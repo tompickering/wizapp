@@ -9,6 +9,7 @@
 #include "level.h"
 #include "logger.h"
 #include "intro.h"
+#include "event.h"
 
 #include <csignal>
 #include <cstdio>
@@ -58,7 +59,10 @@ int WizApp::run() {
     Intro intro;
     bool intro_playing = true;
 
-    level_no = 1;
+    Event event;
+    bool event_playing = false;
+
+    level_no = 2;
     draw_manager.init();
     audio_manager.init();
     bool level_running = false;
@@ -78,6 +82,12 @@ int WizApp::run() {
             intro.update(delta_time);
             if (intro.complete)
                 intro_playing = false;
+        } else if (event_playing) {
+            event.update(delta_time);
+            if (event.complete) {
+                event_playing = false;
+                level_no = 21;
+            }
         } else {
 
             if (!level_running) {
@@ -147,7 +157,17 @@ int WizApp::run() {
                     if (level_no == 100) {
                         this->play_scene(World5End);
                     }
-                    level_no++;
+
+                    if (level_no == 20) {
+                        // Temporary feature toggle
+                        if (false) {
+                            event_playing = true;
+                        } else {
+                            level_no++;
+                        }
+                    } else {
+                        level_no++;
+                    }
                 } else {
                     next_level_pause += delta_time;
                 }
