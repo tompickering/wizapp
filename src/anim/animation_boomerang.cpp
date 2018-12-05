@@ -22,8 +22,9 @@ void AnimationBoomerang::advance(float delta) {
     if (this->time >= (this->duration - this->frame_duration / 2.f)) {
         reverse = true;
     } else if (this->time < (this->frame_duration / 2.f)) {
-        if (reverse && this->iterations > 0)
+        if (reverse && this->iterations > 0) {
             this->iterations--;
+        }
         reverse = false;
     }
 

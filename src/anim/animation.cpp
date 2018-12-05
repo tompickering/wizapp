@@ -53,6 +53,9 @@ Animation::~Animation() {
 }
 
 void Animation::advance(float delta) {
+    if (this->complete)
+        return;
+
     if (this->reverse) {
         this->time -= delta;
     } else {

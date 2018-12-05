@@ -15,7 +15,8 @@
 
 enum CharacterType {
     Wizard,
-    Blob
+    Blob,
+    Baddie
 };
 
 enum FaceDirection {

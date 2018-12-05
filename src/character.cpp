@@ -20,11 +20,15 @@ Character::Character(int x, int y, CharacterType ctype) : Entity(x, y) {
     this->force_move_pending = false;
     this->force_move_left = false;
     this->force_move_breakable = NULL;
+
     if (ctype == Wizard) {
         this->b = 0xFF;
-    } else {
+    } else if (ctype == Blob) {
         this->g = this->b = 0xFF;
+    } else if (ctype == Baddie) {
+        this->r = this->g = this->b = 0;
     }
+
     this->pending_collectable = nullptr;
     this->move_just_completed = false;
     this->x_draw_offset = -0.4;
@@ -36,7 +40,17 @@ Character::Character(int x, int y, CharacterType ctype) : Entity(x, y) {
     this->turn_rate = 0.1f;
 
     this->anim = NULL;
-    this->anim_base = ctype == Wizard ? "assets/img/wiz/" : "assets/img/blob/";
+
+    if (ctype == Wizard) {
+        this->b = 0xFF;
+        this->anim_base = "assets/img/wiz/";
+    } else if (ctype == Blob) {
+        this->g = this->b = 0xFF;
+        this->anim_base = "assets/img/blob/";
+    } else if (ctype == Baddie) {
+        this->r = this->g = this->b = 0;
+        this->anim_base = "assets/img/scene/baddie/";
+    }
 
     this->move_speed_x = 1.f / WALK_DURATION;
     this->move_speed_y = 1.f / CLIMB_DURATION;
@@ -180,11 +194,15 @@ void Character::update_anim(float delta_time) {
                 this->facing = (this->facing == FacingLeft ? FacingRight : FacingLeft);
             }
 
-            if (this->walk_phase == 0 && this->state == Walking) {
-                this->walk_phase++;
-            } else {
+            if (this->type == Baddie) {
                 this->state = Idling;
-                this->walk_phase = 0;
+            } else {
+                if (this->walk_phase == 0 && this->state == Walking) {
+                    this->walk_phase++;
+                } else {
+                    this->state = Idling;
+                    this->walk_phase = 0;
+                }
             }
         } else {
             this->anim->advance(delta_time);
@@ -195,66 +213,82 @@ void Character::update_anim(float delta_time) {
         /* Do we need to assign a new one? */
         string anim_base;
 
-        if (this->state == Turning) {
-            anim_base = this->anim_base + "turn";
-            if (this->type == Wizard) {
-                if (this->facing == FacingLeft) {
-                    this->anim = new Animation(anim_base, 7, 0.12f, true);
+
+        if (this->type == Baddie) {
+            /* Resolve turning */
+            if (this->state == Turning) {
+                this->facing = (this->facing == FacingLeft ? FacingRight : FacingLeft);
+            }
+
+            if (this->state == Walking) {
+                anim_base = this->anim_base
+                          + (this->facing == FacingLeft ? "left" : "right");
+                this->anim = new AnimationBoomerang(anim_base, 7, WALK_DURATION / 2.f);
+                ((AnimationBoomerang*)(this->anim))->set_iterations(1);
+            }
+        } else {
+
+            if (this->state == Turning) {
+                anim_base = this->anim_base + "turn";
+                if (this->type == Wizard) {
+                    if (this->facing == FacingLeft) {
+                        this->anim = new Animation(anim_base, 7, 0.12f, true);
+                    } else {
+                        this->anim = new Animation(anim_base, 7, 0.12f, false);
+                    }
                 } else {
-                    this->anim = new Animation(anim_base, 7, 0.12f, false);
-                }
-            } else {
-                if (this->facing == FacingLeft) {
-                    this->anim = new Animation(anim_base, 6, 0.12f, true);
-                } else {
-                    this->anim = new Animation(anim_base, 6, 0.12f, false);
+                    if (this->facing == FacingLeft) {
+                        this->anim = new Animation(anim_base, 6, 0.12f, true);
+                    } else {
+                        this->anim = new Animation(anim_base, 6, 0.12f, false);
+                    }
                 }
             }
-        }
 
-        if (this->state == ClimbingUp || this->state == ClimbingDown) {
-            if (this->type == Wizard) {
-                anim_base = this->anim_base + "climb";
-                this->anim = new Animation(anim_base, 22, CLIMB_DURATION, this->state == ClimbingDown);
-            } else {
+            if (this->state == ClimbingUp || this->state == ClimbingDown) {
+                if (this->type == Wizard) {
+                    anim_base = this->anim_base + "climb";
+                    this->anim = new Animation(anim_base, 22, CLIMB_DURATION, this->state == ClimbingDown);
+                } else {
+                    anim_base = this->anim_base
+                              + (this->facing == FacingLeft ? "left" : "right")
+                              + "_climb_"
+                              + (this->state == ClimbingUp ? "up" : "down");
+                    this->anim = new AnimationBoomerang(anim_base, 3, CLIMB_DURATION / 3.f);
+                    ((AnimationBoomerang*)(this->anim))->set_iterations(2);
+                }
+            }
+
+            if (this->state == Pushing) {
                 anim_base = this->anim_base
                           + (this->facing == FacingLeft ? "left" : "right")
-                          + "_climb_"
-                          + (this->state == ClimbingUp ? "up" : "down");
-                this->anim = new AnimationBoomerang(anim_base, 3, CLIMB_DURATION / 3.f);
-                ((AnimationBoomerang*)(this->anim))->set_iterations(2);
+                          + "_push";
+                this->anim = new Animation(anim_base, 12, PUSH_DURATION);
             }
-        }
 
-        if (this->state == Pushing) {
-            anim_base = this->anim_base
-                      + (this->facing == FacingLeft ? "left" : "right")
-                      + "_push";
-            this->anim = new Animation(anim_base, 12, PUSH_DURATION);
-        }
-
-        if (this->state == Breaking) {
-            anim_base = this->anim_base
-                      + (this->facing == FacingLeft ? "left" : "right")
-                      + "_break";
-            this->anim = new Animation(anim_base, 11, BREAK_DURATION);
-        }
-
-        if (this->state == Morphing) {
-            if (this->type == Blob) {
+            if (this->state == Breaking) {
                 anim_base = this->anim_base
                           + (this->facing == FacingLeft ? "left" : "right")
-                          + "_morph";
-                this->anim = new Animation(anim_base, 14, MORPH_DURATION, level_ref->active_character != this);
+                          + "_break";
+                this->anim = new Animation(anim_base, 11, BREAK_DURATION);
             }
-        }
 
-        if (this->state == Walking) {
-            anim_base = this->anim_base
-                      + (this->facing == FacingLeft ? "left" : "right")
-                      + (this->walk_phase == 0 ? "" : "_alt");
-            this->anim = new AnimationBoomerang(anim_base, 5, WALK_DURATION / 4.f);
-            ((AnimationBoomerang*)(this->anim))->set_iterations(1);
+            if (this->state == Morphing) {
+                if (this->type == Blob) {
+                    anim_base = this->anim_base
+                              + (this->facing == FacingLeft ? "left" : "right")
+                              + "_morph";
+                    this->anim = new Animation(anim_base, 14, MORPH_DURATION, level_ref->active_character != this);
+                }
+            }
+
+            if (this->state == Walking) {
+                anim_base = this->anim_base
+                          + (this->facing == FacingLeft ? "left" : "right")
+                          + (this->walk_phase == 0 ? "" : "_alt");
+                this->anim = new AnimationBoomerang(anim_base, 5, WALK_DURATION / 4.f);
+                ((AnimationBoomerang*)(this->anim))->set_iterations(1);
+            }
         }
     }
 
@@ -296,6 +330,12 @@ string Character::sprite() {
             if (this->facing == FacingLeft)
                 return "assets/img/blob/block2.png";
         }
+    }
+    if (this->type == Baddie) {
+            if (this->facing == FacingRight)
+                return "assets/img/scene/baddie/right01.png";
+            if (this->facing == FacingLeft)
+                return "assets/img/scene/baddie/left01.png";
     }
 
     return "assets/img/wiz/right.png";
