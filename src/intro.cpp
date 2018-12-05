@@ -14,22 +14,76 @@
 using std::vector;
 
 Intro::Intro() {
-    this->time = 0.f;
-    this->complete = false;
     this->skip_time = 0.f;
     this->skip_pressed = false;
     this->skip_duration = 3.f;
-    this->next_event_countdown = 0.f;
-    this->current_scene = NULL;
 }
 
-Intro::~Intro() {
-    this->clear_anims();
+void Intro::next_event() {
+    if (!this->winds_done) {
+        this->winds();
+        this->winds_done = true;
+        this->next_event_countdown = WINDS_TIME;
+    } else if (!this->fantasia_done) {
+        this->fantasia();
+        this->fantasia_done = true;
+        this->next_event_countdown = FANTASIA_TIME;
+    } else if (!this->presents_done) {
+        this->presents();
+        this->presents_done = true;
+        this->next_event_countdown = PRESENTS_TIME;
+    } else if (!this->nothing_done) {
+        this->nothing();
+        this->nothing_done = true;
+        this->next_event_countdown = NOTHING_TIME;
+    } else if (!this->kidding_done) {
+        this->kidding();
+        this->kidding_done = true;
+        this->next_event_countdown = KIDDING_TIME;
+    } else if (!this->band_done) {
+        this->band();
+        this->band_done = true;
+        this->next_event_countdown = BAND_TIME;
+    } else if (!this->title1_done) {
+        this->title1();
+        this->title1_done = true;
+        this->next_event_countdown = TITLE1_TIME;
+    } else if (!this->scene1_done) {
+        this->scene1();
+        this->scene1_done = true;
+    } else if (!this->scene2_done) {
+        this->scene2();
+        this->scene2_done = true;
+    } else if (!this->scene3_done) {
+        this->scene3();
+        this->scene3_done = true;
+    } else if (!this->scene4_done) {
+        this->scene4();
+        this->scene4_done = true;
+    } else if (!this->scene5_done) {
+        this->scene5();
+        this->scene5_done = true;
+    } else if (!this->scene6_done) {
+        this->scene6();
+        this->scene6_done = true;
+    } else if (!this->scene7_done) {
+        this->scene7();
+        this->scene7_done = true;
+    } else if (!this->scene8_done) {
+        this->scene8();
+        this->scene8_done = true;
+    } else if (!this->title2_done) {
+        this->title2();
+        this->title2_done = true;
+        this->next_event_countdown = TITLE2_TIME;
+    } else if (!this->end_done) {
+        this->end();
+        this->end_done = true;
+        this->next_event_countdown = END_TIME;
+    }
 }
 
 void Intro::update(float delta_time) {
-    this->time += delta_time;
-
     if (input_manager.read(Space, true)) {
         this->skip_pressed = true;
         audio_manager.fade_out((int)(this->skip_duration * 1000.f * .8f));
@@ -42,97 +96,7 @@ void Intro::update(float delta_time) {
         }
     }
 
-    if ((this->next_event_countdown <= 0.f && !this->current_scene)
-        || (this->current_scene && this->current_scene->complete)) {
-        if (!this->winds_done) {
-            this->winds();
-            this->winds_done = true;
-            this->next_event_countdown = WINDS_TIME;
-        } else if (!this->fantasia_done) {
-            this->fantasia();
-            this->fantasia_done = true;
-            this->next_event_countdown = FANTASIA_TIME;
-        } else if (!this->presents_done) {
-            this->presents();
-            this->presents_done = true;
-            this->next_event_countdown = PRESENTS_TIME;
-        } else if (!this->nothing_done) {
-            this->nothing();
-            this->nothing_done = true;
-            this->next_event_countdown = NOTHING_TIME;
-        } else if (!this->kidding_done) {
-            this->kidding();
-            this->kidding_done = true;
-            this->next_event_countdown = KIDDING_TIME;
-        } else if (!this->band_done) {
-            this->band();
-            this->band_done = true;
-            this->next_event_countdown = BAND_TIME;
-        } else if (!this->title1_done) {
-            this->title1();
-            this->title1_done = true;
-            this->next_event_countdown = TITLE1_TIME;
-        } else if (!this->scene1_done) {
-            this->scene1();
-            this->scene1_done = true;
-        } else if (!this->scene2_done) {
-            this->scene2();
-            this->scene2_done = true;
-        } else if (!this->scene3_done) {
-            this->scene3();
-            this->scene3_done = true;
-        } else if (!this->scene4_done) {
-            this->scene4();
-            this->scene4_done = true;
-        } else if (!this->scene5_done) {
-            this->scene5();
-            this->scene5_done = true;
-        } else if (!this->scene6_done) {
-            this->scene6();
-            this->scene6_done = true;
-        } else if (!this->scene7_done) {
-            this->scene7();
-            this->scene7_done = true;
-        } else if (!this->scene8_done) {
-            this->scene8();
-            this->scene8_done = true;
-        } else if (!this->title2_done) {
-            this->title2();
-            this->title2_done = true;
-            this->next_event_countdown = TITLE2_TIME;
-        } else if (!this->end_done) {
-            this->end();
-            this->end_done = true;
-            this->next_event_countdown = END_TIME;
-        }
-    }
-
-    if (this->current_scene) {
-        this->current_scene->update(delta_time);
-        draw_manager.update(this->current_scene);
-    } else {
-        for (unsigned int i = 0; i < this->current_anims.size(); ++i) {
-            this->current_anims.at(i)->advance(delta_time);
-            /* FIXME this should be handled on Animation - but BoomerangAnims mess it up */
-            if (this->current_anims.at(i)->motion)
-                this->current_anims.at(i)->motion->advance(delta_time);
-        }
-        draw_manager.update(this->current_anims);
-
-        this->next_event_countdown -= delta_time;
-    }
-}
-
-void Intro::clear_anims() {
-    for (unsigned int i = 0; i < this->current_anims.size(); ++i) {
-        delete this->current_anims.at(i);
-    }
-    this->current_anims.clear();
-
-    if (this->current_scene) {
-        delete this->current_scene;
-        this->current_scene = NULL;
-    }
+    AnimSequence::update(delta_time);
 }
 
 void Intro::winds() {

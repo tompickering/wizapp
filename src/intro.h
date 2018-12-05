@@ -1,6 +1,8 @@
 #ifndef GUARD_INTRO_H
 #define GUARD_INTRO_H
 
+#include "anim_sequence.h"
+
 #include <vector>
 
 #include "scene.h"
@@ -19,32 +21,16 @@
 
 using std::vector;
 
-enum IntroAnim {
-    Fantasia,
-    Presents,
-    Nothing,
-    Band1,
-    Band2,
-    Band3,
-    WATrailer,
-    WAFull,
-};
-
-class Intro {
+class Intro : public AnimSequence {
     public:
         Intro();
-        ~Intro();
-        void update(float delta_time);
-        bool complete;
+        virtual void update(float delta_time) override;
+    protected:
+        virtual void next_event() override;
     private:
         float skip_duration;
         bool skip_pressed;
         float skip_time;
-        float time;
-        float next_event_countdown;
-        vector<Animation*> current_anims;
-        Scene *current_scene;
-        void clear_anims();
         void winds();
         void fantasia();
         void presents();
