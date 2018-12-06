@@ -28,7 +28,12 @@ void AnimationBoomerang::advance(float delta) {
         reverse = false;
     }
 
-    if (this->iterations == 0)
+    if (this->iterations > 0) {
+        this->complete = false;
+    }
+
+    if (this->iterations == 0) {
         this->complete = true;
+    }
 }
 

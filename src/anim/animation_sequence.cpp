@@ -9,6 +9,7 @@ using std::string;
 using std::vector;
 
 AnimationSequence::AnimationSequence() : Animation() {
+    this->current_anim = NULL;
 }
 
 AnimationSequence::~AnimationSequence() {
@@ -25,25 +26,28 @@ void AnimationSequence::advance(float delta) {
     bool all_complete = true;
     for (unsigned int i = 0; i < this->anims.size(); ++i) {
         if (!this->anims.at(i)->complete) {
-            this->anims.at(i)->advance(delta);
-            this->x = this->anims.at(i)->get_x();
-            this->y = this->anims.at(i)->get_y();
+            if (this->current_anim && this->current_anim != this->anims.at(i)) {
+                this->anims.at(i)->x = this->current_anim->get_x();
+                this->anims.at(i)->y = this->current_anim->get_y();
+            }
+            this->current_anim = this->anims.at(i);
             all_complete = false;
             break;
         }
+    }
+
+    if (this->current_anim) {
+        this->current_anim->advance(delta);
+        this->x = this->current_anim->get_x();
+        this->y = this->current_anim->get_y();
     }
 
     this->complete = all_complete;
 }
 
 string AnimationSequence::sprite() {
-    Animation *current_anim;
-    for (unsigned int i = 0; i < this->anims.size(); ++i) {
-        current_anim = this->anims.at(i);
-        if (!current_anim->complete)
-            break;
-    }
-
-    return current_anim->sprite();
+    if (!this->current_anim)
+        return "";
+    return this->current_anim->sprite();
 }
 

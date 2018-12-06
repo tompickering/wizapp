@@ -26,11 +26,11 @@ class Animation {
         Motion *motion;
         void set_motion(float x_off, float y_off, float duration);
 
+        float x;
+        float y;
     protected:
         string base;
         int frames;
-        float x;
-        float y;
         float duration;
         float frame_duration;
         float time;
