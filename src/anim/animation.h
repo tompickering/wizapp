@@ -9,6 +9,7 @@ using std::string;
 
 class Animation {
     public:
+        Animation();
         Animation(string base, int frames, float duration);
         Animation(string base, int frames, float duration, bool reverse);
         Animation(float x, float y, string base, int frames, float duration);
@@ -19,8 +20,8 @@ class Animation {
         bool complete;
 
         /* Positions are only used in (e.g.) intro */
-        float get_x();
-        float get_y();
+        virtual float get_x();
+        virtual float get_y();
 
         Motion *motion;
         void set_motion(float x_off, float y_off, float duration);

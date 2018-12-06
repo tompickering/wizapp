@@ -4,8 +4,9 @@
 
 #include "scene.h"
 #include "anim/animation.h"
-#include "anim/animation_boomerang.h"
 #include "anim/animation_looping.h"
+#include "anim/animation_sequence.h"
+#include "anim/animation_boomerang.h"
 
 #include "shared.h"
 
@@ -32,8 +33,12 @@ void Event::start() {
     Animation *block = new Animation(9.f / 22.f, 3.f/16.f, "assets/img/themes/01/block", 1, 1.f);
     Animation *blob = new AnimationBoomerang(-.1f, 15.f/16.f, "assets/img/blob/right", 5, 0.1f);
     Animation *baddie = new AnimationBoomerang(-.2f, 15.f/16.f, "assets/img/scene/baddie/right", 5, 0.1f);
-    Animation *wiz = new AnimationLooping(.5f, -1.f/16.f, "assets/img/wiz/climb", 22, 0.5f);
-    wiz->set_motion(0.f, 2.f/8.f, 1.f);
+
+    AnimationSequence *wiz = new AnimationSequence();
+    Animation *wiz1 = new AnimationLooping(.5f, -1.f/16.f, "assets/img/wiz/climb", 22, 0.5f, 2);
+    wiz1->set_motion(0.f, 23.f/64.f, 1.5f);
+    wiz->add_animation(wiz1);
+
     blob->set_motion(1.5f, 0.f, 3.f);
     baddie->set_motion(1.5f, 0.f, 3.f);
     this->current_anims.push_back(background);

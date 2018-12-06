@@ -7,6 +7,18 @@
 
 using std::string;
 
+Animation::Animation() {
+    this->base = "";
+    this->frames = 1;
+    this->duration = 1.f;
+    this->frame_duration = 1.f;
+    this->motion = NULL;
+    this->reset();
+    this->x = 0.f;
+    this->y = 0.f;
+    this->reverse = false;
+}
+
 Animation::Animation(string base, int frames, float duration) {
     this->base = base;
     this->frames = frames;
@@ -57,6 +69,10 @@ void Animation::advance(float delta) {
         this->time -= delta;
     } else {
         this->time += delta;
+    }
+
+    if (this->motion) {
+        this->motion->advance(delta);
     }
 
     if (this->time < 0.f) {

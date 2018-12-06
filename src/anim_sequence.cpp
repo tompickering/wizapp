@@ -39,9 +39,6 @@ void AnimSequence::update(float delta_time) {
     } else {
         for (unsigned int i = 0; i < this->current_anims.size(); ++i) {
             this->current_anims.at(i)->advance(delta_time);
-            /* FIXME this should be handled on Animation - but BoomerangAnims mess it up */
-            if (this->current_anims.at(i)->motion)
-                this->current_anims.at(i)->motion->advance(delta_time);
         }
         draw_manager.update(this->current_anims);
 
