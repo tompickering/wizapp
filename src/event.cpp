@@ -13,18 +13,29 @@
 using std::vector;
 
 Event::Event() {
+    this->start_done = false;
+    this->scene_done = false;
+    this->fade_music_done = false;
 }
 
 void Event::next_event() {
     if (!this->start_done) {
         this->start();
         this->start_done = true;
-        this->next_event_countdown = 0.f;
+        this->next_event_countdown = 17.f;
+    } else if (!this->scene_done) {
+        this->scene_done = true;
+        this->scene();
+    } else if (!this->fade_music_done) {
+        this->fade_music();
+        this->next_event_countdown = 3.2f;
+    } else {
+        this->complete = true;
     }
 }
 
 void Event::start() {
-    audio_manager.play_music("assets/audio/CUTY.ogg", false, false);
+    audio_manager.play_music("assets/audio/CUTY.ogg", false, true);
     Animation *background = new Animation(.5f, .5f, "assets/img/themes/01/back/2", 1, 1.f);
     Animation *ladder1 = new Animation(.5f, 1.f/16.f, "assets/img/themes/01/ladder1", 1, 1.f);
     Animation *ladder2 = new Animation(.5f, 3.f/16.f, "assets/img/themes/01/ladder1", 1, 1.f);
@@ -96,4 +107,13 @@ void Event::start() {
     this->current_anims.push_back(baddie3);
     this->current_anims.push_back(block);
     this->current_anims.push_back(wiz);
+}
+
+void Event::scene() {
+    this->clear_anims();
+    this->current_scene = new Scene(Friend);
+}
+
+void Event::fade_music() {
+    audio_manager.fade_out(3000);
 }

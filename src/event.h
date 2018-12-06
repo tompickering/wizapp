@@ -24,8 +24,12 @@ class Event : public AnimSequence {
         float skip_time;
         void winds();
         void start();
+        void scene();
+        void fade_music();
 
         bool start_done;
+        bool scene_done;
+        bool fade_music_done;
 };
 
 #endif
