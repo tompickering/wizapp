@@ -20,15 +20,16 @@ Event::Event() {
 
 void Event::next_event() {
     if (!this->start_done) {
-        this->start();
         this->start_done = true;
+        this->start();
         this->next_event_countdown = 17.f;
     } else if (!this->scene_done) {
         this->scene_done = true;
         this->scene();
     } else if (!this->fade_music_done) {
+        this->fade_music_done = true;
         this->fade_music();
-        this->next_event_countdown = 3.2f;
+        this->next_event_countdown = 4.f;
     } else {
         this->complete = true;
     }
@@ -115,5 +116,6 @@ void Event::scene() {
 }
 
 void Event::fade_music() {
+    this->clear_anims();
     audio_manager.fade_out(3000);
 }

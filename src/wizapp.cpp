@@ -160,11 +160,7 @@ int WizApp::run() {
 
                     if (level_no == 20) {
                         // Temporary feature toggle
-                        if (false) {
-                            event_playing = true;
-                        } else {
-                            level_no++;
-                        }
+                        event_playing = true;
                     } else {
                         level_no++;
                     }
