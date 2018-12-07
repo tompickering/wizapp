@@ -178,6 +178,10 @@ void Character::update(float delta_time) {
             audio_manager.play_sfx(Morph);
             this->state = Morphing;
             level_ref->active_character->state = Morphing;
+            /* Other character needs their anim updated immediately
+             * to save frame of default active idle until their morph
+             * animation can be set up */
+            level_ref->active_character->update_anim(0);
         }
     }
 
