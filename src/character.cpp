@@ -180,6 +180,8 @@ void Character::update(float delta_time) {
             level_ref->active_character->state = Morphing;
         }
     }
+
+    this->update_anim(0);
 }
 
 /* All anim allocation and freeing handled here */
