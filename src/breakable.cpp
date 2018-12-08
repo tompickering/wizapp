@@ -19,6 +19,8 @@ Breakable::Breakable(int x, int y) : Entity(x, y) {
     this->anim_break = new Animation(
             string(level_ref->theme_base + "break/"), 10, 0.1f);
 
+    this->anim_break->hide_on_complete = true;
+
     this->reset();
 }
 

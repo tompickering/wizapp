@@ -103,7 +103,9 @@ Collectable::Collectable(int x, int y, bool flying) : Entity(x, y) {
             break;
     }
 
-    this->anim_collect = new Animation(level_ref->theme_base + "collect/", 10, 0.15f);
+    this->anim_collect = new Animation(level_ref->theme_base + "collect/", 10, 0.2f);
+    this->anim_collect->hide_on_complete = true;
+
     if (this->flying) {
         this->r = 0xEE;
         this->g = 0x42;

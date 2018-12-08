@@ -17,6 +17,7 @@ Animation::Animation() {
     this->x = 0.f;
     this->y = 0.f;
     this->reverse = false;
+    this->hide_on_complete = false;
 }
 
 Animation::Animation(string base, int frames, float duration) {
@@ -29,6 +30,7 @@ Animation::Animation(string base, int frames, float duration) {
     this->x = 0.f;
     this->y = 0.f;
     this->reverse = false;
+    this->hide_on_complete = false;
 }
 
 Animation::Animation(string base, int frames, float duration, bool reverse) {
@@ -41,6 +43,7 @@ Animation::Animation(string base, int frames, float duration, bool reverse) {
     this->x = 0.f;
     this->y = 0.f;
     this->reverse = reverse;
+    this->hide_on_complete = false;
 
     if (this->reverse) {
         this->time = duration;
@@ -57,6 +60,7 @@ Animation::Animation(float x, float y, string base, int frames, float duration) 
     this->x = x;
     this->y = y;
     this->reverse = false;
+    this->hide_on_complete = false;
 }
 
 Animation::~Animation() {
@@ -96,6 +100,9 @@ void Animation::reset() {
 }
 
 string Animation::sprite() {
+    if (this->complete && this->hide_on_complete)
+        return "";
+
     if (this->frames > 1) {
         int frame = (int)((float) this->frames * this->time / this->duration) + 1;
         if (frame > this->frames)

@@ -18,6 +18,7 @@ class Animation {
         virtual string sprite();
         void reset();
         bool complete;
+        bool hide_on_complete;
 
         /* Positions are only used in (e.g.) intro */
         virtual float get_x();

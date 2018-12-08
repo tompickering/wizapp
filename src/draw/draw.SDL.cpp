@@ -55,11 +55,16 @@ void SDLDrawManager::update(Level *level) {
         ent = level->entities[i];
         if (ent->ignore)
             continue;
+        img_path = ent->sprite();
+
+        if (img_path == "")
+            continue;
+
         surf_rect = {int((ent->real_x + ent->x_draw_offset) * (float) blocksz_w),
                      int((ent->real_y + ent->y_draw_offset) * (float) blocksz_h),
                      blocksz_w,
                      blocksz_h};
-        img_path = ent->sprite();
+
         SDL_Surface *spr_surf = (SDL_Surface*) this->get_sprite_data(img_path);
         if (spr_surf) {
             SDL_BlitSurface(spr_surf, NULL, this->surf, &surf_rect);
