@@ -62,7 +62,12 @@ int WizApp::run() {
     Event event;
     bool event_playing = false;
 
-    level_no = 2;
+    Scene *scene = NULL;
+    bool scene_playing = false;
+
+    SceneRef scene_just_played = None;
+
+    level_no = 1;
     draw_manager.init();
     audio_manager.init();
     bool level_running = false;
@@ -74,6 +79,7 @@ int WizApp::run() {
     float delta_time = 0.f;
     float update_time = 0.f;
     float next_level_pause = 0.f;
+    float fade_time = 0.f;
     while (running) {
         clock_begin = steady_clock::now();
         input_manager.update();
@@ -88,29 +94,64 @@ int WizApp::run() {
                 event_playing = false;
                 level_no = 21;
             }
-        } else {
+        } else if (scene_playing) {
+            if (scene) {
+                draw_manager.update(scene);
+                scene->update(delta_time);
 
+                if (scene->complete) {
+                    if (fade_time == 0.f) {
+                        audio_manager.fade_out(3000);
+                    }
+                    fade_time += delta_time;
+                    if (fade_time > 3.5f) {
+                        fade_time = 0.f;
+                        scene_just_played = scene->scene_ref;
+                        if (scene->end_of_level()) {
+                            if (level_no == 20) {
+                                event_playing = true;
+                            } else {
+                                level_no++;
+                            }
+                        }
+                        delete scene;
+                        scene = NULL;
+                        scene_playing = false;
+                    }
+                }
+            } else {
+                scene_playing = false;
+                continue;
+            }
+        } else {
             if (!level_running) {
-                if (level_no == 1)
-                    this->play_scene(World1Start);
-                else if (level_no == 16)
-                    this->play_scene(World1Mid);
-                else if (level_no == 21)
-                    this->play_scene(World2Start);
-                else if (level_no == 36)
-                    this->play_scene(World2Mid);
-                else if (level_no == 41)
-                    this->play_scene(World3Start);
-                else if (level_no == 56)
-                    this->play_scene(World3Mid);
-                else if (level_no == 61)
-                    this->play_scene(World4Start);
-                else if (level_no == 76)
-                    this->play_scene(World4Mid);
-                else if (level_no == 81)
-                    this->play_scene(World5Start);
-                else if (level_no == 96)
-                    this->play_scene(World5Mid);
+                scene_playing = true;
+                if (level_no == 1 && scene_just_played != World1Start) {
+                    scene = new Scene(World1Start);
+                } else if (level_no == 16 && scene_just_played != World1Mid) {
+                    scene = new Scene(World1Mid);
+                } else if (level_no == 21 && scene_just_played != World2Start) {
+                    scene = new Scene(World2Start);
+                } else if (level_no == 36 && scene_just_played != World2Mid) {
+                    scene = new Scene(World2Mid);
+                } else if (level_no == 41 && scene_just_played != World3Start) {
+                    scene = new Scene(World3Start);
+                } else if (level_no == 56 && scene_just_played != World3Mid) {
+                    scene = new Scene(World3Mid);
+                } else if (level_no == 61 && scene_just_played != World4Start) {
+                    scene = new Scene(World4Start);
+                } else if (level_no == 76 && scene_just_played != World4Mid) {
+                    scene = new Scene(World4Mid);
+                } else if (level_no == 81 && scene_just_played != World5Start) {
+                    scene = new Scene(World5Start);
+                } else if (level_no == 96 && scene_just_played != World5Mid) {
+                    scene = new Scene(World5Mid);
+                } else {
+                    scene_playing = false;
+                }
+
+                if (scene_playing)
+                    continue;
 
                 if (level_no > 100) {
                     running = false;
@@ -138,7 +179,7 @@ int WizApp::run() {
                 if (next_level_pause == 0.f) {
                     logger.info("Level complete!");
                     /* Fade out music when about to change */
-                    if ((level.number % 10) == 0) {
+                    if (((level.number % 10) == 0) || ((level.number + 5) % 20) == 0) {
                         audio_manager.fade_out(1000);
                     }
                 }
@@ -146,24 +187,25 @@ int WizApp::run() {
                     level.clear();
                     level_running = false;
 
-                    if (level_no == 20)
-                        this->play_scene(World1End);
-                    if (level_no == 40)
-                        this->play_scene(World2End);
-                    if (level_no == 60)
-                        this->play_scene(World3End);
-                    if (level_no == 80)
-                        this->play_scene(World4End);
-                    if (level_no == 100) {
-                        this->play_scene(World5End);
+                    scene_playing = true;
+                    if (level_no == 20) {
+                        scene = new Scene(World1End);
+                    } else if (level_no == 40) {
+                        scene = new Scene(World2End);
+                    } else if (level_no == 60) {
+                        scene = new Scene(World3End);
+                    } else if (level_no == 80) {
+                        scene = new Scene(World4End);
+                    } else if (level_no == 100) {
+                        scene = new Scene(World5End);
+                    } else {
+                        scene_playing = false;
                     }
 
-                    if (level_no == 20) {
-                        // Temporary feature toggle
-                        event_playing = true;
-                    } else {
-                        level_no++;
-                    }
+                    if (scene_playing)
+                        continue;
+
+                    level_no++;
                 } else {
                     next_level_pause += delta_time;
                 }
@@ -189,41 +231,4 @@ int WizApp::run() {
 }
 
 void WizApp::play_scene(SceneRef scene_ref) {
-    Scene scene(scene_ref);
-    audio_manager.play_music(scene.music_path(), true, true);
-    steady_clock::time_point clock_begin;
-    steady_clock::time_point clock_end;
-    steady_clock::duration time_span;
-    float delta_time = 0.f;
-    float update_time = 0.f;
-    bool finished = false;
-    float fade_time = 0.f;
-    while (running && !finished) {
-        clock_begin = steady_clock::now();
-
-        draw_manager.update(&scene);
-        scene.update(delta_time);
-
-        if (scene.complete) {
-            if (fade_time == 0.f) {
-                audio_manager.fade_out(3000);
-            }
-            fade_time += delta_time;
-            if (fade_time > 3.5f)
-                finished = true;
-        }
-
-        /* Compute loop time and sleep */
-        clock_end = steady_clock::now();
-        time_span = clock_end - clock_begin;
-        update_time = float(time_span.count()) * steady_clock::period::num / steady_clock::period::den;
-        float min_frame_time = 1.f / MAX_FPS;
-        if (update_time < min_frame_time) {
-            int sleep_ms = (int)(1000.f * min_frame_time - update_time);
-            std::this_thread::sleep_for(std::chrono::milliseconds(sleep_ms));
-        }
-        clock_end = steady_clock::now();
-        time_span = clock_end - clock_begin;
-        delta_time = float(time_span.count()) * steady_clock::period::num / steady_clock::period::den;
-    }
 }

@@ -209,13 +209,17 @@ Scene::Scene(SceneRef ref) {
 }
 
 void Scene::update(float delta_time) {
+    if (this->time == 0.f) {
+        this->play_music();
+    }
+
     this->time += delta_time;
     this->sentence_time += delta_time;
     if (this->scene_ref == World5End && this->time > 1)
         this->complete = true;
 }
 
-string Scene::music_path() {
+void Scene::play_music() {
     switch(this->scene_ref) {
         case Intro1:
         case Intro2:
@@ -225,15 +229,33 @@ string Scene::music_path() {
         case Intro6:
         case Intro7:
         case Intro8:
-            return "assets/audio/FAIRYTALE.ogg";
+            audio_manager.play_music("assets/audio/FAIRYTALE.ogg", false, true);
+            break;
         case Friend:
-            return "assets/audio/CUTY.ogg";
+            audio_manager.play_music("assets/audio/CUTY.ogg", false, true);
+            break;
         case World5End:
-            return "assets/audio/VLAKEIA.ogg";
+            audio_manager.play_music("assets/audio/VLAKEIA.ogg", true, false);
+            break;
         default:
+            audio_manager.play_music("assets/audio/DIALOG.ogg", true, true);
             break;
     }
-    return "assets/audio/DIALOG.ogg";
+}
+
+/* Should the level number be incremented following this scene? */
+bool Scene::end_of_level() {
+    switch(this->scene_ref) {
+        case World1End:
+        case World2End:
+        case World3End:
+        case World4End:
+        case World5End:
+            return true;
+        default:
+            return false;
+    }
+    return false;
 }
 
 string Scene::image_path() {

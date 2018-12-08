@@ -39,7 +39,7 @@ enum SceneRef {
 class Scene {
     public:
         Scene(SceneRef);
-        string music_path();
+        void play_music();
         string image_path();
         string current_text();
         float time;
@@ -51,6 +51,7 @@ class Scene {
         vector<string> text;
         unsigned int sentence;
         float sentence_time;
+        bool end_of_level();
 };
 
 #endif

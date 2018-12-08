@@ -157,7 +157,6 @@ void Intro::title1() {
 
 void Intro::scene1() {
     this->clear_anims();
-    audio_manager.play_music("assets/audio/FAIRYTALE.ogg", true, false);
     this->current_scene = new Scene(Intro1);
 }
 
