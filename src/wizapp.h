@@ -33,7 +33,9 @@ class WizApp {
         Scene *scene;
         SceneRef scene_just_played;
         Level *level;
-        int level_no;
+        unsigned int level_no;
+        float next_level_pause;
+        float fade_time;
         int level_just_completed;
         void init();
         void update(float delta_time);
