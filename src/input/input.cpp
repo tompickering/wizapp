@@ -27,6 +27,10 @@ bool InputManager::read(Input input, bool reset) {
             result = this->r;
             this->r = this->r && !reset;
             break;
+        case LShift:
+            result = this->lshift;
+            this->lshift = this->lshift && !reset;
+            break;
     }
     return result;
 }

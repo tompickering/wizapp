@@ -90,6 +90,8 @@ int WizApp::run() {
         clock_begin = steady_clock::now();
         input_manager.update();
 
+        this->speed = input_manager.read(LShift, false) ? 3.f : 1.f;
+
         if (this->state == GS_Intro) {
             this->intro.update(delta_time);
             if (this->intro.complete)

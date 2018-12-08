@@ -29,6 +29,9 @@ void SDLInputManager::update() {
                 case SDLK_r:
                     this->r = true;
                     break;
+                case SDLK_LSHIFT:
+                    this->lshift = true;
+                    break;
             }
         } else if (e.type == SDL_KEYUP) {
             switch(e.key.keysym.sym) {
@@ -49,6 +52,9 @@ void SDLInputManager::update() {
                     break;
                 case SDLK_r:
                     this->r = false;
+                    break;
+                case SDLK_LSHIFT:
+                    this->lshift = false;
                     break;
             }
         }

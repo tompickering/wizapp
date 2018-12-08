@@ -7,7 +7,8 @@ enum Input {
     Left,
     Right,
     Space,
-    R
+    R,
+    LShift,
 };
 
 class InputManager {
@@ -19,6 +20,7 @@ class InputManager {
         bool left;
         bool right;
         bool space;
+        bool lshift;
         bool r;
         virtual void update() = 0;
 };
