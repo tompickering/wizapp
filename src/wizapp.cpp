@@ -28,6 +28,7 @@ Logger logger;
 AUDIOMANAGER audio_manager;
 INPUTMANAGER input_manager;
 DRAWMANAGER draw_manager;
+SAVEGAME savegame;
 Level *level_ref = nullptr;
 
 #ifdef SDL

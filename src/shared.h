@@ -8,14 +8,19 @@
 #include "audio/audio.h"
 #include "input/input.h"
 #include "draw/draw.h"
+#include "save/save.h"
 
-/* Everyone get utils */
+/* Everyone gets utils */
 #include "utils.h"
 
 #ifdef SDL
 #define AUDIOMANAGER SDLAudioManager
 #define DRAWMANAGER SDLDrawManager
 #define INPUTMANAGER SDLInputManager
+#endif
+
+#ifdef LINUX
+#define SAVEGAME SaveGameLinux
 #endif
 
 extern volatile bool running;

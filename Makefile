@@ -10,7 +10,7 @@ CLEAN = $(NAME) $(OBJS) $(DEPS)
 
 LDLIBS=-lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf
 NAME=wizapp
-CXXFLAGS=-Wall -pedantic -DSDL
+CXXFLAGS=-Wall -pedantic -DSDL -DLINUX
 
 PREFIX = /usr/local
 
