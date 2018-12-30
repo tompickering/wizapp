@@ -3,7 +3,7 @@
 
 #include "save.h"
 
-class SaveGameLinux : SaveGame {
+class SaveGameLinux : public SaveGame {
     public:
         SaveGameLinux();
     protected:
