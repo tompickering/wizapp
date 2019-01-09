@@ -6,8 +6,8 @@
 class SaveGameLinux : public SaveGame {
     public:
         SaveGameLinux();
-    protected:
         virtual void load() override;
+    protected:
         virtual void save() override;
 };
 

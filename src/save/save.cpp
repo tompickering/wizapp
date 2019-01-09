@@ -11,22 +11,28 @@ SaveGame::SaveGame() {
     for (int i = 0; i < LEVELS_BYTES; ++i) {
         completed_levels[i] = 0;
     }
-
-    this->load();
 }
 
 void SaveGame::completed(unsigned int level_no) {
-    this->completed_levels[(level_no - 1) / 8] &= 1 << ((level_no - 1) % 8);
+    this->completed_levels[(level_no - 1) / 8] |= 1 << ((level_no - 1) % 8);
     this->save();
 }
 
 LevelState SaveGame::level_state(unsigned int level_no) {
-    if (level_no / 20 > this->world())
+    if ((level_no - 1) / 20 > this->world())
         return Locked;
-    if (this->completed_levels[level_no / 8] & level_no % 8) {
+    if (this->completed_levels[(level_no - 1) / 8] & 1 << ((level_no - 1) % 8)) {
         return Completed;
     }
     return Available;
+}
+
+unsigned int SaveGame::next_level() {
+    for (unsigned int i = 1; i <= 100; ++i) {
+        if (level_state(i) == Available)
+            return i;
+    }
+    return 100;
 }
 
 unsigned int SaveGame::world() {

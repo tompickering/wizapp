@@ -21,11 +21,11 @@ class SaveGame {
         LevelState level_state(unsigned int level_no);
         /* World unlocked (0-4) */
         unsigned int world();
+        unsigned int next_level();
+        virtual void load();
     protected:
         const char *savedir;
-        char completed_levels[LEVELS_BYTES];
-        /* Called on construction */
-        virtual void load();
+        unsigned char completed_levels[LEVELS_BYTES];
         /* Called on anything which changes state */
         virtual void save();
 };

@@ -66,6 +66,9 @@ void WizApp::init() {
 
     draw_manager.init();
     audio_manager.init();
+
+    savegame.load();
+    level_no = savegame.next_level();
 }
 
 void WizApp::update(float delta_time) {

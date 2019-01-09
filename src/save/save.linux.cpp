@@ -25,8 +25,8 @@ SaveGameLinux::SaveGameLinux() {
 }
 
 void SaveGameLinux::load() {
-    ifstream in(savedir, ios::in | ios::binary);
-    in.read(completed_levels, LEVELS_BYTES);
+    ifstream in(string(savedir) + "/.wizapp_save", ios::in | ios::binary);
+    in.read((char*) completed_levels, LEVELS_BYTES);
     SaveGame::load();
     in.close();
 }
@@ -34,6 +34,6 @@ void SaveGameLinux::load() {
 void SaveGameLinux::save() {
     SaveGame::save();
     ofstream out(string(savedir) + "/.wizapp_save", ios::out | ios::binary);
-    out.write(completed_levels, LEVELS_BYTES);
+    out.write((char*) completed_levels, LEVELS_BYTES);
     out.close();
 }
