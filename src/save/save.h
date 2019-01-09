@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 
+#define LEVELS_BYTES 15
+
 using std::vector;
 
 enum LevelState {
@@ -20,7 +22,8 @@ class SaveGame {
         /* World unlocked (0-4) */
         unsigned int world();
     protected:
-        vector<unsigned int> completed_levels;
+        const char *savedir;
+        char completed_levels[LEVELS_BYTES];
         /* Called on construction */
         virtual void load();
         /* Called on anything which changes state */

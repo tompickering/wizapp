@@ -8,38 +8,41 @@
 using std::vector;
 
 SaveGame::SaveGame() {
+    for (int i = 0; i < LEVELS_BYTES; ++i) {
+        completed_levels[i] = 0;
+    }
+
     this->load();
 }
 
 void SaveGame::completed(unsigned int level_no) {
-    if (std::find(this->completed_levels.begin(),
-                  this->completed_levels.end(),
-                  level_no) == this->completed_levels.end()) {
-        this->completed_levels.push_back(level_no);
-    }
-    std::sort(this->completed_levels.begin(),
-              this->completed_levels.end());
+    this->completed_levels[(level_no - 1) / 8] &= 1 << ((level_no - 1) % 8);
     this->save();
 }
 
 LevelState SaveGame::level_state(unsigned int level_no) {
     if (level_no / 20 > this->world())
         return Locked;
-    if (std::find(this->completed_levels.begin(),
-                  this->completed_levels.end(),
-                  level_no) != this->completed_levels.end())
+    if (this->completed_levels[level_no / 8] & level_no % 8) {
         return Completed;
+    }
     return Available;
 }
 
 unsigned int SaveGame::world() {
-    return this->completed_levels.size() / 20;
+    for (int i = 3; i >= 0; --i) {
+        if (   completed_levels[i * LEVELS_BYTES / 5] == 0xFF
+            && completed_levels[(i * LEVELS_BYTES / 5) + 1] == 0xFF
+            && completed_levels[(i * LEVELS_BYTES / 5) + 2] == 0xF0) {
+        }
+        return i + 1;
+    }
+
+    return 0;
 }
 
 void SaveGame::load() {
     logger.info("SAVEGAME: Loading");
-    std::sort(this->completed_levels.begin(),
-              this->completed_levels.end());
 }
 
 void SaveGame::save() {
