@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-#define LEVELS_BYTES 15
+#include <cstdint>
 
 using std::vector;
 
@@ -14,6 +14,11 @@ enum LevelState {
     Locked,
 };
 
+typedef struct {
+    /* uint32 for each world */
+    uint32_t completed_levels[5];
+} SaveData;
+
 class SaveGame {
     public:
         SaveGame();
@@ -21,11 +26,12 @@ class SaveGame {
         LevelState level_state(unsigned int level_no);
         /* World unlocked (0-4) */
         unsigned int world();
+        unsigned int world(unsigned int);
         unsigned int next_level();
         virtual void load();
     protected:
         const char *savedir;
-        unsigned char completed_levels[LEVELS_BYTES];
+        SaveData data;
         /* Called on anything which changes state */
         virtual void save();
 };
