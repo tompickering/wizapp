@@ -204,6 +204,9 @@ void WizApp::update(float delta_time) {
             }
         }
     }
+
+    /* Ensure unused mouse click data is discarded */
+    input_manager.read_click();
 }
 
 int WizApp::run() {
@@ -236,9 +239,13 @@ int WizApp::run() {
         delta_time = float(time_span.count()) * steady_clock::period::num / steady_clock::period::den;
         delta_time *= this->speed;
     }
-    level_ref->clear();
-    delete this->level;
-    level_ref = NULL;
+
+    if (level_ref) {
+        level_ref->clear();
+        delete this->level;
+        level_ref = NULL;
+    }
+
     return 0;
 }
 
