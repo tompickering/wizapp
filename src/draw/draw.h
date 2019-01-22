@@ -22,6 +22,7 @@ class DrawManager {
         virtual void update(Level *level) = 0;
         virtual void update(Scene *scene) = 0;
         virtual void update(vector<Animation*> anims) = 0;
+        virtual Animation* read_clicked_animation() = 0;
     protected:
         map<string, void*> sprite_data;
         virtual void* get_sprite_data(string) = 0;
@@ -29,6 +30,7 @@ class DrawManager {
         string background_path;
         SceneRef current_scene;
         void *scene_font;
+        Animation *clicked_animation;
 };
 
 #ifdef SDL

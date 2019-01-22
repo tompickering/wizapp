@@ -75,7 +75,12 @@ void WizApp::update(float delta_time) {
     if (this->state == GS_Intro) {
         this->intro.update(delta_time);
         if (this->intro.complete)
+            this->set_state(GS_Menu);
+    } else if (this->state == GS_Menu) {
+        this->menu.update(delta_time);
+        if (this->menu.complete) {
             this->set_state(GS_StartLevel);
+        }
     } else if (this->state == GS_Event) {
         this->event.update(delta_time);
         if (this->event.complete) {

@@ -11,6 +11,7 @@
 #include "../collectable.h"
 #include "../scene.h"
 #include "../anim/animation.h"
+#include "../input/input.h"
 
 #include "../shared.h"
 
@@ -19,6 +20,7 @@ using std::string;
 void SDLDrawManager::init() {
     logger.info("DrawManager Init...");
     this->current_scene = None;
+    this->clicked_animation = NULL;
     this->win = SDL_CreateWindow(PROG_NAME,
                                  SDL_WINDOWPOS_UNDEFINED,
                                  SDL_WINDOWPOS_UNDEFINED,
@@ -112,16 +114,24 @@ void SDLDrawManager::update(Scene *scene) {
 
 void SDLDrawManager::update(vector<Animation*> anims) {
     Animation *anim;
+    ClickPos click_pos = input_manager.read_click();
     SDL_FillRect(this->surf, NULL, SDL_MapRGB(this->surf->format, 0x0, 0x0, 0x0));
     for (unsigned int x = 0; x < anims.size(); ++x) {
         anim = anims.at(x);
         SDL_Surface *spr_surf = (SDL_Surface*) this->get_sprite_data(anim->sprite());
-        SDL_Rect surf_rect = {int(anim->get_x() * (float) SCREEN_WIDTH - spr_surf->w / 2.f),
-                              int(anim->get_y() * (float) SCREEN_HEIGHT - spr_surf->h / 2.f),
+        int draw_x = int(anim->get_x() * (float) SCREEN_WIDTH - spr_surf->w / 2.f);
+        int draw_y = int(anim->get_y() * (float) SCREEN_HEIGHT - spr_surf->h / 2.f);
+        SDL_Rect surf_rect = {draw_x,
+                              draw_y,
                               spr_surf->w,
                               spr_surf->h};
         if (spr_surf) {
             SDL_BlitSurface(spr_surf, NULL, this->surf, &surf_rect);
+            /* Check if this draw element has been clicked */
+            if (click_pos.x >= draw_x && click_pos.x <= draw_x + spr_surf->w
+                && click_pos.y >= draw_y && click_pos.y <= draw_y + spr_surf->h) {
+                clicked_animation = anim;
+            }
         }
     }
     SDL_UpdateWindowSurface(this->win);
@@ -136,6 +146,12 @@ void* SDLDrawManager::get_sprite_data(string img_path) {
         return this->sprite_data[img_path];
     }
     return NULL;
+}
+
+Animation* SDLDrawManager::read_clicked_animation() {
+    Animation *result = clicked_animation;
+    clicked_animation = NULL;
+    return result;
 }
 
 #endif

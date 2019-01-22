@@ -7,6 +7,7 @@
 #include "intro.h"
 #include "scene.h"
 #include "level.h"
+#include "menu/main_menu.h"
 
 using std::string;
 
@@ -31,6 +32,7 @@ class WizApp {
         Intro intro;
         Event event;
         Scene *scene;
+        MainMenu menu;
         SceneRef scene_just_played;
         Level *level;
         unsigned int level_no;
