@@ -37,7 +37,7 @@ unsigned int SaveGame::next_level() {
 
 unsigned int SaveGame::world() {
     for (int i = 3; i >= 0; --i) {
-        if (data.completed_levels[i])
+        if (data.completed_levels[i] == 0b11111111111111111111)
             return i + 1;
     }
 

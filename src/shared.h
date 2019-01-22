@@ -28,6 +28,7 @@ extern Logger logger;
 extern AUDIOMANAGER audio_manager;
 extern INPUTMANAGER input_manager;
 extern DRAWMANAGER draw_manager;
+extern SAVEGAME savegame;
 extern Level *level_ref;
 
 #endif

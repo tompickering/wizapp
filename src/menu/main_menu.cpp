@@ -1,5 +1,6 @@
 #include "main_menu.h"
 
+#include <string>
 #include <vector>
 
 #include "../scene.h"
@@ -8,6 +9,7 @@
 
 #include "../shared.h"
 
+using std::string;
 using std::vector;
 
 MainMenu::MainMenu() {
@@ -27,8 +29,9 @@ void MainMenu::next_event() {
 }
 
 void MainMenu::start() {
+    string w = std::to_string(savegame.world() + 1);
     audio_manager.play_music("assets/audio/DWARVES.ogg", false, true);
-    Animation *background = new Animation(.5f, .5f, "assets/img/menu/world1", 1, 1.f);
+    Animation *background = new Animation(.5f, .5f, "assets/img/menu/world" + w, 1, 1.f);
     round_select = new AnimationLooping(.5f, .5f, "assets/img/menu/round", 10, 1.f);
     current_anims.push_back(background);
     current_anims.push_back(round_select);
