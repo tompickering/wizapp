@@ -1,5 +1,10 @@
 #include "input.h"
 
+InputManager::InputManager() {
+    click_pos.x = -1;
+    click_pos.y = -1;
+}
+
 bool InputManager::read(Input input, bool reset) {
     bool result;
     switch (input) {
@@ -32,5 +37,12 @@ bool InputManager::read(Input input, bool reset) {
             this->lshift = this->lshift && !reset;
             break;
     }
+    return result;
+}
+
+ClickPos InputManager::read_click() {
+    ClickPos result = click_pos;
+    click_pos.x = -1;
+    click_pos.y = -1;
     return result;
 }

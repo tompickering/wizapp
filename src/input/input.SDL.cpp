@@ -57,6 +57,9 @@ void SDLInputManager::update() {
                     this->lshift = false;
                     break;
             }
+        } else if (e.type == SDL_MOUSEBUTTONDOWN && e.button.button == SDL_BUTTON_LEFT) {
+            SDL_GetMouseState(&click_pos.x, &click_pos.y);
+            logger.debug("Click: " + std::to_string(click_pos.x) + "," + std::to_string(click_pos.y));
         }
     }
 }

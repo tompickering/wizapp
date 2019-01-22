@@ -11,9 +11,16 @@ enum Input {
     LShift,
 };
 
+typedef struct {
+    int x;
+    int y;
+} ClickPos;
+
 class InputManager {
     public:
+        InputManager();
         bool read(Input, bool reset);
+        ClickPos read_click();
     protected:
         bool up;
         bool down;
@@ -22,6 +29,7 @@ class InputManager {
         bool space;
         bool lshift;
         bool r;
+        ClickPos click_pos;
         virtual void update() = 0;
 };
 
