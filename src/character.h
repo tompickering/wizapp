@@ -46,6 +46,7 @@ class Character : public Entity {
         virtual string sprite() override;
         virtual void update(float delta_time) override;
         virtual void move(int x, int y) override;
+        virtual void reset() override;
     protected:
         void single_block_move_complete() override;
         void update_anim(float delta_time);

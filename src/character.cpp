@@ -17,29 +17,11 @@ Character::Character(int x, int y, CharacterType ctype) : Entity(x, y) {
     this->type = ctype;
     this->name = "Character";
     this->sort_key = 1;
-    this->force_move_pending = false;
-    this->force_move_left = false;
-    this->force_move_breakable = NULL;
 
-    if (ctype == Wizard) {
-        this->b = 0xFF;
-    } else if (ctype == Blob) {
-        this->g = this->b = 0xFF;
-    } else if (ctype == Baddie) {
-        this->r = this->g = this->b = 0;
-    }
-
-    this->pending_collectable = nullptr;
-    this->move_just_completed = false;
     this->x_draw_offset = -0.4;
     this->y_draw_offset = -0.1;
 
-    this->state = Idling;
-    this->facing = FacingRight;
-
     this->turn_rate = 0.1f;
-
-    this->anim = NULL;
 
     if (ctype == Wizard) {
         this->b = 0xFF;
@@ -55,7 +37,7 @@ Character::Character(int x, int y, CharacterType ctype) : Entity(x, y) {
     this->move_speed_x = 1.f / WALK_DURATION;
     this->move_speed_y = 1.f / CLIMB_DURATION;
 
-    this->walk_phase = 0;
+    reset();
 }
 
 Character::~Character() {
@@ -63,6 +45,26 @@ Character::~Character() {
         delete this->anim;
         this->anim = NULL;
     }
+}
+
+void Character::reset() {
+    Entity::reset();
+    state = Idling;
+    pending_collectable = nullptr;
+    move_just_completed = false;
+
+    force_move_pending = false;
+    force_move_left = false;
+    force_move_breakable = NULL;
+
+    facing = FacingRight;
+
+    if (anim) {
+        delete anim;
+    }
+    anim = NULL;
+
+    walk_phase = 0;
 }
 
 void Character::single_block_move_complete() {
