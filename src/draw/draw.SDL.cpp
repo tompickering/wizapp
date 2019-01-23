@@ -19,24 +19,24 @@ using std::string;
 
 void SDLDrawManager::init() {
     logger.info("DrawManager Init...");
-    this->current_scene = None;
-    this->clicked_animation = NULL;
-    this->win = SDL_CreateWindow(PROG_NAME,
+    current_scene = None;
+    clicked_animation = NULL;
+    win = SDL_CreateWindow(PROG_NAME,
                                  SDL_WINDOWPOS_UNDEFINED,
                                  SDL_WINDOWPOS_UNDEFINED,
                                  SCREEN_WIDTH,
                                  SCREEN_HEIGHT,
                                  SDL_WINDOW_SHOWN);
-    this->surf = SDL_GetWindowSurface(this->win);
-    this->background_spr = NULL;
-    this->background_path = string("");
+    surf = SDL_GetWindowSurface(win);
+    background_spr = NULL;
+    background_path = string("");
 
-    this->scene_font = TTF_OpenFont("font/Tangerine-Regular.ttf", 36);
-    if (!this->scene_font) {
+    scene_font = TTF_OpenFont("font/Tangerine-Regular.ttf", 36);
+    if (!scene_font) {
         logger.fatal(TTF_GetError());
     }
 
-    SDL_FillRect(this->surf, NULL, SDL_MapRGB(this->surf->format, 0x0, 0x0, 0x0));
+    SDL_FillRect(surf, NULL, SDL_MapRGB(surf->format, 0x0, 0x0, 0x0));
 }
 
 void SDLDrawManager::update(Level *level) {
@@ -45,14 +45,14 @@ void SDLDrawManager::update(Level *level) {
     int blocksz_w = SCREEN_WIDTH/level->block_w;
     int blocksz_h = SCREEN_HEIGHT/level->block_h;
     string img_path;
-    this->current_scene = None;
+    current_scene = None;
 
-    if (!this->background_spr || this->background_path != level->get_background()) {
-        this->background_path = level->get_background();
-        this->background_spr = (void*) IMG_Load(this->background_path.c_str());
+    if (!background_spr || background_path != level->get_background()) {
+        background_path = level->get_background();
+        background_spr = (void*) IMG_Load(background_path.c_str());
     }
 
-    SDL_BlitSurface((SDL_Surface*) this->background_spr, NULL, this->surf, NULL);
+    SDL_BlitSurface((SDL_Surface*) background_spr, NULL, surf, NULL);
     for (unsigned int i = 0; i < level->entities.size(); ++i) {
         ent = level->entities[i];
         if (ent->ignore)
@@ -67,31 +67,31 @@ void SDLDrawManager::update(Level *level) {
                      blocksz_w,
                      blocksz_h};
 
-        SDL_Surface *spr_surf = (SDL_Surface*) this->get_sprite_data(img_path);
+        SDL_Surface *spr_surf = (SDL_Surface*) get_sprite_data(img_path);
         if (spr_surf) {
-            SDL_BlitSurface(spr_surf, NULL, this->surf, &surf_rect);
+            SDL_BlitSurface(spr_surf, NULL, surf, &surf_rect);
         } else {
-            SDL_FillRect(this->surf, &surf_rect, SDL_MapRGB(this->surf->format,
+            SDL_FillRect(surf, &surf_rect, SDL_MapRGB(surf->format,
                                                             ent->r, ent->g, ent->b));
         }
     }
-    SDL_UpdateWindowSurface(this->win);
+    SDL_UpdateWindowSurface(win);
 }
 
 void SDLDrawManager::update(Scene *scene) {
-    if (scene->scene_ref != this->current_scene) {
+    if (scene->scene_ref != current_scene) {
         /* Clear screen first */
-        SDL_FillRect(this->surf, NULL, SDL_MapRGB(this->surf->format, 0x0, 0x0, 0x0));
-        this->current_scene = scene->scene_ref;
-        SDL_Surface *spr_surf = (SDL_Surface*) this->get_sprite_data(scene->image_path());
+        SDL_FillRect(surf, NULL, SDL_MapRGB(surf->format, 0x0, 0x0, 0x0));
+        current_scene = scene->scene_ref;
+        SDL_Surface *spr_surf = (SDL_Surface*) get_sprite_data(scene->image_path());
         if (spr_surf) {
-            SDL_BlitSurface(spr_surf, NULL, this->surf, NULL);
+            SDL_BlitSurface(spr_surf, NULL, surf, NULL);
         }
     }
 
     /* Update text */
     SDL_Color white = {255, 255, 255};
-    SDL_Surface *msg_surf = TTF_RenderText_Solid((TTF_Font*) this->scene_font,
+    SDL_Surface *msg_surf = TTF_RenderText_Solid((TTF_Font*) scene_font,
                                                  scene->current_text().c_str(),
                                                  white);
 
@@ -107,18 +107,18 @@ void SDLDrawManager::update(Scene *scene) {
     msg_rect.w = SCREEN_WIDTH - 20;
     msg_rect.h = 100;
 
-    SDL_FillRect(this->surf, &back_rect, SDL_MapRGB(this->surf->format, 0x0, 0x0, 0x0));
-    SDL_BlitSurface(msg_surf, NULL, this->surf, &msg_rect);
-    SDL_UpdateWindowSurface(this->win);
+    SDL_FillRect(surf, &back_rect, SDL_MapRGB(surf->format, 0x0, 0x0, 0x0));
+    SDL_BlitSurface(msg_surf, NULL, surf, &msg_rect);
+    SDL_UpdateWindowSurface(win);
 }
 
 void SDLDrawManager::update(vector<Animation*> anims) {
     Animation *anim;
     ClickPos click_pos = input_manager.read_click();
-    SDL_FillRect(this->surf, NULL, SDL_MapRGB(this->surf->format, 0x0, 0x0, 0x0));
+    SDL_FillRect(surf, NULL, SDL_MapRGB(surf->format, 0x0, 0x0, 0x0));
     for (unsigned int x = 0; x < anims.size(); ++x) {
         anim = anims.at(x);
-        SDL_Surface *spr_surf = (SDL_Surface*) this->get_sprite_data(anim->sprite());
+        SDL_Surface *spr_surf = (SDL_Surface*) get_sprite_data(anim->sprite());
         int draw_x = int(anim->get_x() * (float) SCREEN_WIDTH - spr_surf->w / 2.f);
         int draw_y = int(anim->get_y() * (float) SCREEN_HEIGHT - spr_surf->h / 2.f);
         SDL_Rect surf_rect = {draw_x,
@@ -126,7 +126,7 @@ void SDLDrawManager::update(vector<Animation*> anims) {
                               spr_surf->w,
                               spr_surf->h};
         if (spr_surf) {
-            SDL_BlitSurface(spr_surf, NULL, this->surf, &surf_rect);
+            SDL_BlitSurface(spr_surf, NULL, surf, &surf_rect);
             /* Check if this draw element has been clicked */
             if (click_pos.x >= draw_x && click_pos.x <= draw_x + spr_surf->w
                 && click_pos.y >= draw_y && click_pos.y <= draw_y + spr_surf->h) {
@@ -134,16 +134,16 @@ void SDLDrawManager::update(vector<Animation*> anims) {
             }
         }
     }
-    SDL_UpdateWindowSurface(this->win);
+    SDL_UpdateWindowSurface(win);
 }
 
 void* SDLDrawManager::get_sprite_data(string img_path) {
     if (img_path != "") {
-        if (!this->sprite_data.count(img_path)) {
-            this->sprite_data[img_path] = (void*) IMG_Load(img_path.c_str());
-            return this->sprite_data[img_path];
+        if (!sprite_data.count(img_path)) {
+            sprite_data[img_path] = (void*) IMG_Load(img_path.c_str());
+            return sprite_data[img_path];
         }
-        return this->sprite_data[img_path];
+        return sprite_data[img_path];
     }
     return NULL;
 }

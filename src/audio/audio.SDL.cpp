@@ -12,31 +12,31 @@ void SDLAudioManager::init() {
     if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
         logger.fatal("SDL_mixer failed to initialise");
     }
-    this->playing_track = "";
-    this->sfx_data[Collect] = (void*) Mix_LoadWAV("assets/sfx/collect.wav");
-    this->sfx_data[Wop] = (void*) Mix_LoadWAV("assets/sfx/wop.wav");
-    this->sfx_data[Break] = (void*) Mix_LoadWAV("assets/sfx/break.wav");
-    this->sfx_data[Awat] = (void*) Mix_LoadWAV("assets/sfx/awat.wav");
-    this->sfx_data[FrequencyClear] = (void*) Mix_LoadWAV("assets/sfx/frequencyclear.wav");
-    this->sfx_data[Morph] = (void*) Mix_LoadWAV("assets/sfx/metamorph.wav");
+    playing_track = "";
+    sfx_data[Collect] = (void*) Mix_LoadWAV("assets/sfx/collect.wav");
+    sfx_data[Wop] = (void*) Mix_LoadWAV("assets/sfx/wop.wav");
+    sfx_data[Break] = (void*) Mix_LoadWAV("assets/sfx/break.wav");
+    sfx_data[Awat] = (void*) Mix_LoadWAV("assets/sfx/awat.wav");
+    sfx_data[FrequencyClear] = (void*) Mix_LoadWAV("assets/sfx/frequencyclear.wav");
+    sfx_data[Morph] = (void*) Mix_LoadWAV("assets/sfx/metamorph.wav");
 }
 
 void SDLAudioManager::play_music(string track, bool force_reset, bool looping) {
     logger.info("Playing music");
-    if (track == this->playing_track && !force_reset) {
+    if (track == playing_track && !force_reset) {
         return;
     }
     if (Mix_PlayingMusic()) {
         Mix_HaltMusic();
     }
-    this->playing_track = track;
+    playing_track = track;
     Mix_Music *mus = Mix_LoadMUS(track.c_str());
     Mix_PlayMusic(mus, looping ? -1 : 1);
 }
 
 void SDLAudioManager::play_sfx(SFX sfx) {
     logger.debug("Playing SFX");
-    Mix_PlayChannel(-1, (Mix_Chunk*) this->sfx_data[sfx], 0);
+    Mix_PlayChannel(-1, (Mix_Chunk*) sfx_data[sfx], 0);
 }
 
 void SDLAudioManager::fade_out(int ms) {
