@@ -59,9 +59,6 @@ void Character::reset() {
 
     facing = FacingRight;
 
-    if (anim) {
-        delete anim;
-    }
     anim = NULL;
 
     walk_phase = 0;
