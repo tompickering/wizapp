@@ -29,6 +29,8 @@ class Animation {
 
         float x;
         float y;
+
+        bool clickable;
     protected:
         string base;
         int frames;

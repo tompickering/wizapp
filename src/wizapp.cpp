@@ -72,126 +72,126 @@ void WizApp::init() {
 }
 
 void WizApp::update(float delta_time) {
-    if (this->state == GS_Intro) {
-        this->intro.update(delta_time);
-        if (this->intro.complete)
-            this->set_state(GS_Menu);
-    } else if (this->state == GS_Menu) {
-        this->menu.update(delta_time);
-        if (this->menu.complete) {
+    if (state == GS_Intro) {
+        intro.update(delta_time);
+        if (intro.complete)
+            set_state(GS_Menu);
+    } else if (state == GS_Menu) {
+        menu.update(delta_time);
+        if (menu.complete) {
             level_no = menu.get_level_to_start();
             menu.reset();
-            this->set_state(GS_StartLevel);
+            set_state(GS_StartLevel);
         }
-    } else if (this->state == GS_Event) {
-        this->event.update(delta_time);
-        if (this->event.complete) {
-            this->set_state(GS_Menu);
+    } else if (state == GS_Event) {
+        event.update(delta_time);
+        if (event.complete) {
+            set_state(GS_Menu);
         }
-    } else if (this->state == GS_StartLevScene || this->state == GS_EndLevScene) {
-        if (this->scene) {
-            draw_manager.update(this->scene);
-            this->scene->update(delta_time);
+    } else if (state == GS_StartLevScene || state == GS_EndLevScene) {
+        if (scene) {
+            draw_manager.update(scene);
+            scene->update(delta_time);
 
-            if (this->scene->complete) {
-                if (this->fade_time == 0.f) {
+            if (scene->complete) {
+                if (fade_time == 0.f) {
                     audio_manager.fade_out(3000);
                 }
-                this->fade_time += delta_time;
-                if (this->fade_time > 3.5f) {
-                    this->fade_time = 0.f;
-                    this->scene_just_played = this->scene->scene_ref;
-                    delete this->scene;
-                    this->scene = NULL;
+                fade_time += delta_time;
+                if (fade_time > 3.5f) {
+                    fade_time = 0.f;
+                    scene_just_played = scene->scene_ref;
+                    delete scene;
+                    scene = NULL;
 
-                    if (this->state == GS_EndLevScene) {
-                        if (this->level_no == 20) {
-                            this->set_state(GS_Event);
+                    if (state == GS_EndLevScene) {
+                        if (level_no == 20) {
+                            set_state(GS_Event);
                         } else {
-                            this->set_state(GS_Menu);
+                            set_state(GS_Menu);
                         }
                     }
                 }
             }
         } else {
-            this->set_state(GS_StartLevel);
+            set_state(GS_StartLevel);
             return;
         }
-    } else if (this->state == GS_StartLevel) {
+    } else if (state == GS_StartLevel) {
         bool scene_started = true;
-        if (this->level_no == 1 && this->scene_just_played != World1Start) {
-            this->scene = new Scene(World1Start);
-        } else if (this->level_no == 16 && this->scene_just_played != World1Mid) {
-            this->scene = new Scene(World1Mid);
-        } else if (this->level_no == 21 && this->scene_just_played != World2Start) {
-            this->scene = new Scene(World2Start);
-        } else if (this->level_no == 36 && this->scene_just_played != World2Mid) {
-            this->scene = new Scene(World2Mid);
-        } else if (this->level_no == 41 && this->scene_just_played != World3Start) {
-            this->scene = new Scene(World3Start);
-        } else if (this->level_no == 56 && this->scene_just_played != World3Mid) {
-            this->scene = new Scene(World3Mid);
-        } else if (this->level_no == 61 && this->scene_just_played != World4Start) {
-            this->scene = new Scene(World4Start);
-        } else if (this->level_no == 76 && this->scene_just_played != World4Mid) {
-            this->scene = new Scene(World4Mid);
-        } else if (this->level_no == 81 && this->scene_just_played != World5Start) {
-            this->scene = new Scene(World5Start);
-        } else if (this->level_no == 96 && this->scene_just_played != World5Mid) {
-            this->scene = new Scene(World5Mid);
+        if (level_no == 1 && scene_just_played != World1Start) {
+            scene = new Scene(World1Start);
+        } else if (level_no == 16 && scene_just_played != World1Mid) {
+            scene = new Scene(World1Mid);
+        } else if (level_no == 21 && scene_just_played != World2Start) {
+            scene = new Scene(World2Start);
+        } else if (level_no == 36 && scene_just_played != World2Mid) {
+            scene = new Scene(World2Mid);
+        } else if (level_no == 41 && scene_just_played != World3Start) {
+            scene = new Scene(World3Start);
+        } else if (level_no == 56 && scene_just_played != World3Mid) {
+            scene = new Scene(World3Mid);
+        } else if (level_no == 61 && scene_just_played != World4Start) {
+            scene = new Scene(World4Start);
+        } else if (level_no == 76 && scene_just_played != World4Mid) {
+            scene = new Scene(World4Mid);
+        } else if (level_no == 81 && scene_just_played != World5Start) {
+            scene = new Scene(World5Start);
+        } else if (level_no == 96 && scene_just_played != World5Mid) {
+            scene = new Scene(World5Mid);
         } else {
             scene_started = false;
         }
 
         if (scene_started) {
-            this->set_state(GS_StartLevScene);
+            set_state(GS_StartLevScene);
             return;
         }
 
-        if (this->level_no > 100) {
+        if (level_no > 100) {
             running = false;
             return;
         } else {
-            this->level = new Level(Original, this->level_no);
-            level_ref = this->level;
-            this->level->load();
+            level = new Level(Original, level_no);
+            level_ref = level;
+            level->load();
             audio_manager.play_music(level_ref->get_track(), false, true);
-            this->next_level_pause = 0.f;
-            this->set_state(GS_Level);
+            next_level_pause = 0.f;
+            set_state(GS_Level);
         }
-    } else if (this->state == GS_EndLevel) {
+    } else if (state == GS_EndLevel) {
         bool scene_started = true;
-        if (this->level_no == 20) {
-            this->scene = new Scene(World1End);
-        } else if (this->level_no == 40) {
-            this->scene = new Scene(World2End);
-        } else if (this->level_no == 60) {
-            this->scene = new Scene(World3End);
-        } else if (this->level_no == 80) {
-            this->scene = new Scene(World4End);
-        } else if (this->level_no == 100) {
-            this->scene = new Scene(World5End);
+        if (level_no == 20) {
+            scene = new Scene(World1End);
+        } else if (level_no == 40) {
+            scene = new Scene(World2End);
+        } else if (level_no == 60) {
+            scene = new Scene(World3End);
+        } else if (level_no == 80) {
+            scene = new Scene(World4End);
+        } else if (level_no == 100) {
+            scene = new Scene(World5End);
         } else {
             scene_started = false;
         }
 
-        this->set_state(scene_started ? GS_EndLevScene : GS_StartLevel);
+        set_state(scene_started ? GS_EndLevScene : GS_StartLevel);
 
-        if (this->state == GS_StartLevel)
-            this->level_no++;
+        if (state == GS_StartLevel)
+            level_no++;
 
-    } else if (this->state == GS_Level) {
+    } else if (state == GS_Level) {
         if (input_manager.read(R, true) && !level_ref->complete) {
             level_ref->reset();
         }
 
         draw_manager.update(level_ref);
-        if (this->next_level_pause == 0.f) {
+        if (next_level_pause == 0.f) {
             level_ref->update(delta_time);
         }
 
         if (level_ref->complete) {
-            if (this->next_level_pause == 0.f) {
+            if (next_level_pause == 0.f) {
                 logger.info("Level complete!");
                 savegame.completed(level_ref->number);
                 /* Fade out music when about to change */
@@ -199,13 +199,13 @@ void WizApp::update(float delta_time) {
                     audio_manager.fade_out(1000);
                 }
             }
-            if (this->next_level_pause > 1.5f) {
+            if (next_level_pause > 1.5f) {
                 level_ref->clear();
-                delete this->level;
-                this->level = NULL;
-                this->set_state(GS_EndLevel);
+                delete level;
+                level = NULL;
+                set_state(GS_EndLevel);
             } else {
-                this->next_level_pause += delta_time;
+                next_level_pause += delta_time;
             }
         }
     }
@@ -215,7 +215,7 @@ void WizApp::update(float delta_time) {
 }
 
 int WizApp::run() {
-    this->init();
+    init();
     running = true;
 
     steady_clock::time_point clock_begin;
@@ -227,8 +227,8 @@ int WizApp::run() {
     while (running) {
         clock_begin = steady_clock::now();
         input_manager.update();
-        this->speed = input_manager.read(LShift, false) ? 3.f : 1.f;
-        this->update(delta_time);
+        speed = input_manager.read(LShift, false) ? 3.f : 1.f;
+        update(delta_time);
 
         /* Compute loop time and sleep */
         clock_end = steady_clock::now();
@@ -242,12 +242,12 @@ int WizApp::run() {
         clock_end = steady_clock::now();
         time_span = clock_end - clock_begin;
         delta_time = float(time_span.count()) * steady_clock::period::num / steady_clock::period::den;
-        delta_time *= this->speed;
+        delta_time *= speed;
     }
 
     if (level_ref) {
         level_ref->clear();
-        delete this->level;
+        delete level;
         level_ref = NULL;
     }
 
@@ -255,8 +255,8 @@ int WizApp::run() {
 }
 
 void WizApp::set_state(GameState new_state) {
-    logger.info(this->state2str(this->state) + " -> " + this->state2str(new_state));
-    this->state = new_state;
+    logger.info(state2str(state) + " -> " + state2str(new_state));
+    state = new_state;
 }
 
 string WizApp::state2str(GameState state) {

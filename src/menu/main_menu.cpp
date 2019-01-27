@@ -5,6 +5,7 @@
 
 #include "../scene.h"
 #include "../draw/draw.h"
+#include "../save/save.h"
 #include "../anim/animation.h"
 #include "../anim/animation_looping.h"
 
@@ -85,7 +86,7 @@ void MainMenu::start_round_select() {
     unsigned int world = savegame.world();
     audio_manager.play_music("assets/audio/WINDS.ogg", false, true);
     rs_bg = new Animation(.5f, .5f, "assets/img/menu/hub", 1, 1.f);
-    rs_back = new Animation(.8f, .9f, "assets/img/menu/goback", 1, 1.f);
+    rs_back = new Animation(.75f, .85f, "assets/img/menu/goback", 1, 1.f);
     current_anims.push_back(rs_bg);
     current_anims.push_back(rs_back);
 
@@ -115,11 +116,19 @@ void MainMenu::open_world(unsigned int world) {
     world_open = world;
     Animation *s;
     for (int i = 0; i < 20; ++i) {
-        float x = 0.10f + 0.2f * (i % 5);
-        float y = 0.16f + 0.2f * (i / 5);
+        unsigned int level_no = 1 + (world_open * 20) + i;
+
+        float x = 0.10f + 0.20f * (i % 5);
+        float y = 0.20f + 0.16f * (i / 5);
         s = new Animation(x, y, "assets/img/menu/select/level", 1, 1.f);
         level_icons.push_back(s);
         current_anims.push_back(s);
+
+        if (savegame.level_state(level_no) == Completed) {
+            s = new Animation(x, y, "assets/img/menu/select/tick", 1, 1.f);
+            s->clickable = false;
+            current_anims.push_back(s);
+        }
     }
 }
 

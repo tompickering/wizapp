@@ -128,7 +128,8 @@ void SDLDrawManager::update(vector<Animation*> anims) {
         if (spr_surf) {
             SDL_BlitSurface(spr_surf, NULL, surf, &surf_rect);
             /* Check if this draw element has been clicked */
-            if (click_pos.x >= draw_x && click_pos.x <= draw_x + spr_surf->w
+            if (anim->clickable
+                && click_pos.x >= draw_x && click_pos.x <= draw_x + spr_surf->w
                 && click_pos.y >= draw_y && click_pos.y <= draw_y + spr_surf->h) {
                 clicked_animation = anim;
                 clicked_animation_rel_x = (float)(click_pos.x - draw_x) / (float)(spr_surf->w);
