@@ -79,13 +79,14 @@ void WizApp::update(float delta_time) {
     } else if (this->state == GS_Menu) {
         this->menu.update(delta_time);
         if (this->menu.complete) {
+            level_no = menu.get_level_to_start();
+            menu.reset();
             this->set_state(GS_StartLevel);
         }
     } else if (this->state == GS_Event) {
         this->event.update(delta_time);
         if (this->event.complete) {
-            this->set_state(GS_StartLevel);
-            this->level_no = 21;
+            this->set_state(GS_Menu);
         }
     } else if (this->state == GS_StartLevScene || this->state == GS_EndLevScene) {
         if (this->scene) {
@@ -107,8 +108,7 @@ void WizApp::update(float delta_time) {
                         if (this->level_no == 20) {
                             this->set_state(GS_Event);
                         } else {
-                            this->level_no++;
-                            this->set_state(GS_StartLevel);
+                            this->set_state(GS_Menu);
                         }
                     }
                 }

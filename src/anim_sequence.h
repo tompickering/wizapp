@@ -20,7 +20,7 @@ class AnimSequence {
         float next_event_countdown;
         vector<Animation*> current_anims;
         Scene *current_scene;
-        void clear_anims();
+        virtual void clear_anims();
 };
 
 #endif

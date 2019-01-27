@@ -131,6 +131,8 @@ void SDLDrawManager::update(vector<Animation*> anims) {
             if (click_pos.x >= draw_x && click_pos.x <= draw_x + spr_surf->w
                 && click_pos.y >= draw_y && click_pos.y <= draw_y + spr_surf->h) {
                 clicked_animation = anim;
+                clicked_animation_rel_x = (float)(click_pos.x - draw_x) / (float)(spr_surf->w);
+                clicked_animation_rel_y = (float)(click_pos.y - draw_y) / (float)(spr_surf->h);
             }
         }
     }
@@ -148,9 +150,14 @@ void* SDLDrawManager::get_sprite_data(string img_path) {
     return NULL;
 }
 
-Animation* SDLDrawManager::read_clicked_animation() {
-    Animation *result = clicked_animation;
+AnimClick SDLDrawManager::read_clicked_animation() {
+    AnimClick result;
+    result.anim = clicked_animation;
+    result.rel_x = clicked_animation_rel_x;
+    result.rel_y = clicked_animation_rel_y;
     clicked_animation = NULL;
+    clicked_animation_rel_x = 0.f;
+    clicked_animation_rel_y = 0.f;
     return result;
 }
 
