@@ -47,8 +47,11 @@ void MainMenu::next_event() {
     } else {
         for (unsigned int i = 0; i < level_icons.size(); ++i) {
             if (clicked == level_icons.at(i)) {
-                level_to_start = 1 + (world_open * 20) + i;
-                this->complete = true;
+                unsigned int level_no = 1 + (world_open * 20) + i;
+                if (savegame.level_state(level_no) != Locked) {
+                    level_to_start = level_no;
+                    this->complete = true;
+                }
             }
         }
     }
@@ -95,11 +98,11 @@ void MainMenu::start_round_select() {
     switch (world) {
         case 0:
             /* Sun */
-            ne = new Animation(.3f, .5f, "assets/img/menu/notyet", 1, 1.f);
+            ne = new Animation(.32f, .55f, "assets/img/menu/notyet", 1, 1.f);
             current_anims.push_back(ne);
         case 1:
             /* Jazz */
-            ne = new Animation(.7f, .52f, "assets/img/menu/notyet", 1, 1.f);
+            ne = new Animation(.68f, .55f, "assets/img/menu/notyet", 1, 1.f);
             current_anims.push_back(ne);
         case 2:
             /* Star */
@@ -124,8 +127,13 @@ void MainMenu::open_world(unsigned int world) {
         level_icons.push_back(s);
         current_anims.push_back(s);
 
-        if (savegame.level_state(level_no) == Completed) {
+        LevelState lstate = savegame.level_state(level_no);
+        if (lstate == Completed) {
             s = new Animation(x, y, "assets/img/menu/select/tick", 1, 1.f);
+            s->clickable = false;
+            current_anims.push_back(s);
+        } else if (lstate == Locked) {
+            s = new Animation(x, y, "assets/img/menu/select/cross", 1, 1.f);
             s->clickable = false;
             current_anims.push_back(s);
         }
