@@ -178,7 +178,7 @@ void WizApp::update(float delta_time) {
         set_state(scene_started ? GS_EndLevScene : GS_StartLevel);
 
         if (state == GS_StartLevel)
-            level_no++;
+            level_no = savegame.next_level();
 
     } else if (state == GS_Level) {
         if (input_manager.read(R, true) && !level_ref->complete) {
