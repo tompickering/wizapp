@@ -12,49 +12,55 @@ void SDLInputManager::update() {
         } else if (e.type == SDL_KEYDOWN && !e.key.repeat) {
             switch(e.key.keysym.sym) {
                 case SDLK_UP:
-                    this->up = true;
+                    up = true;
                     break;
                 case SDLK_DOWN:
-                    this->down = true;
+                    down = true;
                     break;
                 case SDLK_LEFT:
-                    this->left = true;
+                    left = true;
                     break;
                 case SDLK_RIGHT:
-                    this->right = true;
+                    right = true;
                     break;
                 case SDLK_SPACE:
-                    this->space = true;
+                    space = true;
                     break;
                 case SDLK_r:
-                    this->r = true;
+                    r = true;
+                    break;
+                case SDLK_q:
+                    q = true;
                     break;
                 case SDLK_LSHIFT:
-                    this->lshift = true;
+                    lshift = true;
                     break;
             }
         } else if (e.type == SDL_KEYUP) {
             switch(e.key.keysym.sym) {
                 case SDLK_UP:
-                    this->up = false;
+                    up = false;
                     break;
                 case SDLK_DOWN:
-                    this->down = false;
+                    down = false;
                     break;
                 case SDLK_LEFT:
-                    this->left = false;
+                    left = false;
                     break;
                 case SDLK_RIGHT:
-                    this->right = false;
+                    right = false;
                     break;
                 case SDLK_SPACE:
-                    this->space = false;
+                    space = false;
                     break;
                 case SDLK_r:
-                    this->r = false;
+                    r = false;
+                    break;
+                case SDLK_q:
+                    q = false;
                     break;
                 case SDLK_LSHIFT:
-                    this->lshift = false;
+                    lshift = false;
                     break;
             }
         } else if (e.type == SDL_MOUSEBUTTONDOWN && e.button.button == SDL_BUTTON_LEFT) {

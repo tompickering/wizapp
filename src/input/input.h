@@ -8,6 +8,7 @@ enum Input {
     Right,
     Space,
     R,
+    Q,
     LShift,
 };
 
@@ -29,6 +30,7 @@ class InputManager {
         bool space;
         bool lshift;
         bool r;
+        bool q;
         ClickPos click_pos;
         virtual void update() = 0;
 };

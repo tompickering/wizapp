@@ -185,6 +185,12 @@ void WizApp::update(float delta_time) {
             level_ref->reset();
         }
 
+        if (input_manager.read(Q, true) && !level_ref->complete) {
+            set_state(GS_Menu);
+            logger.info("Quitting to menu");
+            return;
+        }
+
         draw_manager.update(level_ref);
         if (next_level_pause == 0.f) {
             level_ref->update(delta_time);

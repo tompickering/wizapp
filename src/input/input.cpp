@@ -9,32 +9,36 @@ bool InputManager::read(Input input, bool reset) {
     bool result;
     switch (input) {
         case Up:
-            result = this->up;
-            this->up = this->up && !reset;
+            result = up;
+            up = up && !reset;
             break;
         case Down:
-            result = this->down;
-            this->down = this->down && !reset;
+            result = down;
+            down = down && !reset;
             break;
         case Left:
-            result = this->left;
-            this->left = this->left && !reset;
+            result = left;
+            left = left && !reset;
             break;
         case Right:
-            result = this->right;
-            this->right = this->right && !reset;
+            result = right;
+            right = right && !reset;
             break;
         case Space:
-            result = this->space;
-            this->space = this->space && !reset;
+            result = space;
+            space = space && !reset;
             break;
         case R:
-            result = this->r;
-            this->r = this->r && !reset;
+            result = r;
+            r = r && !reset;
+            break;
+        case Q:
+            result = q;
+            q = q && !reset;
             break;
         case LShift:
-            result = this->lshift;
-            this->lshift = this->lshift && !reset;
+            result = lshift;
+            lshift = lshift && !reset;
             break;
     }
     return result;
