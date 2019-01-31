@@ -44,6 +44,7 @@ class Collectable : public Entity {
     private:
         Animation *anim_idle;
         Animation *anim_collect;
+        float shield;
 };
 
 #endif
