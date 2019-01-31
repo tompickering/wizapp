@@ -74,6 +74,21 @@ void SDLDrawManager::update(Level *level) {
             SDL_FillRect(surf, &surf_rect, SDL_MapRGB(surf->format,
                                                             ent->r, ent->g, ent->b));
         }
+
+        /* If this is a collectable, draw a shield as necessary */
+        Collectable *collectable = dynamic_cast<Collectable*>(ent);
+        if (collectable && collectable->get_shield() > 0) {
+            int spr_idx = (int)(collectable->get_shield() * 5.f) + 1;
+            if (spr_idx > 5)
+                spr_idx = 5;
+            spr_surf = (SDL_Surface*) get_sprite_data("assets/img/shield/shield0" + std::to_string(spr_idx) + ".png");
+            surf_rect = {int((ent->real_x + ent->x_draw_offset) * (float) blocksz_w),
+                         int((ent->real_y + ent->y_draw_offset) * (float) blocksz_h),
+                         blocksz_w,
+                         blocksz_h};
+            SDL_BlitSurface(spr_surf, NULL, surf, &surf_rect);
+        }
+
     }
     SDL_UpdateWindowSurface(win);
 }

@@ -121,6 +121,10 @@ Collectable::~Collectable() {
     delete anim_collect;
 }
 
+float Collectable::get_shield() {
+    return shield;
+}
+
 void Collectable::update(float delta_time) {
     Entity::update(delta_time);
     if (collected) {
@@ -133,17 +137,15 @@ void Collectable::update(float delta_time) {
     if ((level_ref->wizard->block_x == block_x && level_ref->wizard->block_y == block_y - 1)
         || (level_ref->blob &&(
             level_ref->blob->block_x == block_x && level_ref->blob->block_y == block_y - 1))) {
-        shield += delta_time * 2.f;
+        shield += delta_time * 5.f;
     } else {
-        shield -= delta_time * 2.f;
+        shield -= delta_time * 10.f;
     }
 
     if (shield > 1.f)
         shield = 1.f;
     else if (shield < 0)
         shield = 0.f;
-
-    logger.info(std::to_string(shield));
 }
 
 void Collectable::reset() {

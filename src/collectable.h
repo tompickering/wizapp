@@ -41,6 +41,7 @@ class Collectable : public Entity {
         virtual void reset() override;
         virtual string sprite() override;
         CollectableType ctype;
+        float get_shield();
     private:
         Animation *anim_idle;
         Animation *anim_collect;
