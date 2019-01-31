@@ -134,12 +134,15 @@ void Collectable::update(float delta_time) {
     }
 
     /* Check if we're being stood on - shield animation */
-    if ((level_ref->wizard->block_x == block_x && level_ref->wizard->block_y == block_y - 1)
-        || (level_ref->blob &&(
-            level_ref->blob->block_x == block_x && level_ref->blob->block_y == block_y - 1))) {
-        shield += delta_time * 5.f;
+    if ((level_ref->wizard->real_y == real_y - 1
+             && level_ref->wizard->real_x >= real_x - 0.5
+             && level_ref->wizard->real_x <= real_x + 0.5)
+        || (level_ref->blob &&
+            (level_ref->blob->real_y == real_y - 1
+             && level_ref->blob->real_x == real_x))) {
+        shield += delta_time * 12.f;
     } else {
-        shield -= delta_time * 10.f;
+        shield -= delta_time * 12.f;
     }
 
     if (shield > 1.f)
