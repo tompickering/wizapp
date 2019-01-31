@@ -16,6 +16,8 @@ class Animation {
         virtual ~Animation();
         virtual void advance(float delta);
         virtual string sprite();
+        /* Rather than relying on state, sample an animation this far through (0-1) */
+        virtual string sprite(float);
         void reset();
         bool complete;
         bool hide_on_complete;
@@ -38,6 +40,8 @@ class Animation {
         float frame_duration;
         float time;
         bool reverse;
+    private:
+        string get_sprite_string(float);
 };
 
 #endif
