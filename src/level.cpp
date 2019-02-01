@@ -55,13 +55,17 @@ bool Level::switch_character() {
     return false;
 }
 
-void Level::update_falling() {
+bool Level::update_falling() {
     Entity *ent;
+    bool anything_falling = false;
+
+    /* Nothing starts falling whilst something is still moving */
     for (unsigned int i = 0; i < this->entities.size(); ++i) {
         ent = this->entities[i];
         if (ent->moving)
-            return;
+            return false;
     }
+
     for (unsigned int i = 0; i < this->entities.size(); ++i) {
         ent = this->entities[i];
         if (ent->flying)
@@ -70,8 +74,11 @@ void Level::update_falling() {
         if (!this->on_ladder(ent->block_x, ent->block_y)
             && this->is_empty(ent->block_x, ent->block_y + 1)) {
             ent->falling = true;
+            anything_falling = true;
         }
     }
+
+    return anything_falling;
 }
 
 void Level::load() {

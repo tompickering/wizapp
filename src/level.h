@@ -49,7 +49,7 @@ class Level {
         bool stable();
         Character *active_character;
         bool switch_character();
-        void update_falling();
+        bool update_falling();
         void reset();
         string get_theme_base();
         string theme_base;
