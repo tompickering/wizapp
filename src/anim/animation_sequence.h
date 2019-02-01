@@ -15,6 +15,7 @@ class AnimationSequence : public Animation {
         virtual ~AnimationSequence();
         virtual void advance(float delta) override;
         virtual string sprite() override;
+        virtual string sprite(float) override;
         void add_animation(Animation *anim);
     protected:
         Animation *current_anim;

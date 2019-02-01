@@ -31,12 +31,12 @@ class Animation {
 
         float x;
         float y;
+        float duration;
 
         bool clickable;
     protected:
         string base;
         int frames;
-        float duration;
         float frame_duration;
         float time;
         bool reverse;

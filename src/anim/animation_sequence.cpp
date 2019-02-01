@@ -9,45 +9,64 @@ using std::string;
 using std::vector;
 
 AnimationSequence::AnimationSequence() : Animation() {
-    this->current_anim = NULL;
+    current_anim = NULL;
+    duration = 0.f;
 }
 
 AnimationSequence::~AnimationSequence() {
-    for (unsigned int i = 0; i < this->anims.size(); ++i) {
-        delete this->anims.at(i);
+    for (unsigned int i = 0; i < anims.size(); ++i) {
+        delete anims.at(i);
     }
 }
 
 void AnimationSequence::add_animation(Animation *anim) {
-    this->anims.push_back(anim);
+    anims.push_back(anim);
+    duration += anim->duration;
 }
 
 void AnimationSequence::advance(float delta) {
     bool all_complete = true;
-    for (unsigned int i = 0; i < this->anims.size(); ++i) {
-        if (!this->anims.at(i)->complete) {
-            if (this->current_anim && this->current_anim != this->anims.at(i)) {
-                this->anims.at(i)->x = this->current_anim->get_x();
-                this->anims.at(i)->y = this->current_anim->get_y();
+    for (unsigned int i = 0; i < anims.size(); ++i) {
+        if (!anims.at(i)->complete) {
+            if (current_anim && current_anim != anims.at(i)) {
+                anims.at(i)->x = current_anim->get_x();
+                anims.at(i)->y = current_anim->get_y();
             }
-            this->current_anim = this->anims.at(i);
+            current_anim = anims.at(i);
             all_complete = false;
             break;
         }
     }
 
-    if (this->current_anim) {
-        this->current_anim->advance(delta);
-        this->x = this->current_anim->get_x();
-        this->y = this->current_anim->get_y();
+    if (current_anim) {
+        current_anim->advance(delta);
+        x = current_anim->get_x();
+        y = current_anim->get_y();
     }
 
-    this->complete = all_complete;
+    complete = all_complete;
 }
 
 string AnimationSequence::sprite() {
-    if (!this->current_anim)
+    if (!current_anim)
         return "";
-    return this->current_anim->sprite();
+    return current_anim->sprite();
+}
+
+string AnimationSequence::sprite(float interp) {
+    float tracked_duration = 0.f;
+    for (unsigned int i = 0; i < anims.size(); ++i) {
+        float a_duration = anims.at(i)->duration;
+        float base_duration = tracked_duration;
+        tracked_duration += a_duration;
+        if (tracked_duration / duration >= interp) {
+            /* Interpolation point somewhere inside this anim */
+            float start = base_duration / duration;
+            float end = tracked_duration / duration;
+            float a_point = (interp - start) / (end - start);
+            return anims.at(i)->sprite(a_point);
+        }
+    }
+    return "";
 }
 
