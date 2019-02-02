@@ -10,9 +10,9 @@
 
 using std::string;
 
-Collectable::Collectable(int x, int y, bool flying) : Entity(x, y) {
+Collectable::Collectable(int _x, int _y, bool _flying) : Entity(_x, _y) {
     name = "Collectable";
-    flying = flying;
+    flying = _flying;
     navigable_h = true;
     collected = false;
     shield = 0.f;
