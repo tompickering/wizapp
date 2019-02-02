@@ -67,6 +67,24 @@ Animation::Animation(float _x, float _y, string _base, int _frames, float _durat
     clickable = true;
 }
 
+Animation::Animation(float _x, float _y, string _base, int _frames, float _duration, bool _reverse) {
+    base = _base;
+    frames = _frames;
+    duration = _duration;
+    frame_duration = duration / (float) frames;
+    motion = NULL;
+    reset();
+    x = _x;
+    y = _y;
+    reverse = _reverse;
+    hide_on_complete = false;
+    clickable = true;
+
+    if (reverse) {
+        time = duration;
+    }
+}
+
 Animation::~Animation() {
     if (motion)
         delete motion;

@@ -13,6 +13,7 @@ class Animation {
         Animation(string base, int frames, float duration);
         Animation(string base, int frames, float duration, bool reverse);
         Animation(float x, float y, string base, int frames, float duration);
+        Animation(float x, float y, string base, int frames, float duration, bool reverse);
         virtual ~Animation();
         virtual void advance(float delta);
         virtual string sprite();

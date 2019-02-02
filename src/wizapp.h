@@ -5,6 +5,7 @@
 
 #include "event.h"
 #include "intro.h"
+#include "outro.h"
 #include "scene.h"
 #include "level.h"
 #include "menu/main_menu.h"
@@ -21,6 +22,7 @@ enum GameState {
     GS_Level,
     GS_StartLevScene,
     GS_EndLevScene,
+    GS_Outro,
 };
 
 class WizApp {
@@ -30,6 +32,7 @@ class WizApp {
     private:
         GameState state;
         Intro intro;
+        Outro outro;
         Event event;
         Scene *scene;
         MainMenu menu;

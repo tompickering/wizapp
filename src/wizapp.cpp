@@ -9,6 +9,7 @@
 #include "level.h"
 #include "logger.h"
 #include "intro.h"
+#include "outro.h"
 #include "event.h"
 
 #include <csignal>
@@ -75,6 +76,10 @@ void WizApp::update(float delta_time) {
     if (state == GS_Intro) {
         intro.update(delta_time);
         if (intro.complete)
+            set_state(GS_Menu);
+    } else if (state == GS_Outro) {
+        outro.update(delta_time);
+        if (outro.complete)
             set_state(GS_Menu);
     } else if (state == GS_Menu) {
         menu.update(delta_time);
