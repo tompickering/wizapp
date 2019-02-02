@@ -215,7 +215,7 @@ void Scene::update(float delta_time) {
 
     this->time += delta_time;
     this->sentence_time += delta_time;
-    if (this->scene_ref == World5End && this->time > 1)
+    if (this->scene_ref == World5End && this->time > 19)
         this->complete = true;
 }
 
