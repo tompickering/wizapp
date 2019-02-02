@@ -8,6 +8,7 @@
 
 #include "anim/animation.h"
 #include "anim/animation_boomerang.h"
+#include "anim/animation_sequence.h"
 
 #include "shared.h"
 
@@ -60,8 +61,6 @@ void Character::reset() {
     facing = FacingRight;
 
     anim = NULL;
-
-    walk_phase = 0;
 }
 
 void Character::single_block_move_complete() {
@@ -199,16 +198,7 @@ void Character::update_anim(float delta_time) {
                 this->facing = (this->facing == FacingLeft ? FacingRight : FacingLeft);
             }
 
-            if (this->type == Baddie) {
-                this->state = Idling;
-            } else {
-                if (this->walk_phase == 0 && this->state == Walking) {
-                    this->walk_phase++;
-                } else {
-                    this->state = Idling;
-                    this->walk_phase = 0;
-                }
-            }
+            this->state = Idling;
         } else {
             this->anim->advance(delta_time);
         }
@@ -289,10 +279,15 @@ void Character::update_anim(float delta_time) {
 
             if (this->state == Walking) {
                 anim_base = this->anim_base
-                          + (this->facing == FacingLeft ? "left" : "right")
-                          + (this->walk_phase == 0 ? "" : "_alt");
-                this->anim = new AnimationBoomerang(anim_base, 5, WALK_DURATION / 4.f);
-                ((AnimationBoomerang*)(this->anim))->set_iterations(1);
+                          + (this->facing == FacingLeft ? "left" : "right");
+                AnimationSequence *anim_seq = new AnimationSequence();
+                AnimationBoomerang *part1 = new AnimationBoomerang(anim_base, 5, WALK_DURATION / 4.f);
+                AnimationBoomerang *part2 = new AnimationBoomerang(anim_base + "_alt", 5, WALK_DURATION / 4.f);
+                part1->set_iterations(1);
+                part2->set_iterations(1);
+                anim_seq->add_animation(part1);
+                anim_seq->add_animation(part2);
+                this->anim = anim_seq;
             }
         }
     }

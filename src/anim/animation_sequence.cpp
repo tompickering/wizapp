@@ -20,11 +20,19 @@ AnimationSequence::~AnimationSequence() {
 }
 
 void AnimationSequence::add_animation(Animation *anim) {
+    /* If this is our first animation, we consider it 'current' */
+    if (!anims.size()) {
+        current_anim = anim;
+    }
+
     anims.push_back(anim);
     duration += anim->duration;
 }
 
 void AnimationSequence::advance(float delta) {
+    if (complete)
+        return;
+
     bool all_complete = true;
     for (unsigned int i = 0; i < anims.size(); ++i) {
         if (!anims.at(i)->complete) {

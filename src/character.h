@@ -52,7 +52,6 @@ class Character : public Entity {
         void update_anim(float delta_time);
         Animation *anim;
         string anim_base;
-        int walk_phase;
     private:
         FaceDirection facing;
         CharacterState state;
