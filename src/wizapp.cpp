@@ -112,6 +112,8 @@ void WizApp::update(float delta_time) {
                     if (state == GS_EndLevScene) {
                         if (level_no == 20) {
                             set_state(GS_Event);
+                        } else if (level_no == 100) {
+                            set_state(GS_Outro);
                         } else {
                             set_state(GS_Menu);
                         }
