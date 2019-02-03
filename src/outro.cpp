@@ -19,12 +19,6 @@ Outro::Outro() {
 }
 
 void Outro::next_event() {
-    //if (music_fade_required) {
-        //music_fade_required = false;
-        //audio_manager.fade_out((int)(MUSIC_FADE_TIME * 1000.f));
-        //next_event_countdown = MUSIC_FADE_TIME;
-    //} else
-
     if (world_end_required) {
         world_end(on_world++);
         next_event_countdown = MUSIC_FADE_TIME + 1.f;
@@ -41,13 +35,12 @@ void Outro::next_event() {
         end_done = true;
     } else {
         world(on_world);
-        next_event_countdown = 10.f;
+        next_event_countdown = world_times[on_world];
         world_end_required = true;
     }
 }
 
 void Outro::portal_open() {
-    //AnimationSequence portal = new AnimationSequence();
     current_anims.push_back(
         new Animation(.5f, PORTAL_Y, "assets/img/extro/portal/", 10, PORTAL_OPEN_TIME));
 }
