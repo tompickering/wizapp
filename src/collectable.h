@@ -42,6 +42,8 @@ class Collectable : public Entity {
         virtual string sprite() override;
         CollectableType ctype;
         float get_shield();
+
+        static Animation* make_anim(CollectableType type);
     private:
         Animation *anim_idle;
         Animation *anim_collect;

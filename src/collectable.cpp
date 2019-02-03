@@ -16,17 +16,13 @@ Collectable::Collectable(int _x, int _y, bool _flying) : Entity(_x, _y) {
     navigable_h = true;
     collected = false;
     shield = 0.f;
-    string type = flying ? "2" : "1";
 
-    /* Defaults */
+    /* Default */
     ctype = flying ? FMushroom : Flower;
-    float duration = 0.35f;
 
     if (flying) {
         switch (level_ref->theme) {
             case Valley:
-                ctype = FMushroom;
-                break;
             case Industrial:
                 ctype = FMushroom;
                 break;
@@ -59,7 +55,6 @@ Collectable::Collectable(int _x, int _y, bool _flying) : Entity(_x, _y) {
         switch (level_ref->theme) {
             case Valley:
                 ctype = Flower;
-                duration = 0.2f;
                 break;
             case Industrial:
                 ctype = Mushroom;
@@ -75,7 +70,6 @@ Collectable::Collectable(int _x, int _y, bool _flying) : Entity(_x, _y) {
                 break;
             case Stereo:
                 ctype = Clef;
-                duration = 0.5f;
                 break;
             case Star:
                 ctype = Star1;
@@ -92,17 +86,7 @@ Collectable::Collectable(int _x, int _y, bool _flying) : Entity(_x, _y) {
         }
     }
 
-    switch(ctype) {
-        case Flower:
-        case Note3:
-            anim_idle = new AnimationBoomerang(
-                    string(level_ref->theme_base + "collectable" + type + "/"), 10, duration);
-            break;
-        default:
-            anim_idle = new AnimationLooping(
-                    string(level_ref->theme_base + "collectable" + type + "/"), 10, duration);
-            break;
-    }
+    anim_idle = make_anim(ctype);
 
     anim_collect = new Animation(level_ref->theme_base + "collect/", 10, 0.2f);
     anim_collect->hide_on_complete = true;
@@ -119,6 +103,93 @@ Collectable::Collectable(int _x, int _y, bool _flying) : Entity(_x, _y) {
 Collectable::~Collectable() {
     delete anim_idle;
     delete anim_collect;
+}
+
+Animation* Collectable::make_anim(CollectableType type) {
+    float duration = 0.35f;
+
+    string theme;
+    switch (type) {
+        case Flower:
+        case FMushroom:
+            theme = "01";
+            break;
+        case Mushroom:
+            theme = "02";
+            break;
+        case Atom:
+        case Energy:
+            theme = "03";
+            break;
+        case Shadow:
+        case FShadow:
+            theme = "04";
+            break;
+        case Note1:
+        case Note2:
+            theme = "05";
+            break;
+        case Clef:
+        case Note3:
+            theme = "06";
+            break;
+        case Star1:
+        case FStar1:
+            theme = "07";
+            break;
+        case Star2:
+        case FStar2:
+            theme = "08";
+            break;
+        case Diamond:
+        case FDiamond:
+            theme = "09";
+            break;
+        case Unknown:
+        case FUnknown:
+            theme = "10";
+            break;
+    }
+    string base = "assets/img/themes/" + theme + "/";
+
+    string flying_str = "1";
+    switch (type) {
+        case FMushroom:
+        case Energy:
+        case FShadow:
+        case Note2:
+        case Note3:
+        case FStar1:
+        case FStar2:
+        case FDiamond:
+        case FUnknown:
+            flying_str = "2";
+            break;
+        default:
+            break;
+    }
+
+    switch (type) {
+        case Flower:
+            duration = 0.2f;
+        case Clef:
+            duration = 0.5f;
+        default:
+            break;
+    }
+
+    switch (type) {
+        case Flower:
+        case Note3:
+            return new AnimationBoomerang(
+                           string(base + "collectable" + flying_str + "/"), 10, duration);
+        default:
+            break;
+    }
+
+    return new AnimationLooping(
+                   string(base + "collectable" + flying_str + "/"), 10, duration);
+
 }
 
 float Collectable::get_shield() {
