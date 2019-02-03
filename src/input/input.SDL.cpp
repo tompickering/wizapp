@@ -12,15 +12,19 @@ void SDLInputManager::update() {
         } else if (e.type == SDL_KEYDOWN && !e.key.repeat) {
             switch(e.key.keysym.sym) {
                 case SDLK_UP:
+                case SDLK_p:
                     up = true;
                     break;
                 case SDLK_DOWN:
+                case SDLK_l:
                     down = true;
                     break;
                 case SDLK_LEFT:
+                case SDLK_z:
                     left = true;
                     break;
                 case SDLK_RIGHT:
+                case SDLK_x:
                     right = true;
                     break;
                 case SDLK_SPACE:
@@ -39,15 +43,19 @@ void SDLInputManager::update() {
         } else if (e.type == SDL_KEYUP) {
             switch(e.key.keysym.sym) {
                 case SDLK_UP:
+                case SDLK_p:
                     up = false;
                     break;
                 case SDLK_DOWN:
+                case SDLK_l:
                     down = false;
                     break;
                 case SDLK_LEFT:
+                case SDLK_z:
                     left = false;
                     break;
                 case SDLK_RIGHT:
+                case SDLK_x:
                     right = false;
                     break;
                 case SDLK_SPACE:

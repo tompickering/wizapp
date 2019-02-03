@@ -9,18 +9,22 @@ bool InputManager::read(Input input, bool reset) {
     bool result;
     switch (input) {
         case Up:
+        case P:
             result = up;
             up = up && !reset;
             break;
         case Down:
+        case L:
             result = down;
             down = down && !reset;
             break;
         case Left:
+        case Z:
             result = left;
             left = left && !reset;
             break;
         case Right:
+        case X:
             result = right;
             right = right && !reset;
             break;

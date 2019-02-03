@@ -9,6 +9,10 @@ enum Input {
     Space,
     R,
     Q,
+    Z,
+    X,
+    P,
+    L,
     LShift,
 };
 
