@@ -233,7 +233,11 @@ void Collectable::reset() {
 void Collectable::collect() {
     if (!collected) {
         logger.info("Collected!");
-        audio_manager.play_sfx(Collect);
+        if (level_ref->theme == Jazz) {
+            audio_manager.play_sfx(Awat);
+        } else {
+            audio_manager.play_sfx(Collect);
+        }
         collected = true;
         navigable_v = true;
     }

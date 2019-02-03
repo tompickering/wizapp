@@ -2,6 +2,7 @@
 
 #include <string>
 
+#include "level.h"
 #include "anim/animation.h"
 #include "anim/animation_boomerang.h"
 
@@ -60,6 +61,11 @@ string Breakable::sprite() {
 bool Breakable::break_block() {
     if (!this->breaking) {
         this->breaking = true;
+        if (level_ref->theme == Jazz) {
+            audio_manager.play_sfx(FrequencyClear);
+        } else {
+            audio_manager.play_sfx(Break);
+        }
         return true;
     }
     return false;

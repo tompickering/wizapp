@@ -163,7 +163,6 @@ void Character::update(float delta_time) {
                 if (breakable->break_block()) {
                     logger.debug("Interact with breakable");
                     this->state = Breaking;
-                    audio_manager.play_sfx(Break);
                     this->force_move_pending = true;
                     this->force_move_left = left;
                     this->force_move_breakable = breakable;
