@@ -24,7 +24,7 @@ class Outro : public AnimSequence {
     protected:
         virtual void next_event() override;
     private:
-        float world_times[6] = {1.f, 2.f, 1.f, 2.f, 1.f, 2.f};
+        float world_times[6] = {30.f, 30.f, 30.f, 30.f, 30.f, 20.f};
 
         void start();
         void portal_open();

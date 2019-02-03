@@ -2,6 +2,7 @@
 
 #include <vector>
 
+#include "collectable.h"
 #include "anim/animation.h"
 #include "anim/animation_looping.h"
 #include "anim/animation_sequence.h"
@@ -69,23 +70,62 @@ void Outro::world(int world_idx) {
         new Animation(.5f, PORTAL_Y + .02f,
             "assets/img/extro/KOSMOS" + std::to_string(world_idx + 1), 1, 1.f));
 
+    vector<Animation*> anims;
     switch (world_idx) {
         case 0:
+            anims.push_back(Collectable::make_anim(Flower));
+            anims.push_back(Collectable::make_anim(Mushroom));
+            anims.push_back(Collectable::make_anim(FMushroom));
             break;
         case 1:
+            anims.push_back(Collectable::make_anim(Atom));
+            anims.push_back(Collectable::make_anim(Energy));
+            anims.push_back(Collectable::make_anim(Shadow));
+            anims.push_back(Collectable::make_anim(FShadow));
+            anims.push_back(new Animation("assets/img/extro/snowman", 1, 1.f));
+            anims.push_back(new Animation("assets/img/extro/sun", 1, 1.f));
             break;
         case 2:
+            anims.push_back(Collectable::make_anim(Note1));
+            anims.push_back(Collectable::make_anim(Note2));
+            anims.push_back(Collectable::make_anim(Clef));
+            anims.push_back(Collectable::make_anim(Note3));
+            anims.push_back(new Animation("assets/img/extro/stereo", 1, 1.f));
+            anims.push_back(new Animation("assets/img/extro/sax", 1, 1.f));
             break;
         case 3:
+            anims.push_back(Collectable::make_anim(Star1));
+            anims.push_back(Collectable::make_anim(FStar1));
+            anims.push_back(Collectable::make_anim(Star1));
+            anims.push_back(Collectable::make_anim(FStar2));
+            anims.push_back(new Animation("assets/img/extro/alieneer", 1, 1.f));
             break;
         case 4:
+            anims.push_back(Collectable::make_anim(Diamond));
+            anims.push_back(Collectable::make_anim(FDiamond));
+            anims.push_back(Collectable::make_anim(Unknown));
+            anims.push_back(Collectable::make_anim(FUnknown));
+            anims.push_back(new Animation("assets/img/extro/frog", 1, 1.f));
             break;
         case 5:
+            anims.push_back(new Animation("assets/img/extro/masters", 1, 1.f));
+            anims.push_back(new Animation("assets/img/extro/devs", 1, 1.f));
             break;
     }
 
+    float base_x = 1.f;
+    float interval_x = 1.f;
+    for (unsigned int i = 0; i < anims.size(); ++i) {
+        anims.at(i)->x = base_x + interval_x * i;
+        anims.at(i)->y = PORTAL_Y + .05f;
+        anims.at(i)->set_motion(-1.f * anims.size(), 0.f, world_times[world_idx]);
+    }
+
+    current_anims.insert(current_anims.end(), anims.begin(), anims.end());
+
     current_anims.push_back(
         new Animation(.5f, .5f, "assets/img/extro/back", 1, 1.f));
+
     portal_open();
 }
 
