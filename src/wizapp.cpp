@@ -270,6 +270,15 @@ int WizApp::run() {
 void WizApp::set_state(GameState new_state) {
     logger.debug(state2str(state) + " -> " + state2str(new_state));
     state = new_state;
+    switch (state) {
+        case GS_Menu:
+        case GS_RoundSelect:
+            draw_manager.hide_mouse(false);
+            break;
+        default:
+            draw_manager.hide_mouse(true);
+            break;
+    }
 }
 
 string WizApp::state2str(GameState state) {

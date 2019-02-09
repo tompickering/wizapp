@@ -18,6 +18,7 @@ class SDLDrawManager : public DrawManager {
         virtual void update(Scene *scene) override;
         virtual void update(vector<Animation*> anims) override;
         virtual AnimClick read_clicked_animation();
+        virtual void hide_mouse(bool) override;
     protected:
         virtual void* get_sprite_data(string) override;
     private:

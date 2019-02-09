@@ -29,6 +29,7 @@ class DrawManager {
         virtual void update(Scene *scene) = 0;
         virtual void update(vector<Animation*> anims) = 0;
         virtual AnimClick read_clicked_animation() = 0;
+        virtual void hide_mouse(bool) = 0;
     protected:
         map<string, void*> sprite_data;
         virtual void* get_sprite_data(string) = 0;

@@ -177,4 +177,8 @@ AnimClick SDLDrawManager::read_clicked_animation() {
     return result;
 }
 
+void SDLDrawManager::hide_mouse(bool hide) {
+    SDL_ShowCursor(hide ? SDL_DISABLE : SDL_ENABLE);
+}
+
 #endif
