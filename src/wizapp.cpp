@@ -38,7 +38,6 @@ Level *level_ref = nullptr;
 #endif
 
 WizApp::WizApp() {
-    state = GS_Intro;
     scene = NULL;
     level = NULL;
     scene_just_played = None;
@@ -70,6 +69,8 @@ void WizApp::init() {
 
     savegame.load();
     level_no = savegame.next_level();
+
+    set_state(GS_Intro);
 }
 
 void WizApp::update(float delta_time) {
