@@ -54,13 +54,18 @@ class Character : public Entity {
         string anim_base;
     private:
         FaceDirection facing;
+
+        float facing_tween;
+        float turn_time;
+
         CharacterState state;
-        float turn_rate;
         bool force_move_pending;
         bool force_move_left;
         bool move_just_completed;
         Breakable *force_move_breakable;
         Collectable *pending_collectable;
+
+        Animation *anim_turn;
 };
 
 #endif

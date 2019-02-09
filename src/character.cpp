@@ -22,8 +22,6 @@ Character::Character(int _x, int _y, CharacterType ctype) : Entity(_x, _y) {
     x_draw_offset = -0.4;
     y_draw_offset = -0.1;
 
-    turn_rate = 0.1f;
-
     if (ctype == Wizard) {
         b = 0xFF;
         anim_base = "assets/img/wiz/";
@@ -39,6 +37,9 @@ Character::Character(int _x, int _y, CharacterType ctype) : Entity(_x, _y) {
     move_speed_y = 1.f / CLIMB_DURATION;
 
     reset();
+
+    /* Animations */
+    anim_turn = new Animation(anim_base + "turn", type == Wizard ? 7 : 6, 0.12f);
 }
 
 Character::~Character() {
@@ -59,6 +60,9 @@ void Character::reset() {
     force_move_breakable = NULL;
 
     facing = FacingRight;
+
+    facing_tween = 1.f;
+    turn_time = 0.15;
 
     anim = NULL;
 }
@@ -93,6 +97,24 @@ void Character::update(float delta_time) {
 
     if (!at_rest() || !level_ref->stable())
         return;
+
+    if (state == Turning) {
+        /* Have we finished turning? */
+        if (facing == FacingLeft && facing_tween == 1.f) {
+            facing = FacingRight;
+            state = Idling;
+        } else if (facing == FacingRight && facing_tween == 0.f) {
+            facing = FacingLeft;
+            state = Idling;
+        } else {
+            facing_tween = clamp(facing_tween
+                                 + delta_time * (1.f / turn_time)
+                                 * (facing == FacingLeft ? 1.f : -1.f),
+                                 0.f, 1.f);
+        }
+        /* Can't do anything else now */
+        return;
+    }
 
     if (state != Idling)
         return;
@@ -189,17 +211,16 @@ void Character::update(float delta_time) {
 /* Do not allocate a new value without freeing the old one */
 void Character::update_anim(float delta_time) {
     if (anim) {
-        if (anim->complete) {
-            delete anim;
-            anim = NULL;
+        /* Only if this is a 'playing' rather than a 'sampled' animation... */
+        if (state != Turning) {
+            if (anim->complete) {
+                delete anim;
+                anim = NULL;
 
-            if (state == Turning) {
-                facing = (facing == FacingLeft ? FacingRight : FacingLeft);
+                state = Idling;
+            } else {
+                anim->advance(delta_time);
             }
-
-            state = Idling;
-        } else {
-            anim->advance(delta_time);
         }
     }
 
@@ -209,11 +230,6 @@ void Character::update_anim(float delta_time) {
 
 
         if (type == Baddie) {
-            /* Resolve turning */
-            if (state == Turning) {
-                facing = (facing == FacingLeft ? FacingRight : FacingLeft);
-            }
-
             if (state == Walking) {
                 image_base = anim_base
                           + (facing == FacingLeft ? "left" : "right");
@@ -221,24 +237,6 @@ void Character::update_anim(float delta_time) {
                 ((AnimationBoomerang*)(anim))->set_iterations(1);
             }
         } else {
-
-            if (state == Turning) {
-                image_base = anim_base + "turn";
-                if (type == Wizard) {
-                    if (facing == FacingLeft) {
-                        anim = new Animation(image_base, 7, 0.12f, true);
-                    } else {
-                        anim = new Animation(image_base, 7, 0.12f, false);
-                    }
-                } else {
-                    if (facing == FacingLeft) {
-                        anim = new Animation(image_base, 6, 0.12f, true);
-                    } else {
-                        anim = new Animation(image_base, 6, 0.12f, false);
-                    }
-                }
-            }
-
             if (state == ClimbingUp || state == ClimbingDown) {
                 if (type == Wizard) {
                     image_base = anim_base + "climb";
@@ -290,10 +288,6 @@ void Character::update_anim(float delta_time) {
             }
         }
     }
-
-    if (!anim) {
-        state = Idling;
-    }
 }
 
 void Character::move(int _x, int _y) {
@@ -308,8 +302,13 @@ void Character::move(int _x, int _y) {
 }
 
 string Character::sprite() {
-    if (anim)
+    if (anim) {
         return anim->sprite();
+    }
+
+    if (state == Turning) {
+        return anim_turn->sprite(1.f - facing_tween);
+    }
 
     if (type == Wizard) {
         if (facing == FacingRight)
