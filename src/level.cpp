@@ -29,8 +29,8 @@ Level::Level(LevelSet set, unsigned int number) {
     }
 
     sprintf(level_str, "%03d", number);
-    logger.info("Loading level: " + string(level_str));
-    logger.info("Theme: " + std::to_string(theme));
+    logger.debug("Loading level: " + string(level_str));
+    logger.debug("Theme: " + std::to_string(theme));
     this->file_path = "orig/" + string(level_str);
     this->complete = false;
 
@@ -38,16 +38,16 @@ Level::Level(LevelSet set, unsigned int number) {
     theme_no_str[2] = '\0';
     sprintf(theme_no_str, "%02d", (int)(this->theme) + 1);
     this->theme_base = "assets/img/themes/" + string(theme_no_str) + "/";
-    logger.info(this->theme_base);
+    logger.debug(this->theme_base);
 }
 
 bool Level::switch_character() {
     if (this->blob) {
         if (this->active_character == this->wizard) {
-            logger.info("Switching to blob");
+            logger.debug("Switching to blob");
             this->active_character = this->blob;
         } else {
-            logger.info("Switching to wizard");
+            logger.debug("Switching to wizard");
             this->active_character = this->wizard;
         }
         return true;
@@ -216,7 +216,7 @@ void Level::update(float delta_time) {
 }
 
 void Level::clear() {
-    logger.info("Clearing level");
+    logger.debug("Clearing level");
     for (unsigned int i = 0; i < this->entities.size(); ++i) {
         delete this->entities[i];
     }
@@ -332,7 +332,7 @@ bool Level::stable() {
 }
 
 void Level::reset() {
-    logger.info("Resetting level");
+    logger.debug("Resetting level");
     Entity *ent;
     for (unsigned int i = 0; i < this->entities.size(); ++i) {
         ent = this->entities[i];

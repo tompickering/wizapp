@@ -232,7 +232,7 @@ void Collectable::reset() {
 
 void Collectable::collect() {
     if (!collected) {
-        logger.info("Collected!");
+        logger.debug("Collected!");
         if (level_ref->theme == Jazz) {
             audio_manager.play_sfx(Awat);
         } else {

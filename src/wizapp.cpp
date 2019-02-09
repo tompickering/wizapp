@@ -194,7 +194,7 @@ void WizApp::update(float delta_time) {
 
         if (input_manager.read(Q, true) && !level_ref->complete) {
             set_state(GS_Menu);
-            logger.info("Quitting to menu");
+            logger.debug("Quitting to menu");
             return;
         }
 
@@ -205,7 +205,7 @@ void WizApp::update(float delta_time) {
 
         if (level_ref->complete) {
             if (next_level_pause == 0.f) {
-                logger.info("Level complete!");
+                logger.debug("Level complete!");
                 savegame.completed(level_ref->number);
                 /* Fade out music when about to change */
                 if (((level_ref->number % 10) == 0) || ((level_ref->number + 5) % 20) == 0) {
@@ -268,7 +268,7 @@ int WizApp::run() {
 }
 
 void WizApp::set_state(GameState new_state) {
-    logger.info(state2str(state) + " -> " + state2str(new_state));
+    logger.debug(state2str(state) + " -> " + state2str(new_state));
     state = new_state;
 }
 

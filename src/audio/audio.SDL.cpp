@@ -22,7 +22,7 @@ void SDLAudioManager::init() {
 }
 
 void SDLAudioManager::play_music(string track, bool force_reset, bool looping) {
-    logger.info("Playing music");
+    logger.debug("Playing music");
     if (track == playing_track && !force_reset) {
         return;
     }
