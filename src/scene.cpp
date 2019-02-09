@@ -157,7 +157,9 @@ Scene::Scene(SceneRef ref) {
             this->text.push_back(
                 "Greetings conical humanoid... NOT!");
             this->text.push_back(
-                "I am the Alieneer and I advise you to go back to your old men, before I get mad!");
+                "I am the Alieneer and I advise you to go back to your old men,");
+            this->text.push_back(
+                "before I get mad!");
             this->text.push_back(
                 "Leave now... or suffer the consequences!");
             break;
