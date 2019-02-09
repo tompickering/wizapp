@@ -285,6 +285,8 @@ string WizApp::state2str(GameState state) {
     switch (state) {
         case GS_Intro:
             return "Intro";
+        case GS_Outro:
+            return "Outro";
         case GS_Menu:
             return "Menu";
         case GS_RoundSelect:

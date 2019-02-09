@@ -173,7 +173,9 @@ Scene::Scene(SceneRef ref) {
             break;
         case World5Start:
             this->text.push_back(
-                "Welcome to the FANTASIA world, where anything can happen!");
+                "Welcome to the FANTASIA world,");
+            this->text.push_back(
+                "where anything can happen!");
             this->text.push_back(
                 "This is the final test of wisdom as you'll have to travel through");
             this->text.push_back(
