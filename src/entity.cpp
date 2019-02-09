@@ -65,23 +65,7 @@ void Entity::update(float delta_time) {
     }
     float min_x, min_y = 0.f;
     float max_x, max_y = 10000.f;
-    if (float_abs(real_x - (float) block_x) > POS_THRESHOLD) {
-        float sign = 1.;
-        if (real_x < (float) block_x) {
-            sign = 1.f;
-            min_x = 0.f;
-            max_x = (float) block_x;
-        } else {
-            sign = -1.;
-            min_x = (float) block_x;
-            max_x = 10000.f;
-        }
-        real_x += sign * delta_time * move_speed_x;
-        real_x = clamp(real_x, min_x, max_x);
-        if (float_abs(real_x - (float) block_x) <= POS_THRESHOLD) {
-            single_block_move_complete();
-        }
-    } else if (float_abs(real_y - (float) block_y) > POS_THRESHOLD) {
+    if (float_abs(real_y - (float) block_y) > POS_THRESHOLD) {
         float sign = 1.;
         float speed = moving ? move_speed_y : fall_speed;
         if (real_y < (float) block_y) {
@@ -96,6 +80,22 @@ void Entity::update(float delta_time) {
         real_y += sign * delta_time * speed;
         real_y = clamp(real_y, min_y, max_y);
         if (float_abs(real_y - (float) block_y) <= POS_THRESHOLD) {
+            single_block_move_complete();
+        }
+    } else if (float_abs(real_x - (float) block_x) > POS_THRESHOLD) {
+        float sign = 1.;
+        if (real_x < (float) block_x) {
+            sign = 1.f;
+            min_x = 0.f;
+            max_x = (float) block_x;
+        } else {
+            sign = -1.;
+            min_x = (float) block_x;
+            max_x = 10000.f;
+        }
+        real_x += sign * delta_time * move_speed_x;
+        real_x = clamp(real_x, min_x, max_x);
+        if (float_abs(real_x - (float) block_x) <= POS_THRESHOLD) {
             single_block_move_complete();
         }
     }
