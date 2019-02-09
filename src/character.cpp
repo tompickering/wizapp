@@ -98,6 +98,9 @@ void Character::update(float delta_time) {
     level_ref->update_falling();
     Entity::update(delta_time);
 
+    if (type == Wizard && state == Morphing)
+        state = Idling;
+
     update_anim(delta_time);
 
     if (pending_collectable && real_x == pending_collectable->real_x) {
