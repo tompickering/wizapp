@@ -7,42 +7,42 @@
 #define POS_THRESHOLD .0001
 
 Entity::Entity(int x, int y) {
-    this->name = "Entity";
-    this->sort_key = 0;
-    this->r = this->g = this->b = 0;
-    this->move_speed_x = 5.f;
-    this->move_speed_y = 5.f;
-    this->fall_speed = 25.f;
-    this->flying = false;
-    this->initial_x = x;
-    this->initial_y = y;
-    this->x_draw_offset = 0.f;
-    this->y_draw_offset = 0.f;
-    this->reset();
+    name = "Entity";
+    sort_key = 0;
+    r = g = b = 0;
+    move_speed_x = 5.f;
+    move_speed_y = 5.f;
+    fall_speed = 25.f;
+    flying = false;
+    initial_x = x;
+    initial_y = y;
+    x_draw_offset = 0.f;
+    y_draw_offset = 0.f;
+    reset();
 }
 
 Entity::~Entity() {
 }
 
 void Entity::reset() {
-    int x = this->initial_x;
-    int y = this->initial_y;
-    this->ignore = false;
-    this->moving = false;
-    this->falling = false;
-    this->block_x = x;
-    this->block_y = y;
-    this->real_x = (float) x;
-    this->real_y = (float) y;
-    this->prev_block_x = x;
-    this->prev_block_y = y;
+    int x = initial_x;
+    int y = initial_y;
+    ignore = false;
+    moving = false;
+    falling = false;
+    block_x = x;
+    block_y = y;
+    real_x = (float) x;
+    real_y = (float) y;
+    prev_block_x = x;
+    prev_block_y = y;
 }
 
 /* N.B. 'Moving' relates only to voluntary motion - not falling! */
 void Entity::move(int x, int y) {
-    this->block_x = x;
-    this->block_y = y;
-    this->moving = true;
+    block_x = x;
+    block_y = y;
+    moving = true;
 }
 
 bool operator< (const Entity &lhs, const Entity &rhs) {
@@ -54,57 +54,57 @@ bool cmp_entity_ptr(Entity *lhs, Entity *rhs) {
 }
 
 void Entity::single_block_move_complete() {
-    this->prev_block_x = this->block_x;
-    this->prev_block_y = this->block_y;
-    this->moving = false;
+    prev_block_x = block_x;
+    prev_block_y = block_y;
+    moving = false;
 }
 
 void Entity::update(float delta_time) {
-    if (this->falling && float_abs(this->real_y - (float) this->block_y) < POS_THRESHOLD) {
-        this->block_y++;
+    if (falling && float_abs(real_y - (float) block_y) < POS_THRESHOLD) {
+        block_y++;
     }
     float min_x, min_y = 0.f;
     float max_x, max_y = 10000.f;
-    if (float_abs(this->real_x - (float) this->block_x) > POS_THRESHOLD) {
+    if (float_abs(real_x - (float) block_x) > POS_THRESHOLD) {
         float sign = 1.;
-        if (this->real_x < (float) this->block_x) {
+        if (real_x < (float) block_x) {
             sign = 1.f;
             min_x = 0.f;
-            max_x = (float) this->block_x;
+            max_x = (float) block_x;
         } else {
             sign = -1.;
-            min_x = (float) this->block_x;
+            min_x = (float) block_x;
             max_x = 10000.f;
         }
-        this->real_x += sign * delta_time * this->move_speed_x;
-        this->real_x = clamp(this->real_x, min_x, max_x);
-        if (float_abs(this->real_x - (float) this->block_x) <= POS_THRESHOLD) {
+        real_x += sign * delta_time * move_speed_x;
+        real_x = clamp(real_x, min_x, max_x);
+        if (float_abs(real_x - (float) block_x) <= POS_THRESHOLD) {
             single_block_move_complete();
         }
-    } else if (float_abs(this->real_y - (float) this->block_y) > POS_THRESHOLD) {
+    } else if (float_abs(real_y - (float) block_y) > POS_THRESHOLD) {
         float sign = 1.;
-        float speed = this->moving ? this->move_speed_y : this->fall_speed;
-        if (this->real_y < (float) this->block_y) {
+        float speed = moving ? move_speed_y : fall_speed;
+        if (real_y < (float) block_y) {
             sign = 1;
             min_y = 0.f;
-            max_y = (float) this->block_y;
+            max_y = (float) block_y;
         } else {
             sign = -1.;
-            min_y = (float) this->block_y;
+            min_y = (float) block_y;
             max_y = 10000.f;
         }
-        this->real_y += sign * delta_time * speed;
-        this->real_y = clamp(this->real_y, min_y, max_y);
-        if (float_abs(this->real_y - (float) this->block_y) <= POS_THRESHOLD) {
+        real_y += sign * delta_time * speed;
+        real_y = clamp(real_y, min_y, max_y);
+        if (float_abs(real_y - (float) block_y) <= POS_THRESHOLD) {
             single_block_move_complete();
         }
     }
 }
 
 bool Entity::at_rest() {
-    return !this->falling
-           && float_abs(this->real_x - (float) this->block_x) < POS_THRESHOLD
-           && float_abs(this->real_y - (float) this->block_y) < POS_THRESHOLD;
+    return !falling
+           && float_abs(real_x - (float) block_x) < POS_THRESHOLD
+           && float_abs(real_y - (float) block_y) < POS_THRESHOLD;
 }
 
 string Entity::sprite() {
