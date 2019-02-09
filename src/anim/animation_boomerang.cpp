@@ -37,3 +37,9 @@ void AnimationBoomerang::advance(float delta) {
     }
 }
 
+/* Interpolate over a single iteration */
+string AnimationBoomerang::sprite(float interp) {
+    if (interp <= 0.5)
+        return Animation::sprite(interp * 2);
+    return Animation::sprite(1 - (2 * (interp - 0.5)));
+}

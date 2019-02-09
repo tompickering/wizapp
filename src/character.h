@@ -6,6 +6,7 @@
 #include "collectable.h"
 
 #include "anim/animation.h"
+#include "anim/animation_sequence.h"
 
 #define WALK_DURATION 0.5f
 #define CLIMB_DURATION 0.5f
@@ -66,6 +67,8 @@ class Character : public Entity {
         Collectable *pending_collectable;
 
         Animation *anim_turn;
+        AnimationSequence *anim_walk_left;
+        AnimationSequence *anim_walk_right;
 };
 
 #endif

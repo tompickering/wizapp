@@ -40,6 +40,24 @@ Character::Character(int _x, int _y, CharacterType ctype) : Entity(_x, _y) {
 
     /* Animations */
     anim_turn = new Animation(anim_base + "turn", type == Wizard ? 7 : 6, 0.12f);
+
+
+    AnimationBoomerang *part1, *part2;
+    anim_walk_left = new AnimationSequence();
+    part1 = new AnimationBoomerang(anim_base + "left", 5, WALK_DURATION / 4.f);
+    part2 = new AnimationBoomerang(anim_base + "left" + "_alt", 5, WALK_DURATION / 4.f);
+    part1->set_iterations(1);
+    part2->set_iterations(1);
+    anim_walk_left->add_animation(part1);
+    anim_walk_left->add_animation(part2);
+
+    anim_walk_right = new AnimationSequence();
+    part1 = new AnimationBoomerang(anim_base + "right", 5, 1.f);
+    part2 = new AnimationBoomerang(anim_base + "right" + "_alt", 5, 1.f);
+    part1->set_iterations(1);
+    part2->set_iterations(1);
+    anim_walk_right->add_animation(part1);
+    anim_walk_right->add_animation(part2);
 }
 
 Character::~Character() {
@@ -114,6 +132,12 @@ void Character::update(float delta_time) {
         }
         /* Can't do anything else now */
         return;
+    }
+
+    if (state == Walking) {
+        if (real_x == (float) block_x) {
+            state = Idling;
+        }
     }
 
     if (state != Idling)
@@ -212,7 +236,8 @@ void Character::update(float delta_time) {
 void Character::update_anim(float delta_time) {
     if (anim) {
         /* Only if this is a 'playing' rather than a 'sampled' animation... */
-        if (state != Turning) {
+        if (state != Turning
+            && state != Walking) {
             if (anim->complete) {
                 delete anim;
                 anim = NULL;
@@ -273,19 +298,6 @@ void Character::update_anim(float delta_time) {
                     anim = new Animation(image_base, 14, MORPH_DURATION, level_ref->active_character != this);
                 }
             }
-
-            if (state == Walking) {
-                image_base = anim_base
-                          + (facing == FacingLeft ? "left" : "right");
-                AnimationSequence *anim_seq = new AnimationSequence();
-                AnimationBoomerang *part1 = new AnimationBoomerang(image_base, 5, WALK_DURATION / 4.f);
-                AnimationBoomerang *part2 = new AnimationBoomerang(image_base + "_alt", 5, WALK_DURATION / 4.f);
-                part1->set_iterations(1);
-                part2->set_iterations(1);
-                anim_seq->add_animation(part1);
-                anim_seq->add_animation(part2);
-                anim = anim_seq;
-            }
         }
     }
 }
@@ -308,6 +320,15 @@ string Character::sprite() {
 
     if (state == Turning) {
         return anim_turn->sprite(1.f - facing_tween);
+    } else if (state == Walking) {
+        Animation *anim_walk = facing == FacingLeft ? anim_walk_left : anim_walk_right;
+        float interp = 0.f;
+        if (facing == FacingLeft) {
+            interp = 1.f - (real_x - (float) block_x);
+        } else {
+            interp = 1.f - ((float) block_x - real_x);
+        }
+        return anim_walk->sprite(interp);
     }
 
     if (type == Wizard) {

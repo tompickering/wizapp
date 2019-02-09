@@ -12,6 +12,7 @@ class AnimationBoomerang : public Animation {
         AnimationBoomerang(string base, int frames, float duration);
         AnimationBoomerang(float x, float y, string base, int frames, float duration);
         virtual void advance(float delta) override;
+        virtual string sprite(float) override;
         void set_iterations(int iterations);
     protected:
         int iterations;
