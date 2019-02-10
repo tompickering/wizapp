@@ -71,7 +71,6 @@ void Character::reset() {
     Entity::reset();
     state = Idling;
     pending_collectable = nullptr;
-    move_just_completed = false;
 
     force_move_pending = false;
     force_move_left = false;
@@ -83,11 +82,6 @@ void Character::reset() {
     turn_time = 0.15;
 
     anim = NULL;
-}
-
-void Character::single_block_move_complete() {
-    Entity::single_block_move_complete();
-    move_just_completed = true;
 }
 
 bool Character::receptive_to_input() {
@@ -107,11 +101,8 @@ void Character::update(float delta_time) {
         pending_collectable->ignore = true;
     }
 
-    if (move_just_completed) {
-        move_just_completed = false;
-        if (anything_falling) {
-            return;
-        }
+    if (anything_falling) {
+        return;
     }
 
     if (level_ref->active_character && level_ref->active_character->type != type)

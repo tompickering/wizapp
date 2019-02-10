@@ -49,7 +49,6 @@ class Character : public Entity {
         virtual void move(int x, int y) override;
         virtual void reset() override;
     protected:
-        void single_block_move_complete() override;
         void update_anim(float delta_time);
         Animation *anim;
         string anim_base;
@@ -62,7 +61,6 @@ class Character : public Entity {
         CharacterState state;
         bool force_move_pending;
         bool force_move_left;
-        bool move_just_completed;
         Breakable *force_move_breakable;
         Collectable *pending_collectable;
 
