@@ -243,7 +243,12 @@ int WizApp::run() {
     while (running) {
         clock_begin = steady_clock::now();
         input_manager.update();
-        speed = input_manager.read(LShift, false) ? 3.f : 1.f;
+
+        /* Game speed increased if Shift is held */
+        speed = 1.f;
+        if (state == GS_Level && input_manager.read(LShift, false))
+            speed = 3.f;
+
         update(delta_time);
 
         /* Compute loop time and sleep */
