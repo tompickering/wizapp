@@ -95,8 +95,8 @@ bool Character::receptive_to_input() {
 }
 
 void Character::update(float delta_time) {
-    level_ref->update_falling();
     Entity::update(delta_time);
+    bool anything_falling = level_ref->update_falling();
 
     if (type == Wizard && state == Morphing)
         state = Idling;
@@ -108,9 +108,10 @@ void Character::update(float delta_time) {
     }
 
     if (move_just_completed) {
-        /* Wait one frame for other things to catch up (falling blocks etc) */
         move_just_completed = false;
-        return;
+        if (anything_falling) {
+            return;
+        }
     }
 
     if (level_ref->active_character && level_ref->active_character->type != type)
