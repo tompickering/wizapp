@@ -209,7 +209,7 @@ void WizApp::update(float delta_time) {
                 logger.debug("Level complete!");
                 savegame.completed(level_ref->number);
                 /* Fade out music when about to change */
-                if (((level_ref->number % 10) == 0) || ((level_ref->number + 5) % 20) == 0) {
+                if ((level_ref->number - 1) / 10 != (savegame.next_level() - 1) / 10) {
                     audio_manager.fade_out(1000);
                 }
             }
