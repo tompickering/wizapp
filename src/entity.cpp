@@ -4,8 +4,6 @@
 #include "shared.h"
 #include "collectable.h"
 
-#define POS_THRESHOLD .0001
-
 Entity::Entity(int x, int y) {
     name = "Entity";
     sort_key = 0;
@@ -60,12 +58,12 @@ void Entity::single_block_move_complete() {
 }
 
 void Entity::update(float delta_time) {
-    if (falling && float_abs(real_y - (float) block_y) < POS_THRESHOLD) {
+    if (falling && real_y == (float) block_y) {
         block_y++;
     }
     float min_x, min_y = 0.f;
     float max_x, max_y = 10000.f;
-    if (float_abs(real_y - (float) block_y) > POS_THRESHOLD) {
+    if (real_y != (float) block_y) {
         float sign = 1.;
         float speed = moving ? move_speed_y : fall_speed;
         if (real_y < (float) block_y) {
@@ -79,10 +77,10 @@ void Entity::update(float delta_time) {
         }
         real_y += sign * delta_time * speed;
         real_y = clamp(real_y, min_y, max_y);
-        if (float_abs(real_y - (float) block_y) <= POS_THRESHOLD) {
+        if (real_y == (float) block_y) {
             single_block_move_complete();
         }
-    } else if (float_abs(real_x - (float) block_x) > POS_THRESHOLD) {
+    } else if (real_x != (float) block_x) {
         float sign = 1.;
         if (real_x < (float) block_x) {
             sign = 1.f;
@@ -95,7 +93,7 @@ void Entity::update(float delta_time) {
         }
         real_x += sign * delta_time * move_speed_x;
         real_x = clamp(real_x, min_x, max_x);
-        if (float_abs(real_x - (float) block_x) <= POS_THRESHOLD) {
+        if (real_x == (float) block_x) {
             single_block_move_complete();
         }
     }
@@ -103,8 +101,8 @@ void Entity::update(float delta_time) {
 
 bool Entity::at_rest() {
     return !falling
-           && float_abs(real_x - (float) block_x) < POS_THRESHOLD
-           && float_abs(real_y - (float) block_y) < POS_THRESHOLD;
+           && real_x == (float) block_x
+           && real_y == (float) block_y;
 }
 
 string Entity::sprite() {
