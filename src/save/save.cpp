@@ -21,8 +21,17 @@ void SaveGame::completed(unsigned int level_no) {
 LevelState SaveGame::level_state(unsigned int level_no) {
     if (data.completed_levels[world(level_no)] & 1 << ((level_no - 1) % 20))
         return Completed;
+
+    /* Levels in worlds not reached are locked */
     if (world(level_no) > world())
         return Locked;
+
+    if (world() == world(level_no)
+        && (level_no) % 20 != 1
+        && level_state(world(level_no) * 20 + 1) != Completed) {
+        return Locked;
+    }
+
     if ((level_no - 1) % 20 >= 15) {
         for (unsigned int i = 1; i < level_no; ++i) {
             if (level_state(i) != Completed)
