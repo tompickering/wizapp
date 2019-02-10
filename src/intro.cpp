@@ -14,85 +14,85 @@
 using std::vector;
 
 Intro::Intro() {
-    this->skip_time = 0.f;
-    this->skip_pressed = false;
-    this->skip_duration = 3.f;
+    skip_time = 0.f;
+    skip_pressed = false;
+    skip_duration = 3.f;
 }
 
 void Intro::next_event() {
-    if (!this->winds_done) {
-        this->winds();
-        this->winds_done = true;
-        this->next_event_countdown = WINDS_TIME;
-    } else if (!this->fantasia_done) {
-        this->fantasia();
-        this->fantasia_done = true;
-        this->next_event_countdown = FANTASIA_TIME;
-    } else if (!this->presents_done) {
-        this->presents();
-        this->presents_done = true;
-        this->next_event_countdown = PRESENTS_TIME;
-    } else if (!this->nothing_done) {
-        this->nothing();
-        this->nothing_done = true;
-        this->next_event_countdown = NOTHING_TIME;
-    } else if (!this->kidding_done) {
-        this->kidding();
-        this->kidding_done = true;
-        this->next_event_countdown = KIDDING_TIME;
-    } else if (!this->band_done) {
-        this->band();
-        this->band_done = true;
-        this->next_event_countdown = BAND_TIME;
-    } else if (!this->title1_done) {
-        this->title1();
-        this->title1_done = true;
-        this->next_event_countdown = TITLE1_TIME;
-    } else if (!this->scene1_done) {
-        this->scene1();
-        this->scene1_done = true;
-    } else if (!this->scene2_done) {
-        this->scene2();
-        this->scene2_done = true;
-    } else if (!this->scene3_done) {
-        this->scene3();
-        this->scene3_done = true;
-    } else if (!this->scene4_done) {
-        this->scene4();
-        this->scene4_done = true;
-    } else if (!this->scene5_done) {
-        this->scene5();
-        this->scene5_done = true;
-    } else if (!this->scene6_done) {
-        this->scene6();
-        this->scene6_done = true;
-    } else if (!this->scene7_done) {
-        this->scene7();
-        this->scene7_done = true;
-    } else if (!this->scene8_done) {
-        this->scene8();
-        this->scene8_done = true;
-    } else if (!this->title2_done) {
-        this->title2();
-        this->title2_done = true;
-        this->next_event_countdown = TITLE2_TIME;
-    } else if (!this->end_done) {
-        this->end();
-        this->end_done = true;
-        this->next_event_countdown = END_TIME;
+    if (!winds_done) {
+        winds();
+        winds_done = true;
+        next_event_countdown = WINDS_TIME;
+    } else if (!fantasia_done) {
+        fantasia();
+        fantasia_done = true;
+        next_event_countdown = FANTASIA_TIME;
+    } else if (!presents_done) {
+        presents();
+        presents_done = true;
+        next_event_countdown = PRESENTS_TIME;
+    } else if (!nothing_done) {
+        nothing();
+        nothing_done = true;
+        next_event_countdown = NOTHING_TIME;
+    } else if (!kidding_done) {
+        kidding();
+        kidding_done = true;
+        next_event_countdown = KIDDING_TIME;
+    } else if (!band_done) {
+        band();
+        band_done = true;
+        next_event_countdown = BAND_TIME;
+    } else if (!title1_done) {
+        title1();
+        title1_done = true;
+        next_event_countdown = TITLE1_TIME;
+    } else if (!scene1_done) {
+        scene1();
+        scene1_done = true;
+    } else if (!scene2_done) {
+        scene2();
+        scene2_done = true;
+    } else if (!scene3_done) {
+        scene3();
+        scene3_done = true;
+    } else if (!scene4_done) {
+        scene4();
+        scene4_done = true;
+    } else if (!scene5_done) {
+        scene5();
+        scene5_done = true;
+    } else if (!scene6_done) {
+        scene6();
+        scene6_done = true;
+    } else if (!scene7_done) {
+        scene7();
+        scene7_done = true;
+    } else if (!scene8_done) {
+        scene8();
+        scene8_done = true;
+    } else if (!title2_done) {
+        title2();
+        title2_done = true;
+        next_event_countdown = TITLE2_TIME;
+    } else if (!end_done) {
+        end();
+        end_done = true;
+        next_event_countdown = END_TIME;
     }
 }
 
 void Intro::update(float delta_time) {
     if (input_manager.read(Space, true)) {
-        this->skip_pressed = true;
-        audio_manager.fade_out((int)(this->skip_duration * 1000.f * .8f));
+        skip_pressed = true;
+        audio_manager.fade_out((int)(skip_duration * 1000.f * .8f));
     }
 
-    if (this->skip_pressed) {
-        this->skip_time += delta_time;
-        if (this->skip_time > this->skip_duration) {
-            this->complete = true;
+    if (skip_pressed) {
+        skip_time += delta_time;
+        if (skip_time > skip_duration) {
+            complete = true;
         }
     }
 
@@ -104,19 +104,19 @@ void Intro::winds() {
 }
 
 void Intro::fantasia() {
-    this->current_anims.push_back(
+    current_anims.push_back(
         new AnimationBoomerang(.5f, .4f, "assets/img/intro/fantasia", 15, 1.f));
 }
 
 void Intro::presents() {
-    this->current_anims.push_back(
+    current_anims.push_back(
         new AnimationBoomerang(.5f, .9f, "assets/img/intro/presents", 19, 1.f));
 }
 
 void Intro::nothing() {
-    this->clear_anims();
+    clear_anims();
     audio_manager.play_music("assets/audio/intro_nothing.ogg", true, false);
-    this->current_anims.push_back(
+    current_anims.push_back(
         new Animation(.5f, .5f, "assets/img/intro/nothing", 1, 1.f));
 }
 
@@ -125,7 +125,7 @@ void Intro::kidding() {
 }
 
 void Intro::band() {
-    this->clear_anims();
+    clear_anims();
     audio_manager.play_music("assets/audio/intro_band.ogg", true, true);
     Animation *band1 = new AnimationBoomerang(0.8f, .5f, "assets/img/intro/band2/trumpet", 9, 0.3f);
     Animation *band2 = new AnimationBoomerang(0.9f, .5f, "assets/img/intro/band2/drum", 9, 0.3f);
@@ -137,87 +137,87 @@ void Intro::band() {
     band3->set_motion(-0.8, 0.f, BAND_TIME);
     wiz->set_motion(-0.8, 0.f, BAND_TIME);
     app->set_motion(-0.8, 0.f, BAND_TIME);
-    this->current_anims.push_back(band1);
-    this->current_anims.push_back(band2);
-    this->current_anims.push_back(band3);
-    this->current_anims.push_back(wiz);
-    this->current_anims.push_back(app);
+    current_anims.push_back(band1);
+    current_anims.push_back(band2);
+    current_anims.push_back(band3);
+    current_anims.push_back(wiz);
+    current_anims.push_back(app);
 }
 
 void Intro::title1() {
-    this->clear_anims();
+    clear_anims();
     audio_manager.play_music("assets/audio/intro_wizapp.ogg", true, false);
-    this->current_anims.push_back(
+    current_anims.push_back(
         new Animation(.5f, .5f, "assets/img/intro/wizback", 1, 1.f));
-    this->current_anims.push_back(
+    current_anims.push_back(
         new Animation(.5f, .35f, "assets/img/intro/wizard06", 1, 1.f));
-    this->current_anims.push_back(
+    current_anims.push_back(
         new Animation(.5f, .65f, "assets/img/intro/apprentice06", 1, 1.f));
 }
 
 void Intro::scene1() {
-    this->clear_anims();
-    this->current_scene = new Scene(Intro1);
+    clear_anims();
+    current_scene = new Scene(Intro1);
 }
 
 // Programmming: Bill Kotsias
 
 void Intro::scene2() {
-    this->clear_anims();
-    this->current_scene = new Scene(Intro2);
+    clear_anims();
+    current_scene = new Scene(Intro2);
 }
 
 // Additional Code: Kostas Proitsakis (GrimAce)
 
 void Intro::scene3() {
-    this->clear_anims();
-    this->current_scene = new Scene(Intro3);
+    clear_anims();
+    current_scene = new Scene(Intro3);
 }
 
 // 2D Art: Spiros Vergos
 
 void Intro::scene4() {
-    this->clear_anims();
-    this->current_scene = new Scene(Intro4);
+    clear_anims();
+    current_scene = new Scene(Intro4);
 }
 
 // 3D Modelling: Bill Kotsias
 
 void Intro::scene5() {
-    this->clear_anims();
-    this->current_scene = new Scene(Intro5);
+    clear_anims();
+    current_scene = new Scene(Intro5);
 }
 
 // Special Effects: Spiros Vergos
 
 void Intro::scene6() {
-    this->clear_anims();
-    this->current_scene = new Scene(Intro6);
+    clear_anims();
+    current_scene = new Scene(Intro6);
 }
 
 // Music & SFX: Bill Kotsias
 
 void Intro::scene7() {
-    this->clear_anims();
-    this->current_scene = new Scene(Intro7);
+    clear_anims();
+    current_scene = new Scene(Intro7);
 }
 
 // Sound Player: Digitial Symphony - BASS
 
 void Intro::scene8() {
-    this->clear_anims();
-    this->current_scene = new Scene(Intro8);
+    clear_anims();
+    current_scene = new Scene(Intro8);
 }
 
 // AutoVCache Module: T.Karwoth
 
 void Intro::title2() {
-    this->clear_anims();
-    this->current_anims.push_back(
+    clear_anims();
+    current_anims.push_back(
         new Animation(.5f, .5f, "assets/img/intro/wizback", 1, 1.f));
-    this->current_anims.push_back(
+    current_anims.push_back(
         new Animation(.5f, .35f, "assets/img/intro/wizard06", 1, 1.f));
-    this->current_anims.push_back(
+    current_anims.push_back(
         new Animation(.5f, .65f, "assets/img/intro/apprentice06", 1, 1.f));
 }
 
