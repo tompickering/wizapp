@@ -31,6 +31,7 @@ class DrawManager {
         virtual AnimClick read_clicked_animation() = 0;
         virtual void hide_mouse(bool) = 0;
     protected:
+        virtual void draw_text(string, int, int, int, int, unsigned char, unsigned char, unsigned char) = 0;
         map<string, void*> sprite_data;
         virtual void* get_sprite_data(string) = 0;
         void *background_spr;

@@ -39,6 +39,23 @@ void SDLDrawManager::init() {
     SDL_FillRect(surf, NULL, SDL_MapRGB(surf->format, 0x0, 0x0, 0x0));
 }
 
+void SDLDrawManager::draw_text(string text, int x, int y, int w, int h,
+                               unsigned char r, unsigned  char g, unsigned char b) {
+    SDL_Color colour = {r, g, b};
+    SDL_Surface *msg_surf = TTF_RenderText_Solid((TTF_Font*) scene_font,
+                                                 text.c_str(),
+                                                 colour);
+
+    SDL_Rect msg_rect;
+    msg_rect.x = x;
+    msg_rect.y = y;
+    msg_rect.w = w;
+    msg_rect.h = h;
+
+    SDL_BlitSurface(msg_surf, NULL, surf, &msg_rect);
+    SDL_UpdateWindowSurface(win);
+}
+
 void SDLDrawManager::update(Level *level) {
     SDL_Rect surf_rect;
     Entity *ent;
@@ -105,25 +122,14 @@ void SDLDrawManager::update(Scene *scene) {
     }
 
     /* Update text */
-    SDL_Color white = {255, 255, 255};
-    SDL_Surface *msg_surf = TTF_RenderText_Solid((TTF_Font*) scene_font,
-                                                 scene->current_text().c_str(),
-                                                 white);
-
     SDL_Rect back_rect;
     back_rect.x = 0;
     back_rect.y = 440;
     back_rect.w = SCREEN_WIDTH - 1;
     back_rect.h = 200;
-
-    SDL_Rect msg_rect;
-    msg_rect.x = 10;
-    msg_rect.y = 448;
-    msg_rect.w = SCREEN_WIDTH - 20;
-    msg_rect.h = 100;
-
     SDL_FillRect(surf, &back_rect, SDL_MapRGB(surf->format, 0x0, 0x0, 0x0));
-    SDL_BlitSurface(msg_surf, NULL, surf, &msg_rect);
+
+    draw_text(scene->current_text(), 10, 448, SCREEN_WIDTH - 20, 100, 0xFF, 0xFF, 0xFF);
     SDL_UpdateWindowSurface(win);
 }
 
