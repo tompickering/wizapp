@@ -38,24 +38,11 @@ class Intro : public AnimSequence {
         void kidding();
         void band();
         void title1();
-        void scene1();
-        // Programmming: Bill Kotsias
-        void scene2();
-        // Additional Code: Kostas Proitsakis (GrimAce)
-        void scene3();
-        // 2D Art: Spiros Vergos
-        void scene4();
-        // 3D Modelling: Bill Kotsias
-        void scene5();
-        // Special Effects: Spiros Vergos
-        void scene6();
-        // Music & SFX: Bill Kotsias
-        void scene7();
-        // Sound Player: Digitial Symphony - BASS
-        void scene8();
-        // AutoVCache Module: T.Karwoth
         void title2();
         void end();
+
+        void next_scene();
+        void next_credits();
 
         bool winds_done;
         bool fantasia_done;
@@ -64,14 +51,8 @@ class Intro : public AnimSequence {
         bool kidding_done;
         bool band_done;
         bool title1_done;
-        bool scene1_done;
-        bool scene2_done;
-        bool scene3_done;
-        bool scene4_done;
-        bool scene5_done;
-        bool scene6_done;
-        bool scene7_done;
-        bool scene8_done;
+        unsigned int scene_done;
+        unsigned int credits_done;
         bool title2_done;
         bool end_done;
 };

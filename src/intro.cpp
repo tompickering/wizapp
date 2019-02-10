@@ -17,6 +17,8 @@ Intro::Intro() {
     skip_time = 0.f;
     skip_pressed = false;
     skip_duration = 3.f;
+    scene_done = 0;
+    credits_done = 0;
 }
 
 void Intro::next_event() {
@@ -48,39 +50,45 @@ void Intro::next_event() {
         title1();
         title1_done = true;
         next_event_countdown = TITLE1_TIME;
-    } else if (!scene1_done) {
-        scene1();
-        scene1_done = true;
-    } else if (!scene2_done) {
-        scene2();
-        scene2_done = true;
-    } else if (!scene3_done) {
-        scene3();
-        scene3_done = true;
-    } else if (!scene4_done) {
-        scene4();
-        scene4_done = true;
-    } else if (!scene5_done) {
-        scene5();
-        scene5_done = true;
-    } else if (!scene6_done) {
-        scene6();
-        scene6_done = true;
-    } else if (!scene7_done) {
-        scene7();
-        scene7_done = true;
-    } else if (!scene8_done) {
-        scene8();
-        scene8_done = true;
-    } else if (!title2_done) {
-        title2();
-        title2_done = true;
-        next_event_countdown = TITLE2_TIME;
-    } else if (!end_done) {
-        end();
-        end_done = true;
-        next_event_countdown = END_TIME;
+    } else if (scene_done == 8 && credits_done == 8) {
+        if (!title2_done) {
+            title2();
+            title2_done = true;
+            next_event_countdown = TITLE2_TIME;
+        } else if (!end_done) {
+            end();
+            end_done = true;
+            next_event_countdown = END_TIME;
+        }
+    } else {
+        if (scene_done == credits_done) {
+            next_scene();
+        } else {
+            next_credits();
+        }
     }
+}
+
+void Intro::next_scene() {
+    clear_anims();
+    SceneRef to_play = (SceneRef) ((int)(Intro1) + scene_done);
+    current_scene = new Scene(to_play);
+    scene_done++;
+}
+
+void Intro::next_credits() {
+    // Original game:
+    // Programmming: Bill Kotsias
+    // Additional Code: Kostas Proitsakis (GrimAce)
+    // 2D Art: Spiros Vergos
+    // 3D Modelling: Bill Kotsias
+    // Special Effects: Spiros Vergos
+    // Music & SFX: Bill Kotsias
+    // Sound Player: Digitial Symphony - BASS
+    // AutoVCache Module: T.Karwoth
+
+    next_event_countdown = 0.f;
+    credits_done++;
 }
 
 void Intro::update(float delta_time) {
@@ -154,62 +162,6 @@ void Intro::title1() {
     current_anims.push_back(
         new Animation(.5f, .65f, "assets/img/intro/apprentice06", 1, 1.f));
 }
-
-void Intro::scene1() {
-    clear_anims();
-    current_scene = new Scene(Intro1);
-}
-
-// Programmming: Bill Kotsias
-
-void Intro::scene2() {
-    clear_anims();
-    current_scene = new Scene(Intro2);
-}
-
-// Additional Code: Kostas Proitsakis (GrimAce)
-
-void Intro::scene3() {
-    clear_anims();
-    current_scene = new Scene(Intro3);
-}
-
-// 2D Art: Spiros Vergos
-
-void Intro::scene4() {
-    clear_anims();
-    current_scene = new Scene(Intro4);
-}
-
-// 3D Modelling: Bill Kotsias
-
-void Intro::scene5() {
-    clear_anims();
-    current_scene = new Scene(Intro5);
-}
-
-// Special Effects: Spiros Vergos
-
-void Intro::scene6() {
-    clear_anims();
-    current_scene = new Scene(Intro6);
-}
-
-// Music & SFX: Bill Kotsias
-
-void Intro::scene7() {
-    clear_anims();
-    current_scene = new Scene(Intro7);
-}
-
-// Sound Player: Digitial Symphony - BASS
-
-void Intro::scene8() {
-    clear_anims();
-    current_scene = new Scene(Intro8);
-}
-
-// AutoVCache Module: T.Karwoth
 
 void Intro::title2() {
     clear_anims();
