@@ -31,7 +31,9 @@ Scene::Scene(SceneRef ref) {
             break;
         case Intro3:
             this->text.push_back(
-                "Take this Magic Wand with you. It will be your indefatigable comrade, as it will");
+                "Take this Magic Wand with you.");
+            this->text.push_back(
+                "It will be your indefatigable comrade, as it will");
             this->text.push_back(
                 "help you to exploit all the mental powers that you have already obtained...");
             break;
@@ -43,15 +45,17 @@ Scene::Scene(SceneRef ref) {
             break;
         case Intro5:
             this->text.push_back(
-                "Take this magic hat as well. It is the shield that will protect you physically");
+                "Take this magic hat as well.");
+            this->text.push_back(
+                "It is the shield that will protect you physically");
             this->text.push_back(
                 "during your long and tiresome quest...");
             break;
         case Intro6:
             this->text.push_back(
-                "But bear in mind that your magical equipment are not enough in order to finish");
+                "But bear in mind that your magical equipment are not enough in order");
             this->text.push_back(
-                "all the puzzles that you are about to confront...");
+                "to finish all the puzzles that you are about to confront...");
             break;
         case Intro7:
             this->text.push_back(
