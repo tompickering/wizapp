@@ -18,6 +18,8 @@
 #define TITLE2_TIME   5.f
 #define END_TIME      5.f
 
+#define CREDITS_TIME  4.f
+
 
 using std::vector;
 

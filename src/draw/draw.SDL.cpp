@@ -11,6 +11,7 @@
 #include "../collectable.h"
 #include "../scene.h"
 #include "../anim/animation.h"
+#include "../anim/animation_text.h"
 #include "../input/input.h"
 
 #include "../shared.h"
@@ -41,8 +42,10 @@ void SDLDrawManager::init() {
 
 void SDLDrawManager::draw_text(string text, int x, int y, int w, int h,
                                unsigned char r, unsigned  char g, unsigned char b) {
+    TTF_Font *font = (TTF_Font*) scene_font;
+
     SDL_Color colour = {r, g, b};
-    SDL_Surface *msg_surf = TTF_RenderText_Solid((TTF_Font*) scene_font,
+    SDL_Surface *msg_surf = TTF_RenderText_Solid(font,
                                                  text.c_str(),
                                                  colour);
 
@@ -53,7 +56,19 @@ void SDLDrawManager::draw_text(string text, int x, int y, int w, int h,
     msg_rect.h = h;
 
     SDL_BlitSurface(msg_surf, NULL, surf, &msg_rect);
-    SDL_UpdateWindowSurface(win);
+}
+
+void SDLDrawManager::draw_text(string text, float x, float y, int w, int h,
+                               unsigned char r, unsigned  char g, unsigned char b) {
+    TTF_Font *font = (TTF_Font*) scene_font;
+
+    int render_w, render_h;
+    TTF_SizeText(font, text.c_str(), &render_w, &render_h);
+
+    int draw_x = (int)(SCREEN_WIDTH * x) - (render_w / 2);
+    int draw_y = (int)(SCREEN_HEIGHT * y) - (render_h / 2);
+    draw_text(text, draw_x, draw_y, w, h, r, g, b);
+
 }
 
 void SDLDrawManager::update(Level *level) {
@@ -139,22 +154,31 @@ void SDLDrawManager::update(vector<Animation*> anims) {
     SDL_FillRect(surf, NULL, SDL_MapRGB(surf->format, 0x0, 0x0, 0x0));
     for (unsigned int x = 0; x < anims.size(); ++x) {
         anim = anims.at(x);
-        SDL_Surface *spr_surf = (SDL_Surface*) get_sprite_data(anim->sprite());
-        int draw_x = int(anim->get_x() * (float) SCREEN_WIDTH - spr_surf->w / 2.f);
-        int draw_y = int(anim->get_y() * (float) SCREEN_HEIGHT - spr_surf->h / 2.f);
-        SDL_Rect surf_rect = {draw_x,
-                              draw_y,
-                              spr_surf->w,
-                              spr_surf->h};
-        if (spr_surf) {
-            SDL_BlitSurface(spr_surf, NULL, surf, &surf_rect);
-            /* Check if this draw element has been clicked */
-            if (anim->clickable
-                && click_pos.x >= draw_x && click_pos.x <= draw_x + spr_surf->w
-                && click_pos.y >= draw_y && click_pos.y <= draw_y + spr_surf->h) {
-                clicked_animation = anim;
-                clicked_animation_rel_x = (float)(click_pos.x - draw_x) / (float)(spr_surf->w);
-                clicked_animation_rel_y = (float)(click_pos.y - draw_y) / (float)(spr_surf->h);
+
+        AnimationText *anim_text = dynamic_cast<AnimationText*>(anim);
+        if (anim_text) {
+            draw_text(anim_text->text,
+                      anim_text->get_x(), anim_text->get_y(),
+                      SCREEN_WIDTH, SCREEN_HEIGHT,
+                      anim_text->r, anim_text->g, anim_text->b);
+        } else {
+            SDL_Surface *spr_surf = (SDL_Surface*) get_sprite_data(anim->sprite());
+            int draw_x = int(anim->get_x() * (float) SCREEN_WIDTH - spr_surf->w / 2.f);
+            int draw_y = int(anim->get_y() * (float) SCREEN_HEIGHT - spr_surf->h / 2.f);
+            SDL_Rect surf_rect = {draw_x,
+                                  draw_y,
+                                  spr_surf->w,
+                                  spr_surf->h};
+            if (spr_surf) {
+                SDL_BlitSurface(spr_surf, NULL, surf, &surf_rect);
+                /* Check if this draw element has been clicked */
+                if (anim->clickable
+                    && click_pos.x >= draw_x && click_pos.x <= draw_x + spr_surf->w
+                    && click_pos.y >= draw_y && click_pos.y <= draw_y + spr_surf->h) {
+                    clicked_animation = anim;
+                    clicked_animation_rel_x = (float)(click_pos.x - draw_x) / (float)(spr_surf->w);
+                    clicked_animation_rel_y = (float)(click_pos.y - draw_y) / (float)(spr_surf->h);
+                }
             }
         }
     }

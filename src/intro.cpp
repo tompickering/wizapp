@@ -8,6 +8,7 @@
 #include "anim/animation.h"
 #include "anim/animation_boomerang.h"
 #include "anim/animation_looping.h"
+#include "anim/animation_text.h"
 
 #include "shared.h"
 
@@ -50,7 +51,7 @@ void Intro::next_event() {
         title1();
         title1_done = true;
         next_event_countdown = TITLE1_TIME;
-    } else if (scene_done == 8 && credits_done == 8) {
+    } else if (scene_done == 8 && credits_done == 7) {
         if (!title2_done) {
             title2();
             title2_done = true;
@@ -77,6 +78,7 @@ void Intro::next_scene() {
 }
 
 void Intro::next_credits() {
+    clear_anims();
     // Original game:
     // Programmming: Bill Kotsias
     // Additional Code: Kostas Proitsakis (GrimAce)
@@ -87,7 +89,59 @@ void Intro::next_credits() {
     // Sound Player: Digitial Symphony - BASS
     // AutoVCache Module: T.Karwoth
 
-    next_event_countdown = 0.f;
+    float h0 = .45f;
+    float h1 = .55f;
+
+    switch (credits_done) {
+        case 0:
+            current_anims.push_back(
+                new AnimationText(.5f, h0, "Programming (Original)", 0, CREDITS_TIME));
+            current_anims.push_back(
+                new AnimationText(.5f, h1, "Bill Kotsias", 0, CREDITS_TIME));
+            break;
+        case 1:
+            current_anims.push_back(
+                new AnimationText(.5f, h0, "Programming (2018 Remake)", 0, CREDITS_TIME));
+            current_anims.push_back(
+                new AnimationText(.5f, h1, "Tom Pickering", 0, CREDITS_TIME));
+            break;
+        case 2:
+            current_anims.push_back(
+                new AnimationText(.5f, h0, "2D Art", 0, CREDITS_TIME));
+            current_anims.push_back(
+                new AnimationText(.5f, h1, "Spiros Vergos", 0, CREDITS_TIME));
+            break;
+        case 3:
+            current_anims.push_back(
+                new AnimationText(.5f, h0, "3D Modelling", 0, CREDITS_TIME));
+            current_anims.push_back(
+                new AnimationText(.5f, h1, "Bill Kotsias", 0, CREDITS_TIME));
+            break;
+        case 4:
+            current_anims.push_back(
+                new AnimationText(.5f, h0, "Special Effects", 0, CREDITS_TIME));
+            current_anims.push_back(
+                new AnimationText(.5f, h1, "Spiros Vergos", 0, CREDITS_TIME));
+            break;
+        case 5:
+            current_anims.push_back(
+                new AnimationText(.5f, h0, "Music & SFX", 0, CREDITS_TIME));
+            current_anims.push_back(
+                new AnimationText(.5f, h1, "Bill Kotsias", 0, CREDITS_TIME));
+            break;
+        case 6:
+            current_anims.push_back(
+                new AnimationText(.5f, .4f, "Additional Thanks", 0, CREDITS_TIME));
+            current_anims.push_back(
+                new AnimationText(.5f, .5f, "Kostas Proitsakis", 0, CREDITS_TIME));
+            current_anims.push_back(
+                new AnimationText(.5f, .6f, "T. Karwoth", 0, CREDITS_TIME));
+            break;
+        default:
+            break;
+    }
+
+    next_event_countdown = CREDITS_TIME;
     credits_done++;
 }
 
