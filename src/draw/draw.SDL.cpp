@@ -55,9 +55,11 @@ void SDLDrawManager::draw_text(void* font_gen, string text, int x, int y, int w,
     TTF_Font *font = (TTF_Font*) font_gen;
 
     SDL_Color colour = {r, g, b};
-    SDL_Surface *msg_surf = TTF_RenderText_Solid(font,
-                                                 text.c_str(),
-                                                 colour);
+    SDL_Color black = {0, 0, 0};
+    SDL_Surface *msg_surf = TTF_RenderText_Shaded(font,
+                                                  text.c_str(),
+                                                  colour,
+                                                  black);
 
     SDL_Rect msg_rect;
     msg_rect.x = x;
