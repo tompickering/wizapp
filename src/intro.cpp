@@ -92,50 +92,53 @@ void Intro::next_credits() {
     float h0 = .45f;
     float h1 = .55f;
 
+    void *f_title = draw_manager.credits_font_title;
+    void *f_name = draw_manager.credits_font_name;
+
     switch (credits_done) {
         case 0:
             current_anims.push_back(
-                new AnimationText(.5f, h0, "Programming (Original)", 0, CREDITS_TIME));
+                new AnimationText(f_title, .5f, h0, "Programming (Original)", 0, CREDITS_TIME));
             current_anims.push_back(
-                new AnimationText(.5f, h1, "Bill Kotsias", 0, CREDITS_TIME));
+                new AnimationText(f_name, .5f, h1, "Bill Kotsias", 0, CREDITS_TIME));
             break;
         case 1:
             current_anims.push_back(
-                new AnimationText(.5f, h0, "Programming (2018 Remake)", 0, CREDITS_TIME));
+                new AnimationText(f_title, .5f, h0, "Programming (2018 Remake)", 0, CREDITS_TIME));
             current_anims.push_back(
-                new AnimationText(.5f, h1, "Tom Pickering", 0, CREDITS_TIME));
+                new AnimationText(f_name, .5f, h1, "Tom Pickering", 0, CREDITS_TIME));
             break;
         case 2:
             current_anims.push_back(
-                new AnimationText(.5f, h0, "2D Art", 0, CREDITS_TIME));
+                new AnimationText(f_title, .5f, h0, "2D Art", 0, CREDITS_TIME));
             current_anims.push_back(
-                new AnimationText(.5f, h1, "Spiros Vergos", 0, CREDITS_TIME));
+                new AnimationText(f_name, .5f, h1, "Spiros Vergos", 0, CREDITS_TIME));
             break;
         case 3:
             current_anims.push_back(
-                new AnimationText(.5f, h0, "3D Modelling", 0, CREDITS_TIME));
+                new AnimationText(f_title, .5f, h0, "3D Modelling", 0, CREDITS_TIME));
             current_anims.push_back(
-                new AnimationText(.5f, h1, "Bill Kotsias", 0, CREDITS_TIME));
+                new AnimationText(f_name, .5f, h1, "Bill Kotsias", 0, CREDITS_TIME));
             break;
         case 4:
             current_anims.push_back(
-                new AnimationText(.5f, h0, "Special Effects", 0, CREDITS_TIME));
+                new AnimationText(f_title, .5f, h0, "Special Effects", 0, CREDITS_TIME));
             current_anims.push_back(
-                new AnimationText(.5f, h1, "Spiros Vergos", 0, CREDITS_TIME));
+                new AnimationText(f_name, .5f, h1, "Spiros Vergos", 0, CREDITS_TIME));
             break;
         case 5:
             current_anims.push_back(
-                new AnimationText(.5f, h0, "Music & SFX", 0, CREDITS_TIME));
+                new AnimationText(f_title, .5f, h0, "Music & SFX", 0, CREDITS_TIME));
             current_anims.push_back(
-                new AnimationText(.5f, h1, "Bill Kotsias", 0, CREDITS_TIME));
+                new AnimationText(f_name, .5f, h1, "Bill Kotsias", 0, CREDITS_TIME));
             break;
         case 6:
             current_anims.push_back(
-                new AnimationText(.5f, .4f, "Additional Thanks", 0, CREDITS_TIME));
+                new AnimationText(f_title, .5f, .4f, "Additional Thanks", 0, CREDITS_TIME));
             current_anims.push_back(
-                new AnimationText(.5f, .5f, "Kostas Proitsakis", 0, CREDITS_TIME));
+                new AnimationText(f_name, .5f, .5f, "Kostas Proitsakis", 0, CREDITS_TIME));
             current_anims.push_back(
-                new AnimationText(.5f, .6f, "T. Karwoth", 0, CREDITS_TIME));
+                new AnimationText(f_name, .5f, .6f, "T. Karwoth", 0, CREDITS_TIME));
             break;
         default:
             break;

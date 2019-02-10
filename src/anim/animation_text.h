@@ -9,9 +9,10 @@ using std::string;
 
 class AnimationText : public Animation {
     public:
-        AnimationText(float x, float y, string base, int frames, float duration);
+        AnimationText(void* font, float x, float y, string base, int frames, float duration);
         virtual void advance(float delta) override;
         string text;
+        void *font;
         unsigned char r;
         unsigned char g;
         unsigned char b;

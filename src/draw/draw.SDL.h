@@ -20,9 +20,9 @@ class SDLDrawManager : public DrawManager {
         virtual AnimClick read_clicked_animation();
         virtual void hide_mouse(bool) override;
     protected:
-        virtual void draw_text(string, int, int, int, int,
+        virtual void draw_text(void*, string, int, int, int, int,
                                unsigned char, unsigned char, unsigned char) override;
-        virtual void draw_text(string, float, float, int, int,
+        virtual void draw_text(void*, string, float, float, int, int,
                                unsigned char, unsigned char, unsigned char) override;
         virtual void* get_sprite_data(string) override;
     private:

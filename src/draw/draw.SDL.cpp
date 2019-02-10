@@ -37,12 +37,22 @@ void SDLDrawManager::init() {
         logger.fatal(TTF_GetError());
     }
 
+    credits_font_title = TTF_OpenFont("font/Tangerine-Regular.ttf", 48);
+    if (!credits_font_title) {
+        logger.fatal(TTF_GetError());
+    }
+
+    credits_font_name = TTF_OpenFont("font/Tangerine-Regular.ttf", 42);
+    if (!credits_font_name) {
+        logger.fatal(TTF_GetError());
+    }
+
     SDL_FillRect(surf, NULL, SDL_MapRGB(surf->format, 0x0, 0x0, 0x0));
 }
 
-void SDLDrawManager::draw_text(string text, int x, int y, int w, int h,
+void SDLDrawManager::draw_text(void* font_gen, string text, int x, int y, int w, int h,
                                unsigned char r, unsigned  char g, unsigned char b) {
-    TTF_Font *font = (TTF_Font*) scene_font;
+    TTF_Font *font = (TTF_Font*) font_gen;
 
     SDL_Color colour = {r, g, b};
     SDL_Surface *msg_surf = TTF_RenderText_Solid(font,
@@ -58,16 +68,16 @@ void SDLDrawManager::draw_text(string text, int x, int y, int w, int h,
     SDL_BlitSurface(msg_surf, NULL, surf, &msg_rect);
 }
 
-void SDLDrawManager::draw_text(string text, float x, float y, int w, int h,
+void SDLDrawManager::draw_text(void* font_gen, string text, float x, float y, int w, int h,
                                unsigned char r, unsigned  char g, unsigned char b) {
-    TTF_Font *font = (TTF_Font*) scene_font;
+    TTF_Font *font = (TTF_Font*) font_gen;
 
     int render_w, render_h;
     TTF_SizeText(font, text.c_str(), &render_w, &render_h);
 
     int draw_x = (int)(SCREEN_WIDTH * x) - (render_w / 2);
     int draw_y = (int)(SCREEN_HEIGHT * y) - (render_h / 2);
-    draw_text(text, draw_x, draw_y, w, h, r, g, b);
+    draw_text(font_gen, text, draw_x, draw_y, w, h, r, g, b);
 
 }
 
@@ -144,7 +154,8 @@ void SDLDrawManager::update(Scene *scene) {
     back_rect.h = 200;
     SDL_FillRect(surf, &back_rect, SDL_MapRGB(surf->format, 0x0, 0x0, 0x0));
 
-    draw_text(scene->current_text(), 10, 448, SCREEN_WIDTH - 20, 100, 0xFF, 0xFF, 0xFF);
+    draw_text(scene_font, scene->current_text(),
+              10, 448, SCREEN_WIDTH - 20, 100, 0xFF, 0xFF, 0xFF);
     SDL_UpdateWindowSurface(win);
 }
 
@@ -157,7 +168,8 @@ void SDLDrawManager::update(vector<Animation*> anims) {
 
         AnimationText *anim_text = dynamic_cast<AnimationText*>(anim);
         if (anim_text) {
-            draw_text(anim_text->text,
+            draw_text(anim_text->font,
+                      anim_text->text,
                       anim_text->get_x(), anim_text->get_y(),
                       SCREEN_WIDTH, SCREEN_HEIGHT,
                       anim_text->r, anim_text->g, anim_text->b);

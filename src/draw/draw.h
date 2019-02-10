@@ -30,19 +30,22 @@ class DrawManager {
         virtual void update(vector<Animation*> anims) = 0;
         virtual AnimClick read_clicked_animation() = 0;
         virtual void hide_mouse(bool) = 0;
+
+        void *scene_font;
+        void *credits_font_title;
+        void *credits_font_name;
     protected:
         /* Using absolute co-ordinates */
-        virtual void draw_text(string, int, int, int, int,
+        virtual void draw_text(void*, string, int, int, int, int,
                                unsigned char, unsigned char, unsigned char) = 0;
         /* Using proportional (0-1) co-ordinates */
-        virtual void draw_text(string, float, float, int, int,
+        virtual void draw_text(void*, string, float, float, int, int,
                                unsigned char, unsigned char, unsigned char) = 0;
         map<string, void*> sprite_data;
         virtual void* get_sprite_data(string) = 0;
         void *background_spr;
         string background_path;
         SceneRef current_scene;
-        void *scene_font;
         Animation *clicked_animation;
         float clicked_animation_rel_x;
         float clicked_animation_rel_y;
