@@ -38,6 +38,9 @@ Character::Character(int _x, int _y, CharacterType ctype) : Entity(_x, _y) {
 
     reset();
 
+    fall_tween = 0.f;
+    fall_entry_seconds = fall_speed / 30.f;
+
     /* Animations */
     anim_turn = new Animation(anim_base + "turn", type == Wizard ? 7 : 6, 0.12f);
 
@@ -58,6 +61,11 @@ Character::Character(int _x, int _y, CharacterType ctype) : Entity(_x, _y) {
     part2->set_iterations(1);
     anim_walk_right->add_animation(part1);
     anim_walk_right->add_animation(part2);
+
+    if (type == Wizard) {
+        anim_fall_left = new Animation("assets/img/wiz/left_fall", 8, 1.f);
+        anim_fall_right = new Animation("assets/img/wiz/right_fall", 8, 1.f);
+    }
 }
 
 Character::~Character() {
@@ -91,6 +99,19 @@ bool Character::receptive_to_input() {
 void Character::update(float delta_time) {
     Entity::update(delta_time);
     bool anything_falling = level_ref->update_falling();
+
+    if (falling) {
+        if (type == Wizard)
+            state = Falling;
+        fall_tween += delta_time * 1.f/fall_entry_seconds;
+        fall_tween = clamp(fall_tween, 0.f, 1.f);
+    } else {
+        fall_tween -= delta_time * 1.f/fall_entry_seconds;
+        fall_tween = clamp(fall_tween, 0.f, 1.f);
+    }
+
+    if (state == Falling && !falling && fall_tween == 0.f)
+        state = Idling;
 
     if (type == Wizard && state == Morphing)
         state = Idling;
@@ -333,6 +354,9 @@ string Character::sprite() {
             interp = 1.f - ((float) block_x - real_x);
         }
         return anim_walk->sprite(interp);
+    } else if (type == Wizard && state == Falling) {
+        Animation *anim_fall = facing == FacingLeft ? anim_fall_left : anim_fall_right;
+        return anim_fall->sprite(fall_tween);
     }
 
     if (type == Wizard) {

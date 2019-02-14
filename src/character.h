@@ -56,6 +56,8 @@ class Character : public Entity {
         void update_anim(float delta_time);
         Animation *anim;
         string anim_base;
+        float fall_tween;
+        float fall_entry_seconds;
     private:
         FaceDirection facing;
 
@@ -71,6 +73,8 @@ class Character : public Entity {
         Animation *anim_turn;
         AnimationSequence *anim_walk_left;
         AnimationSequence *anim_walk_right;
+        Animation *anim_fall_left;
+        Animation *anim_fall_right;
 };
 
 #endif
