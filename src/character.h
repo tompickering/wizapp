@@ -48,6 +48,10 @@ class Character : public Entity {
         virtual void update(float delta_time) override;
         virtual void move(int x, int y) override;
         virtual void reset() override;
+
+        /* Climbing down from a ladder into empty space */
+        bool climbing_to_fall;
+
     protected:
         void update_anim(float delta_time);
         Animation *anim;

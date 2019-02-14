@@ -95,6 +95,11 @@ void Character::update(float delta_time) {
     if (type == Wizard && state == Morphing)
         state = Idling;
 
+    if (state != ClimbingDown) {
+        /* TODO: Remove this and actually enter fall at the appropriate point */
+        climbing_to_fall = false;
+    }
+
     update_anim(delta_time);
 
     if (pending_collectable && real_x == pending_collectable->real_x) {
@@ -188,6 +193,10 @@ void Character::update(float delta_time) {
         if (level_ref->is_navigable(input_target_x, input_target_y,
                                     block_x, block_y,
                                     attempting_climb)) {
+            if (down && level_ref->is_empty(input_target_x, input_target_y)) {
+                /* Climbing down into the air - we'll shift into fall early! */
+                climbing_to_fall = true;
+            }
             move(input_target_x, input_target_y);
         } else if (left ^ right) {
             /* Interactions with block and breakable */
