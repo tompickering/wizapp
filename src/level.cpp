@@ -18,7 +18,7 @@
 using std::ifstream;
 using std::string;
 
-Level::Level(LevelSet _set, unsigned int _number) {
+Level::Level(LevelSet set, unsigned int _number) {
     char level_str[4];
     number = _number;
 
