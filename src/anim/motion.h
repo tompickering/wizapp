@@ -9,8 +9,11 @@ class Motion {
         virtual void advance(float delta);
         float x_target_offset;
         float y_target_offset;
+        float brightness_target_offset;
         float get_x_offset();
         float get_y_offset();
+        float get_brightness_offset();
+        float start_delay;
     protected:
         float time;
         float duration;

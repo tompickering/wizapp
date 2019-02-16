@@ -15,7 +15,7 @@
 #define KIDDING_TIME  0.5f
 #define BAND_TIME     13.5f
 #define TITLE1_TIME   5.f
-#define TITLE2_TIME   5.f
+#define TITLE2_TIME   2.f
 #define END_TIME      5.f
 
 #define CREDITS_TIME  4.f

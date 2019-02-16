@@ -170,11 +170,12 @@ void SDLDrawManager::update(vector<Animation*> anims) {
 
         AnimationText *anim_text = dynamic_cast<AnimationText*>(anim);
         if (anim_text) {
+            unsigned char brightness = (unsigned char) (anim_text->get_brightness() * 0xFF);
             draw_text(anim_text->font,
                       anim_text->text,
                       anim_text->get_x(), anim_text->get_y(),
                       SCREEN_WIDTH, SCREEN_HEIGHT,
-                      anim_text->r, anim_text->g, anim_text->b);
+                      brightness, brightness, brightness);
         } else {
             SDL_Surface *spr_surf = (SDL_Surface*) get_sprite_data(anim->sprite());
             int draw_x = int(anim->get_x() * (float) SCREEN_WIDTH - spr_surf->w / 2.f);

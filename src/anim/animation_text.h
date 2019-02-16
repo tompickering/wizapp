@@ -13,10 +13,9 @@ class AnimationText : public Animation {
         virtual void advance(float delta) override;
         string text;
         void *font;
-        unsigned char r;
-        unsigned char g;
-        unsigned char b;
+        float get_brightness();
     protected:
+        float brightness;
 };
 
 #endif
