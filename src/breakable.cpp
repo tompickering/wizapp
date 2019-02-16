@@ -10,57 +10,57 @@
 
 using std::string;
 
-Breakable::Breakable(int x, int y) : Entity(x, y) {
-    this->name = "Breakable";
-    this->flying = true;
-    this->g = 0xFF;
+Breakable::Breakable(int _x, int _y) : Entity(_x, _y) {
+    name = "Breakable";
+    flying = true;
+    g = 0xFF;
 
-    this->anim_idle = new AnimationBoomerang(
-            string(level_ref->theme_base + "breakable/"), 5, 0.2f);
-    this->anim_break = new Animation(
-            string(level_ref->theme_base + "break/"), 10, 0.1f);
+    anim_idle = new AnimationBoomerang(
+        string(level_ref->theme_base + "breakable/"), 5, 0.2f);
+    anim_break = new Animation(
+        string(level_ref->theme_base + "break/"), 10, 0.1f);
 
-    this->anim_break->hide_on_complete = true;
+    anim_break->hide_on_complete = true;
 
-    this->reset();
+    reset();
 }
 
 Breakable::~Breakable() {
-    delete this->anim_idle;
-    delete this->anim_break;
+    delete anim_idle;
+    delete anim_break;
 }
 
 void Breakable::update(float delta_time) {
     Entity::update(delta_time);
-    if (this->breaking) {
-        this->anim_break->advance(delta_time);
+    if (breaking) {
+        anim_break->advance(delta_time);
     } else {
-        this->anim_idle->advance(delta_time);
+        anim_idle->advance(delta_time);
     }
 
-    if (this->anim_break->complete) {
-        this->navigable_h = true;
+    if (anim_break->complete) {
+        navigable_h = true;
     }
 }
 
 void Breakable::reset() {
     Entity::reset();
-    this->navigable_h = false;
-    this->breaking = false;
-    this->anim_idle->reset();
-    this->anim_break->reset();
+    navigable_h = false;
+    breaking = false;
+    anim_idle->reset();
+    anim_break->reset();
 }
 
 string Breakable::sprite() {
-    if (this->breaking) {
-        return this->anim_break->sprite();
+    if (breaking) {
+        return anim_break->sprite();
     }
-    return this->anim_idle->sprite();
+    return anim_idle->sprite();
 }
 
 bool Breakable::break_block() {
-    if (!this->breaking) {
-        this->breaking = true;
+    if (!breaking) {
+        breaking = true;
         if (level_ref->theme == Jazz) {
             audio_manager.play_sfx(FrequencyClear);
         } else {

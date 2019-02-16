@@ -15,7 +15,7 @@ SaveGame::SaveGame() {
 
 void SaveGame::completed(unsigned int level_no) {
     data.completed_levels[world(level_no)] |= 1 << ((level_no - 1) % 20);
-    this->save();
+    save();
 }
 
 LevelState SaveGame::level_state(unsigned int level_no) {

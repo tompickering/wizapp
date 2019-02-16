@@ -2,9 +2,9 @@
 
 #include "shared.h"
 
-StaticBlock::StaticBlock(int x, int y) : Entity(x, y) {
-    this->name = "Static Block";
-    this->flying = true;
+StaticBlock::StaticBlock(int _x, int _y) : Entity(_x, _y) {
+    name = "Static Block";
+    flying = true;
 }
 
 string StaticBlock::sprite() {

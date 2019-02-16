@@ -50,7 +50,7 @@ void MainMenu::next_event() {
                 unsigned int level_no = 1 + (world_open * 20) + i;
                 if (savegame.level_state(level_no) != Locked) {
                     level_to_start = level_no;
-                    this->complete = true;
+                    complete = true;
                 }
             }
         }
@@ -141,6 +141,5 @@ void MainMenu::open_world(unsigned int world) {
 }
 
 void MainMenu::fade_music() {
-    //this->clear_anims();
     audio_manager.fade_out(3000);
 }

@@ -13,25 +13,25 @@
 using std::vector;
 
 Event::Event() {
-    this->start_done = false;
-    this->scene_done = false;
-    this->fade_music_done = false;
+    start_done = false;
+    scene_done = false;
+    fade_music_done = false;
 }
 
 void Event::next_event() {
-    if (!this->start_done) {
-        this->start_done = true;
-        this->start();
-        this->next_event_countdown = 17.f;
-    } else if (!this->scene_done) {
-        this->scene_done = true;
-        this->scene();
-    } else if (!this->fade_music_done) {
-        this->fade_music_done = true;
-        this->fade_music();
-        this->next_event_countdown = 4.f;
+    if (!start_done) {
+        start_done = true;
+        start();
+        next_event_countdown = 17.f;
+    } else if (!scene_done) {
+        scene_done = true;
+        scene();
+    } else if (!fade_music_done) {
+        fade_music_done = true;
+        fade_music();
+        next_event_countdown = 4.f;
     } else {
-        this->complete = true;
+        complete = true;
     }
 }
 
@@ -95,27 +95,27 @@ void Event::start() {
     blob3_1->set_motion(3.f, 0.f, 9.f);
     baddie3->set_motion(3.f, 0.f, 9.f);
 
-    this->current_anims.push_back(background);
-    this->current_anims.push_back(ladder1);
-    this->current_anims.push_back(ladder2);
-    this->current_anims.push_back(static1);
-    this->current_anims.push_back(static2);
-    this->current_anims.push_back(blob1);
-    this->current_anims.push_back(baddie1);
-    this->current_anims.push_back(blob2);
-    this->current_anims.push_back(baddie2);
-    this->current_anims.push_back(blob3);
-    this->current_anims.push_back(baddie3);
-    this->current_anims.push_back(block);
-    this->current_anims.push_back(wiz);
+    current_anims.push_back(background);
+    current_anims.push_back(ladder1);
+    current_anims.push_back(ladder2);
+    current_anims.push_back(static1);
+    current_anims.push_back(static2);
+    current_anims.push_back(blob1);
+    current_anims.push_back(baddie1);
+    current_anims.push_back(blob2);
+    current_anims.push_back(baddie2);
+    current_anims.push_back(blob3);
+    current_anims.push_back(baddie3);
+    current_anims.push_back(block);
+    current_anims.push_back(wiz);
 }
 
 void Event::scene() {
-    this->clear_anims();
-    this->current_scene = new Scene(Friend);
+    clear_anims();
+    current_scene = new Scene(Friend);
 }
 
 void Event::fade_music() {
-    this->clear_anims();
+    clear_anims();
     audio_manager.fade_out(3000);
 }
