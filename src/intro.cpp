@@ -9,6 +9,7 @@
 #include "anim/animation_boomerang.h"
 #include "anim/animation_looping.h"
 #include "anim/animation_text.h"
+#include "anim/motion_sin.h"
 
 #include "shared.h"
 
@@ -169,8 +170,10 @@ void Intro::winds() {
 }
 
 void Intro::fantasia() {
-    current_anims.push_back(
-        new AnimationBoomerang(.5f, .4f, "assets/img/intro/fantasia", 15, 1.f));
+    AnimationBoomerang *fantasia =
+        new AnimationBoomerang(.5f, .4f, "assets/img/intro/fantasia", 15, 1.f);
+    fantasia->motion = new MotionSin(.01f, 3.f);
+    current_anims.push_back(fantasia);
 }
 
 void Intro::presents() {
