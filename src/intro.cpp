@@ -186,7 +186,9 @@ void Intro::nothing() {
 }
 
 void Intro::kidding() {
-    logger.info("(Just kidding!)");
+    void *f_title = draw_manager.credits_font_title;
+    current_anims.push_back(
+        new AnimationText(f_title, .5f, .92f, "(Just kidding!)", 0, 1.f));
 }
 
 void Intro::band() {
@@ -223,13 +225,16 @@ void Intro::title1() {
 void Intro::title2() {
     clear_anims();
     current_anims.push_back(
-        new Animation(.5f, .5f, "assets/img/intro/wizback", 1, 1.f));
+        new Animation(.5f, .42f, "assets/img/intro/wizback", 1, 1.f));
     current_anims.push_back(
-        new Animation(.5f, .35f, "assets/img/intro/wizard06", 1, 1.f));
+        new Animation(.5f, .27f, "assets/img/intro/wizard06", 1, 1.f));
     current_anims.push_back(
-        new Animation(.5f, .65f, "assets/img/intro/apprentice06", 1, 1.f));
+        new Animation(.5f, .57f, "assets/img/intro/apprentice06", 1, 1.f));
 }
 
 void Intro::end() {
+    void *f_title = draw_manager.credits_font_title;
+    current_anims.push_back(
+        new AnimationText(f_title, .5f, .92f, "Press [SPACE] to Start!", 0, 1.f));
 }
 
