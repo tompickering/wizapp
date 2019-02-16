@@ -10,7 +10,7 @@ Entity::Entity(int x, int y) {
     r = g = b = 0;
     move_speed_x = 5.f;
     move_speed_y = 5.f;
-    fall_speed = 10.f;
+    fall_speed = 15.f;
     flying = false;
     initial_x = x;
     initial_y = y;
