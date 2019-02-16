@@ -10,6 +10,7 @@
 #include "anim/animation_looping.h"
 #include "anim/animation_text.h"
 #include "anim/motion_sin.h"
+#include "anim/motion_pulse.h"
 
 #include "shared.h"
 
@@ -96,53 +97,62 @@ void Intro::next_credits() {
     void *f_title = draw_manager.credits_font_title;
     void *f_name = draw_manager.credits_font_name;
 
+    AnimationText *cred_title = nullptr;
+    AnimationText *cred_1 = nullptr;
+    AnimationText *cred_2 = nullptr;
+
     switch (credits_done) {
         case 0:
-            current_anims.push_back(
-                new AnimationText(f_title, .5f, h0, "Programming (Original)", 0, CREDITS_TIME));
-            current_anims.push_back(
-                new AnimationText(f_name, .5f, h1, "Bill Kotsias", 0, CREDITS_TIME));
+            cred_title = new AnimationText(f_title, .5f, h0, "Programming (Original)", 0, CREDITS_TIME);
+            cred_1 = new AnimationText(f_name, .5f, h1, "Bill Kotsias", 0, CREDITS_TIME);
             break;
         case 1:
-            current_anims.push_back(
-                new AnimationText(f_title, .5f, h0, "Programming (2018 Remake)", 0, CREDITS_TIME));
-            current_anims.push_back(
-                new AnimationText(f_name, .5f, h1, "Tom Pickering", 0, CREDITS_TIME));
+            cred_title = new AnimationText(f_title, .5f, h0, "Programming (2018 Remake)", 0, CREDITS_TIME);
+            cred_1 = new AnimationText(f_name, .5f, h1, "Tom Pickering", 0, CREDITS_TIME);
             break;
         case 2:
-            current_anims.push_back(
-                new AnimationText(f_title, .5f, h0, "2D Art", 0, CREDITS_TIME));
-            current_anims.push_back(
-                new AnimationText(f_name, .5f, h1, "Spiros Vergos", 0, CREDITS_TIME));
+            cred_title = new AnimationText(f_title, .5f, h0, "2D Art", 0, CREDITS_TIME);
+            cred_1 = new AnimationText(f_name, .5f, h1, "Spiros Vergos", 0, CREDITS_TIME);
             break;
         case 3:
-            current_anims.push_back(
-                new AnimationText(f_title, .5f, h0, "3D Modelling", 0, CREDITS_TIME));
-            current_anims.push_back(
-                new AnimationText(f_name, .5f, h1, "Bill Kotsias", 0, CREDITS_TIME));
+            cred_title = new AnimationText(f_title, .5f, h0, "3D Modelling", 0, CREDITS_TIME);
+            cred_1 = new AnimationText(f_name, .5f, h1, "Bill Kotsias", 0, CREDITS_TIME);
             break;
         case 4:
-            current_anims.push_back(
-                new AnimationText(f_title, .5f, h0, "Special Effects", 0, CREDITS_TIME));
-            current_anims.push_back(
-                new AnimationText(f_name, .5f, h1, "Spiros Vergos", 0, CREDITS_TIME));
+            cred_title = new AnimationText(f_title, .5f, h0, "Special Effects", 0, CREDITS_TIME);
+            cred_1 = new AnimationText(f_name, .5f, h1, "Spiros Vergos", 0, CREDITS_TIME);
             break;
         case 5:
-            current_anims.push_back(
-                new AnimationText(f_title, .5f, h0, "Music & SFX", 0, CREDITS_TIME));
-            current_anims.push_back(
-                new AnimationText(f_name, .5f, h1, "Bill Kotsias", 0, CREDITS_TIME));
+            cred_title = new AnimationText(f_title, .5f, h0, "Music & SFX", 0, CREDITS_TIME);
+            cred_1 = new AnimationText(f_name, .5f, h1, "Bill Kotsias", 0, CREDITS_TIME);
             break;
         case 6:
-            current_anims.push_back(
-                new AnimationText(f_title, .5f, .4f, "Additional Thanks", 0, CREDITS_TIME));
-            current_anims.push_back(
-                new AnimationText(f_name, .5f, .5f, "Kostas Proitsakis", 0, CREDITS_TIME));
-            current_anims.push_back(
-                new AnimationText(f_name, .5f, .6f, "T. Karwoth", 0, CREDITS_TIME));
+            cred_title = new AnimationText(f_title, .5f, .4f, "Additional Thanks", 0, CREDITS_TIME);
+            cred_1 = new AnimationText(f_name, .5f, .5f, "Kostas Proitsakis", 0, CREDITS_TIME);
+            cred_2 = new AnimationText(f_name, .5f, .6f, "T. Karwoth", 0, CREDITS_TIME);
             break;
         default:
             break;
+    }
+
+    MotionPulse *mp_title = new MotionPulse(1.f, 2.2f);
+    MotionPulse *mp_cred1 = new MotionPulse(1.f, 2.2f);
+    mp_title->brightness_target_offset = 1.0;
+    mp_cred1->brightness_target_offset = 1.0;
+    mp_cred1->start_delay = 1.f;
+
+    cred_title->motion = mp_title;
+    current_anims.push_back(cred_title);
+
+    cred_1->motion = mp_cred1;
+    current_anims.push_back(cred_1);
+
+    if (cred_2) {
+        MotionPulse *mp_cred2 = new MotionPulse(1.f, 2.2f);
+        mp_cred2->brightness_target_offset = 1.0;
+        mp_cred2->start_delay = 1.5f;
+        cred_2->motion = mp_cred2;
+        current_anims.push_back(cred_2);
     }
 
     next_event_countdown = CREDITS_TIME;
