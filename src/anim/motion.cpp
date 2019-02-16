@@ -24,17 +24,19 @@ void Motion::advance(float delta) {
         time = duration + start_delay;
 }
 
-float Motion::get_x_offset() {
+float Motion::get_proportion() {
     float t = clamp(time - start_delay, 0.f, duration);
-    return x_target_offset * t / duration;
+    return t / duration;
+}
+
+float Motion::get_x_offset() {
+    return x_target_offset * get_proportion();
 }
 
 float Motion::get_y_offset() {
-    float t = clamp(time - start_delay, 0.f, duration);
-    return y_target_offset * t / duration;
+    return y_target_offset * get_proportion();
 }
 
 float Motion::get_brightness_offset() {
-    float t = clamp(time - start_delay, 0.f, duration);
-    return brightness_target_offset * t / duration;
+    return brightness_target_offset * get_proportion();
 }

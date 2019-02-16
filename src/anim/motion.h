@@ -17,6 +17,7 @@ class Motion {
     protected:
         float time;
         float duration;
+        virtual float get_proportion();
 };
 
 #endif

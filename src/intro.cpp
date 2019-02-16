@@ -235,7 +235,7 @@ void Intro::title2() {
 void Intro::end() {
     void *f_title = draw_manager.credits_font_title;
     AnimationText *press_to_start =
-        new AnimationText(f_title, .5f, .92f, "Press SPACE to Start!", 0, 1.f);
+        new AnimationText(f_title, .5f, .92f, "Press SPACE to Start", 0, 1.f);
     Motion *motion = new Motion(0, 0, 2.f);
     motion->brightness_target_offset = 1.0;
     press_to_start->motion = motion;
