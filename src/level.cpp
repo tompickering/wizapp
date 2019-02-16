@@ -18,37 +18,37 @@
 using std::ifstream;
 using std::string;
 
-Level::Level(LevelSet set, unsigned int number) {
+Level::Level(LevelSet _set, unsigned int _number) {
     char level_str[4];
-    this->number = number;
+    number = _number;
 
     if (set == Original) {
         theme = static_cast<Theme>((number - 1) / 10);
     } else {
-        this->theme = Valley;
+        theme = Valley;
     }
 
     sprintf(level_str, "%03d", number);
     logger.debug("Loading level: " + string(level_str));
     logger.debug("Theme: " + std::to_string(theme));
-    this->file_path = "orig/" + string(level_str);
-    this->complete = false;
+    file_path = "orig/" + string(level_str);
+    complete = false;
 
     char theme_no_str[3];
     theme_no_str[2] = '\0';
-    sprintf(theme_no_str, "%02d", (int)(this->theme) + 1);
-    this->theme_base = "assets/img/themes/" + string(theme_no_str) + "/";
-    logger.debug(this->theme_base);
+    sprintf(theme_no_str, "%02d", (int)(theme) + 1);
+    theme_base = "assets/img/themes/" + string(theme_no_str) + "/";
+    logger.debug(theme_base);
 }
 
 bool Level::switch_character() {
-    if (this->blob) {
-        if (this->active_character == this->wizard) {
+    if (blob) {
+        if (active_character == wizard) {
             logger.debug("Switching to blob");
-            this->active_character = this->blob;
+            active_character = blob;
         } else {
             logger.debug("Switching to wizard");
-            this->active_character = this->wizard;
+            active_character = wizard;
         }
         return true;
     }
@@ -60,19 +60,19 @@ bool Level::update_falling() {
     bool anything_falling = false;
 
     /* Nothing starts falling whilst something is still moving */
-    for (unsigned int i = 0; i < this->entities.size(); ++i) {
-        ent = this->entities[i];
+    for (unsigned int i = 0; i < entities.size(); ++i) {
+        ent = entities[i];
         if (ent->moving)
             return false;
     }
 
-    for (unsigned int i = 0; i < this->entities.size(); ++i) {
-        ent = this->entities[i];
+    for (unsigned int i = 0; i < entities.size(); ++i) {
+        ent = entities[i];
         if (ent->flying)
             continue;
         ent->falling = false;
-        if (!this->on_ladder(ent->block_x, ent->block_y)
-            && this->is_empty(ent->block_x, ent->block_y + 1)) {
+        if (!on_ladder(ent->block_x, ent->block_y)
+            && is_empty(ent->block_x, ent->block_y + 1)) {
             ent->falling = true;
             anything_falling = true;
         }
@@ -83,17 +83,17 @@ bool Level::update_falling() {
 
 void Level::load() {
     int collectables = 0;
-    this->wizard = nullptr;
-    this->blob = nullptr;
-    logger.debug("Loading level " + this->file_path);
+    wizard = nullptr;
+    blob = nullptr;
+    logger.debug("Loading level " + file_path);
     ifstream file;
-    file.open("levels/" + this->file_path);
+    file.open("levels/" + file_path);
     Entity *new_entity;
     Entity *new_entity2;
     char output[20];
     int row = 0;
-    this->block_w = 0;
-    this->block_h = 0;
+    block_w = 0;
+    block_h = 0;
     if (file.is_open()) {
         while (!file.eof()) {
             output[0] = '\0';
@@ -110,17 +110,17 @@ void Level::load() {
                         case 'W':   // Wizard + Ladder
                             new_entity2 = new Ladder(col, row);
                         case 'w':   // Wizard
-                            if (this->wizard) {
+                            if (wizard) {
                                 logger.error("Multiple wizards!");
                             }
-                            this->wizard = new Character(col, row, CharacterType::Wizard);
-                            new_entity = this->wizard;
+                            wizard = new Character(col, row, CharacterType::Wizard);
+                            new_entity = wizard;
                             break;
                         case 'O':   // Blob + Ladder
                             new_entity2 = new Ladder(col, row);
                         case 'o':   // Blob
-                            this->blob = new Character(col, row, CharacterType::Blob);
-                            new_entity = this->blob;
+                            blob = new Character(col, row, CharacterType::Blob);
+                            new_entity = blob;
                             break;
                         case 'l':   // Ladder
                             new_entity = new Ladder(col, row);
@@ -150,21 +150,21 @@ void Level::load() {
                             breakloop = true;
                     }
                     if (new_entity) {
-                        this->entities.push_back(new_entity);
+                        entities.push_back(new_entity);
                         logger.debug("New " + new_entity->name + " at " +
                                      std::to_string(col) + "," + std::to_string(row));
                     }
                     if (new_entity2) {
-                        this->entities.push_back(new_entity2);
+                        entities.push_back(new_entity2);
                         logger.debug("New " + new_entity2->name + " at " +
                                      std::to_string(col) + "," + std::to_string(row));
                     }
                 ++col;
                 }
-                if (this->block_w > 0 && this->block_w != col) {
+                if (block_w > 0 && block_w != col) {
                     logger.error("Inconsistent number of columns in level!");
                 }
-                this->block_w = col;
+                block_w = col;
                 row++;
             }
         }
@@ -173,12 +173,12 @@ void Level::load() {
     if (!collectables) {
         logger.error("No collectables in level!");
     }
-    this->block_h = row;
-    logger.debug("Size: " + std::to_string(this->block_w) + "x" + std::to_string(this->block_h));
+    block_h = row;
+    logger.debug("Size: " + std::to_string(block_w) + "x" + std::to_string(block_h));
 
     /* Set up ladders */
-    for (unsigned int i = 0; i < this->entities.size(); ++i) {
-        Ladder *l = dynamic_cast<Ladder*>(this->entities[i]);
+    for (unsigned int i = 0; i < entities.size(); ++i) {
+        Ladder *l = dynamic_cast<Ladder*>(entities[i]);
         if (l) {
             if (!on_ladder(l->block_x, l->block_y + 1)) {
                 l->base_ladder = true;
@@ -187,29 +187,29 @@ void Level::load() {
     }
 
     // Ensure characters are at the end, and therefore drawn last (over ladders)
-    std::sort(this->entities.begin(), this->entities.end(), cmp_entity_ptr);
+    std::sort(entities.begin(), entities.end(), cmp_entity_ptr);
 
-    this->active_character = this->wizard;
+    active_character = wizard;
 }
 
 
 void Level::update(float delta_time) {
     Entity *ent;
 
-    for (unsigned int i = 0; i < this->entities.size(); ++i) {
-        this->entities[i]->update(delta_time);
+    for (unsigned int i = 0; i < entities.size(); ++i) {
+        entities[i]->update(delta_time);
     }
 
     /* Update falling status */
-    this->update_falling();
+    update_falling();
 
     /* Check completion */
-    this->complete = true;
-    for (unsigned int i = 0; i < this->entities.size(); ++i) {
-        ent = this->entities[i];
+    complete = true;
+    for (unsigned int i = 0; i < entities.size(); ++i) {
+        ent = entities[i];
         Collectable *c = dynamic_cast<Collectable*>(ent);
         if (c && !c->ignore) {
-            this->complete = false;
+            complete = false;
             break;
         }
     }
@@ -217,16 +217,16 @@ void Level::update(float delta_time) {
 
 void Level::clear() {
     logger.debug("Clearing level");
-    for (unsigned int i = 0; i < this->entities.size(); ++i) {
-        delete this->entities[i];
+    for (unsigned int i = 0; i < entities.size(); ++i) {
+        delete entities[i];
     }
-    this->entities.clear();
+    entities.clear();
 }
 
 bool Level::on_ladder(int x, int y) {
     Entity *ent;
-    for (unsigned int i = 0; i < this->entities.size(); ++i) {
-        ent = this->entities[i];
+    for (unsigned int i = 0; i < entities.size(); ++i) {
+        ent = entities[i];
         if (ent->block_x == x && ent->block_y == y) {
             if (dynamic_cast<Ladder*>(ent)) {
                 return true;
@@ -239,18 +239,18 @@ bool Level::on_ladder(int x, int y) {
 bool Level::is_empty(int x, int y) {
     if (x < 0) return false;
     if (y < 0) return false;
-    if (x >= this->block_w) return false;
-    if (y >= this->block_h) return false;
-    return (!this->at(x, y));
+    if (x >= block_w) return false;
+    if (y >= block_h) return false;
+    return (!at(x, y));
 }
 
 bool Level::is_navigable(int x, int y, int from_x, int from_y, bool updown) {
     Entity *ent;
     bool ladder = false; 
-    if (x < 0 || y < 0 || x >= this->block_w || y >= this->block_h)
+    if (x < 0 || y < 0 || x >= block_w || y >= block_h)
         return false;
-    for (unsigned int i = 0; i < this->entities.size(); ++i) {
-        ent = this->entities[i];
+    for (unsigned int i = 0; i < entities.size(); ++i) {
+        ent = entities[i];
         if (ent->ignore) {
             continue;
         }
@@ -272,13 +272,13 @@ bool Level::is_navigable(int x, int y, int from_x, int from_y, bool updown) {
     }
     return !updown                              // Walking sideways
            || (ladder && from_y < y)            // Moving down into a ladder (would return sooner if blocked)
-           || this->on_ladder(from_x, from_y);  // On a ladder (would return sooner if destination blocked)
+           || on_ladder(from_x, from_y);  // On a ladder (would return sooner if destination blocked)
 }
 
 Collectable* Level::attempt_collect(int x, int y) {
     Entity *ent;
-    for (unsigned int i = 0; i < this->entities.size(); ++i) {
-        ent = this->entities[i];
+    for (unsigned int i = 0; i < entities.size(); ++i) {
+        ent = entities[i];
         if (ent->block_x == x && ent->block_y == y) {
             if (ent->ignore)
                 continue;
@@ -301,10 +301,10 @@ Entity* Level::at(int x, int y) {
     Entity *ent = NULL;
     if (x < 0) return ent;
     if (y < 0) return ent;
-    if (x >= this->block_w) return ent;
-    if (y >= this->block_h) return ent;
-    for (unsigned int i = 0; i < this->entities.size(); ++i) {
-        ent = this->entities[i];
+    if (x >= block_w) return ent;
+    if (y >= block_h) return ent;
+    for (unsigned int i = 0; i < entities.size(); ++i) {
+        ent = entities[i];
         if (ent->ignore)
             continue;
         if (ent->block_x == x && ent->block_y == y) {
@@ -320,8 +320,8 @@ Entity* Level::at(int x, int y) {
 /* The level is 'stable' if nothing is falling and everything is at its target location */
 bool Level::stable() {
     Entity *ent;
-    for (unsigned int i = 0; i < this->entities.size(); ++i) {
-        ent = this->entities[i];
+    for (unsigned int i = 0; i < entities.size(); ++i) {
+        ent = entities[i];
         if (ent->ignore)
             continue;
         if (!ent->at_rest()) {
@@ -334,40 +334,40 @@ bool Level::stable() {
 void Level::reset() {
     logger.debug("Resetting level");
     Entity *ent;
-    for (unsigned int i = 0; i < this->entities.size(); ++i) {
-        ent = this->entities[i];
+    for (unsigned int i = 0; i < entities.size(); ++i) {
+        ent = entities[i];
         ent->reset();
     }
 
-    this->active_character = this->wizard;
+    active_character = wizard;
 }
 
 string Level::get_theme_base() {
-    return this->theme_base;
+    return theme_base;
 }
 
 string Level::get_background() {
-    return this->theme_base + "back/" + (((this->number - 1) % 10 < 5) ? "1" : "2") + ".png";
+    return theme_base + "back/" + (((number - 1) % 10 < 5) ? "1" : "2") + ".png";
 }
 
 string Level::get_track() {
-    if (this->number <= 10)
+    if (number <= 10)
         return "assets/audio/TRACK1.ogg";
-    if (this->number <= 20)
+    if (number <= 20)
         return "assets/audio/TRACK2.ogg";
-    if (this->number <= 30)
+    if (number <= 30)
         return "assets/audio/TRACK3.ogg";
-    if (this->number <= 40)
+    if (number <= 40)
         return "assets/audio/TRACK4.ogg";
-    if (this->number <= 50)
+    if (number <= 50)
         return "assets/audio/TRACK5.ogg";
-    if (this->number <= 60)
+    if (number <= 60)
         return "assets/audio/TRACK6.ogg";
-    if (this->number <= 70)
+    if (number <= 70)
         return "assets/audio/TRACK7.ogg";
-    if (this->number <= 80)
+    if (number <= 80)
         return "assets/audio/TRACK8.ogg";
-    if (this->number <= 90)
+    if (number <= 90)
         return "assets/audio/TRACK9.ogg";
     return "assets/audio/TRACK10.ogg";
 }
