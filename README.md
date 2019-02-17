@@ -11,9 +11,9 @@ Play through 100 levels spanning 5 worlds as you progress through your quest to 
 ![Screenshot 3](screenshots/03.png)
 ![Screenshot 4](screenshots/04.png)
 
-At present, the game only supports Linux, and will create a save file at ~/.wizapp_save. However, the code abstracts all SDL and platform-specific logic such that in theory, it would require minimal effort to adapt to other platforms.
+The game was designed primarily to run on Linux, but also runs well on Mac OS X. On both systems, it will create a save file at ~/.wizapp_save. The code abstracts all SDL and platform-specific logic such that in theory, it would require minimal effort to adapt to other platforms.
 
-Controls:
+## Controls
 * Move character: Arrow keys, or the original bindings Z/X (left / right) and P/L (up / down)
 * Switch character: Space
 * Reset level: R
@@ -21,20 +21,23 @@ Controls:
 * Shift: Hold to increase game speed (be careful - one false move and you may well be hitting restart!)
 * Press Space to exit the intro sequence
 
-Linux build dependencies:
+## Linux build dependencies
 * libsdl2-dev
 * libsdl2-image-dev
 * libsdl2-mixer-dev
 * libsdl2-ttf-dev
 
-Credits:
+## Mac OS X build dependencies
+brew install sdl2 sdl2_image sdl2_mixer sdl2_ttf
+
+## Credits
 * Music and SFX - Bill Kotsias
 * Graphics - Bill Kotsias and Spyros Vergos
 * New engine code - Tom Pickering
 
 All content under the 'assets' subdirectory are copyright Bill Kotsias, and are included in this GPLv3-licensed package with his kind permission.
 
-Differeces from the original (incomplete list):
+## Differeces from the original (incomplete list)
 * Runs in windowed mode, no vertical scrolling!
 * Music is not restarted between levels which use the same track
 * No in-game menu - replaced with single key presses
@@ -43,7 +46,7 @@ Differeces from the original (incomplete list):
 * No level editor (yet) or other main menu functions, however level files are easy to create
 * You can hold Shift to increase level speed
 
-Level file key:
+## Level file key
 * . - Empty space
 * X - Static block
 * B - Pushable block
