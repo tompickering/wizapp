@@ -16,6 +16,8 @@ using std::vector;
 
 MainMenu::MainMenu() {
     round_select = NULL;
+    rs_bg = NULL;
+    rs_back = NULL;
     reset();
 }
 
@@ -25,32 +27,34 @@ void MainMenu::next_event() {
     if (!start_done) {
         start_done = true;
         start_main();
-    } else if (clicked == round_select) {
-        start_round_select();
-    } else if (clicked == rs_bg) {
-        int unlocked_world = savegame.world();
-        float rx = click_data.rel_x;
-        int world = 3;
-        if (rx <= 0.2)
-            world = 0;
-        else if (rx <= 0.38)
-            world = 1;
-        else if (rx <= 0.6)
-            world = 4;
-        else if (rx <= 0.77)
-            world = 2;
+    } else if (clicked) {
+        if (clicked == round_select) {
+            start_round_select();
+        } else if (clicked == rs_bg) {
+            int unlocked_world = savegame.world();
+            float rx = click_data.rel_x;
+            int world = 3;
+            if (rx <= 0.2)
+                world = 0;
+            else if (rx <= 0.38)
+                world = 1;
+            else if (rx <= 0.6)
+                world = 4;
+            else if (rx <= 0.77)
+                world = 2;
 
-        if (world <= unlocked_world)
-            open_world(world);
-    } else if (clicked == rs_back) {
-        start_main();
-    } else {
-        for (unsigned int i = 0; i < level_icons.size(); ++i) {
-            if (clicked == level_icons.at(i)) {
-                unsigned int level_no = 1 + (world_open * 20) + i;
-                if (savegame.level_state(level_no) != Locked) {
-                    level_to_start = level_no;
-                    complete = true;
+            if (world <= unlocked_world)
+                open_world(world);
+        } else if (clicked == rs_back) {
+            start_main();
+        } else {
+            for (unsigned int i = 0; i < level_icons.size(); ++i) {
+                if (clicked == level_icons.at(i)) {
+                    unsigned int level_no = 1 + (world_open * 20) + i;
+                    if (savegame.level_state(level_no) != Locked) {
+                        level_to_start = level_no;
+                        complete = true;
+                    }
                 }
             }
         }
