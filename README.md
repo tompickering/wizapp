@@ -4,11 +4,11 @@ This is a clone of Wizard Apprentice - a game released by Fantasia for RISC OS s
 
 Play through 100 levels spanning 5 worlds as you progress through your quest to become a true wizard. Your goal is simply to pick up all of the collectables in each level by walking sideways into them. Sounds easy? Be warned - the unwise will find themselves trapped in no time...
 
-[Screenshot 0](screenshots/00.png)
-[Screenshot 1](screenshots/01.png)
-[Screenshot 2](screenshots/02.png)
-[Screenshot 3](screenshots/03.png)
-[Screenshot 4](screenshots/04.png)
+![Screenshot 0](screenshots/00.png)
+![Screenshot 1](screenshots/01.png)
+![Screenshot 2](screenshots/02.png)
+![Screenshot 3](screenshots/03.png)
+![Screenshot 4](screenshots/04.png)
 
 At present, the game only supports Linux, and will create a save file at ~/.wizapp_save. However, the code abstracts all SDL and platform-specific logic such that in theory, it would require minimal effort to adapt to other platforms.
 
