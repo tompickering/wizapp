@@ -27,8 +27,9 @@ The game was designed primarily to run on Linux, but also runs well on Mac OS X.
 * libsdl2-mixer-dev
 * libsdl2-ttf-dev
 
-## Mac OS X build dependencies
-brew install sdl2 sdl2_image sdl2_mixer sdl2_ttf
+## MacOS build dependencies
+* Install [Homebrew](https://brew.sh/)
+* `brew install sdl2 sdl2_image sdl2_mixer sdl2_ttf`
 
 ## Credits
 * Music and SFX - Bill Kotsias
