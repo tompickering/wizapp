@@ -31,6 +31,7 @@ enum LevelSet {
 class Level {
     public:
         Level(LevelSet set, unsigned int number);
+        Level(string);
         unsigned int number;
         Theme theme;
         void clear();

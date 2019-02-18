@@ -45,6 +45,7 @@ WizApp::WizApp() {
     speed = 1.f;
     next_level_pause = 0.f;
     fade_time = 0.f;
+    run_single_level = false;
 }
 
 void WizApp::init() {
@@ -126,46 +127,55 @@ void WizApp::update(float delta_time) {
             return;
         }
     } else if (state == GS_StartLevel) {
-        bool scene_started = true;
-        if (level_no == 1 && scene_just_played != World1Start) {
-            scene = new Scene(World1Start);
-        } else if (level_no == 16 && scene_just_played != World1Mid) {
-            scene = new Scene(World1Mid);
-        } else if (level_no == 21 && scene_just_played != World2Start) {
-            scene = new Scene(World2Start);
-        } else if (level_no == 36 && scene_just_played != World2Mid) {
-            scene = new Scene(World2Mid);
-        } else if (level_no == 41 && scene_just_played != World3Start) {
-            scene = new Scene(World3Start);
-        } else if (level_no == 56 && scene_just_played != World3Mid) {
-            scene = new Scene(World3Mid);
-        } else if (level_no == 61 && scene_just_played != World4Start) {
-            scene = new Scene(World4Start);
-        } else if (level_no == 76 && scene_just_played != World4Mid) {
-            scene = new Scene(World4Mid);
-        } else if (level_no == 81 && scene_just_played != World5Start) {
-            scene = new Scene(World5Start);
-        } else if (level_no == 96 && scene_just_played != World5Mid) {
-            scene = new Scene(World5Mid);
-        } else {
-            scene_started = false;
-        }
-
-        if (scene_started) {
-            set_state(GS_StartLevScene);
-            return;
-        }
-
-        if (level_no > 100) {
-            running = false;
-            return;
-        } else {
-            level = new Level(Original, level_no);
+        if (run_single_level) {
+            level = new Level(string(single_level_to_run));
             level_ref = level;
             level->load();
             audio_manager.play_music(level_ref->get_track(), false, true);
             next_level_pause = 0.f;
             set_state(GS_Level);
+        } else {
+            bool scene_started = true;
+            if (level_no == 1 && scene_just_played != World1Start) {
+                scene = new Scene(World1Start);
+            } else if (level_no == 16 && scene_just_played != World1Mid) {
+                scene = new Scene(World1Mid);
+            } else if (level_no == 21 && scene_just_played != World2Start) {
+                scene = new Scene(World2Start);
+            } else if (level_no == 36 && scene_just_played != World2Mid) {
+                scene = new Scene(World2Mid);
+            } else if (level_no == 41 && scene_just_played != World3Start) {
+                scene = new Scene(World3Start);
+            } else if (level_no == 56 && scene_just_played != World3Mid) {
+                scene = new Scene(World3Mid);
+            } else if (level_no == 61 && scene_just_played != World4Start) {
+                scene = new Scene(World4Start);
+            } else if (level_no == 76 && scene_just_played != World4Mid) {
+                scene = new Scene(World4Mid);
+            } else if (level_no == 81 && scene_just_played != World5Start) {
+                scene = new Scene(World5Start);
+            } else if (level_no == 96 && scene_just_played != World5Mid) {
+                scene = new Scene(World5Mid);
+            } else {
+                scene_started = false;
+            }
+
+            if (scene_started) {
+                set_state(GS_StartLevScene);
+                return;
+            }
+
+            if (level_no > 100) {
+                running = false;
+                return;
+            } else {
+                level = new Level(Original, level_no);
+                level_ref = level;
+                level->load();
+                audio_manager.play_music(level_ref->get_track(), false, true);
+                next_level_pause = 0.f;
+                set_state(GS_Level);
+            }
         }
     } else if (state == GS_EndLevel) {
         bool scene_started = true;
@@ -205,6 +215,11 @@ void WizApp::update(float delta_time) {
         }
 
         if (level_ref->complete) {
+            if (run_single_level) {
+                running = false;
+                return;
+            }
+
             if (next_level_pause == 0.f) {
                 logger.debug("Level complete!");
                 savegame.completed(level_ref->number);
@@ -230,7 +245,7 @@ void WizApp::update(float delta_time) {
     input_manager.read_click();
 }
 
-int WizApp::run() {
+int WizApp::run(int argc, char **argv) {
     init();
     running = true;
 
@@ -239,6 +254,12 @@ int WizApp::run() {
     steady_clock::duration time_span;
     float delta_time = 0.f;
     float update_time = 0.f;
+
+    if (argc > 1) {
+        run_single_level = true;
+        single_level_to_run = argv[1];
+        state = GS_StartLevel;
+    }
 
     while (running) {
         clock_begin = steady_clock::now();

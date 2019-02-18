@@ -28,7 +28,7 @@ enum GameState {
 class WizApp {
     public:
         WizApp();
-        int run();
+        int run(int argc, char** argv);
     private:
         GameState state;
         Intro intro;
@@ -47,6 +47,8 @@ class WizApp {
         void set_state(GameState new_state);
         string state2str(GameState state);
         float speed;
+        bool run_single_level;
+        char *single_level_to_run;
 };
 
 #endif

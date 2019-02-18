@@ -31,7 +31,7 @@ Level::Level(LevelSet set, unsigned int _number) {
     sprintf(level_str, "%03d", number);
     logger.debug("Loading level: " + string(level_str));
     logger.debug("Theme: " + std::to_string(theme));
-    file_path = "orig/" + string(level_str);
+    file_path = "levels/orig/" + string(level_str);
     complete = false;
 
     char theme_no_str[3];
@@ -39,6 +39,18 @@ Level::Level(LevelSet set, unsigned int _number) {
     sprintf(theme_no_str, "%02d", (int)(theme) + 1);
     theme_base = "assets/img/themes/" + string(theme_no_str) + "/";
     logger.debug(theme_base);
+}
+
+Level::Level(string path) {
+    number = 1;
+    theme = Valley;
+    file_path = path;
+    complete = false;
+
+    char theme_no_str[3];
+    theme_no_str[2] = '\0';
+    sprintf(theme_no_str, "%02d", (int)(theme) + 1);
+    theme_base = "assets/img/themes/" + string(theme_no_str) + "/";
 }
 
 bool Level::switch_character() {
@@ -87,7 +99,7 @@ void Level::load() {
     blob = nullptr;
     logger.debug("Loading level " + file_path);
     ifstream file;
-    file.open("levels/" + file_path);
+    file.open(file_path);
     Entity *new_entity;
     Entity *new_entity2;
     char output[20];
