@@ -178,13 +178,13 @@ void SDLDrawManager::update(vector<Animation*> anims) {
                       brightness, brightness, brightness);
         } else {
             SDL_Surface *spr_surf = (SDL_Surface*) get_sprite_data(anim->sprite());
-            int draw_x = int(anim->get_x() * (float) SCREEN_WIDTH - spr_surf->w / 2.f);
-            int draw_y = int(anim->get_y() * (float) SCREEN_HEIGHT - spr_surf->h / 2.f);
-            SDL_Rect surf_rect = {draw_x,
-                                  draw_y,
-                                  spr_surf->w,
-                                  spr_surf->h};
             if (spr_surf) {
+                int draw_x = int(anim->get_x() * (float) SCREEN_WIDTH - spr_surf->w / 2.f);
+                int draw_y = int(anim->get_y() * (float) SCREEN_HEIGHT - spr_surf->h / 2.f);
+                SDL_Rect surf_rect = {draw_x,
+                                      draw_y,
+                                      spr_surf->w,
+                                      spr_surf->h};
                 SDL_BlitSurface(spr_surf, NULL, surf, &surf_rect);
                 /* Check if this draw element has been clicked */
                 if (anim->clickable

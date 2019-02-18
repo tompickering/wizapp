@@ -187,8 +187,9 @@ void Intro::fantasia() {
 }
 
 void Intro::presents() {
-    current_anims.push_back(
-        new AnimationBoomerang(.5f, .9f, "assets/img/intro/presents", 19, 1.f));
+    Animation *anim = new Animation(.5f, .9f, "assets/img/intro/presents", 19, 1.f);
+    anim->hide_on_complete = true;
+    current_anims.push_back(anim);
 }
 
 void Intro::nothing() {
