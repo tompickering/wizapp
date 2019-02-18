@@ -11,7 +11,7 @@ Play through 100 levels spanning 5 worlds as you progress through your quest to 
 ![Screenshot 3](screenshots/03.png)
 ![Screenshot 4](screenshots/04.png)
 
-The game was designed primarily to run on Linux, but also runs well on Mac OS X. On both systems, it will create a save file at ~/.wizapp_save. The code abstracts all SDL and platform-specific logic such that in theory, it would require minimal effort to adapt to other platforms.
+The game was designed primarily to run on Linux, but also runs well on macOS. On both systems, it will create a save file at ~/.wizapp_save. The code abstracts all SDL and platform-specific logic such that in theory, it would require minimal effort to adapt to other platforms.
 
 ## Controls
 * Move character: Arrow keys, or the original bindings Z/X (left / right) and P/L (up / down)
@@ -60,4 +60,4 @@ All content under the 'assets' subdirectory are copyright Bill Kotsias, and are 
 * o - Blob start point
 * O - Blob start point with ladder
 
-The game will currently only draw levels of size 11x8 correctly, however in theory the game engine will handle any size...
+Passing a level file as a command-line argument will launch directly into that level. The game will currently only draw levels of size 11x8 correctly, however in theory the game engine will handle any size...
