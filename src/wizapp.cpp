@@ -204,8 +204,13 @@ void WizApp::update(float delta_time) {
         }
 
         if (input_manager.read(Q, true) && !level_ref->complete) {
-            set_state(GS_Menu);
-            logger.debug("Quitting to menu");
+            if (!run_single_level) {
+                set_state(GS_Menu);
+                logger.debug("Quitting to menu");
+            } else {
+                running = false;
+                logger.debug("Quitting");
+            }
             return;
         }
 
