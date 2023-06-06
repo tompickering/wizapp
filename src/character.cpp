@@ -131,7 +131,6 @@ void Character::update(float delta_time) {
     bool down = input_manager.read(Down, false);
     bool left = input_manager.read(Left, false);
     bool right = input_manager.read(Right, false);
-    bool morph = input_manager.read(Space, true);
 
     if (state == ClimbingUp || state == ClimbingDown) {
         if (left) {
@@ -213,6 +212,8 @@ void Character::update(float delta_time) {
             input_target_y++;
         }
     }
+
+    bool morph = input_manager.read(Space, true);
 
     if (move_attempted) {
         /* Handle turning */
