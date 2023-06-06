@@ -23,6 +23,10 @@
 #define SAVEGAME SaveGameLinux
 #endif
 
+#ifdef WINDOWS
+#define SAVEGAME SaveGameWindows
+#endif
+
 extern volatile bool running;
 extern Logger logger;
 extern AUDIOMANAGER audio_manager;

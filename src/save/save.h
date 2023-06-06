@@ -40,4 +40,8 @@ class SaveGame {
 #include "save.linux.h"
 #endif
 
+#ifdef WINDOWS
+#include "save.windows.h"
+#endif
+
 #endif
