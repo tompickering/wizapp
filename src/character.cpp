@@ -127,6 +127,23 @@ void Character::update(float delta_time) {
         pending_collectable->ignore = true;
     }
 
+    bool up = input_manager.read(Up, false);
+    bool down = input_manager.read(Down, false);
+    bool left = input_manager.read(Left, false);
+    bool right = input_manager.read(Right, false);
+    bool morph = input_manager.read(Space, true);
+
+    if (state == ClimbingUp || state == ClimbingDown) {
+        if (left) {
+            facing = FacingLeft;
+            facing_tween = 0.f;
+        }
+        if (right) {
+            facing = FacingRight;
+            facing_tween = 1.f;
+        }
+    }
+
     if (anything_falling) {
         return;
     }
@@ -175,12 +192,6 @@ void Character::update(float delta_time) {
         /* Don't try to make another move now */
         return;
     }
-
-    bool up = input_manager.read(Up, false);
-    bool down = input_manager.read(Down, false);
-    bool left = input_manager.read(Left, false);
-    bool right = input_manager.read(Right, false);
-    bool morph = input_manager.read(Space, true);
 
     bool move_attempted = false;
     bool attempting_climb = false;
