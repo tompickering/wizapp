@@ -16,12 +16,21 @@
 
 using std::vector;
 
-Intro::Intro() {
-    skip_time = 0.f;
-    skip_pressed = false;
-    skip_duration = 3.f;
-    scene_done = 0;
-    credits_done = 0;
+Intro::Intro()
+    : skip_time(0.f)
+    , skip_pressed(false)
+    , skip_duration(3.f)
+    , winds_done(false)
+    , fantasia_done(false)
+    , presents_done(false)
+    , nothing_done(false)
+    , kidding_done(false)
+    , band_done(false)
+    , title1_done(false)
+    , title2_done(false)
+    , end_done(false)
+    , scene_done(0)
+    , credits_done(0) {
 }
 
 void Intro::next_event() {
