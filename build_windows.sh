@@ -38,6 +38,6 @@ cp lib/SDL2_ttf-2.20.2/x86_64-w64-mingw32/bin/SDL2_ttf.dll .
 name=$(basename "$(pwd)")
 
 pushd ..
-zip -r wizapp.zip "${name}" --include "${name}/assets/*" "${name}/wizapp.exe" "${name}/LICENSE" "${name}/README.md" "${name}/*.dll"
+zip -r wizapp.zip "${name}" --include "${name}/assets/*" "${name}/font/*" "${name}/levels/*" "${name}/wizapp.exe" "${name}/LICENSE" "${name}/README.md" "${name}/*.dll"
 mv wizapp.zip "${name}"
 popd
