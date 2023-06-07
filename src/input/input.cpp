@@ -6,7 +6,7 @@ InputManager::InputManager() {
 }
 
 bool InputManager::read(Input input, bool reset) {
-    bool result;
+    bool result = false;
     switch (input) {
         case Up:
         case P:
