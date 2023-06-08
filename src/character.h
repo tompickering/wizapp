@@ -29,6 +29,8 @@ enum CharacterState {
     Idling,
     Turning,
     Walking,
+    Turn2ClimbUp,
+    Turn2ClimbDown,
     ClimbingUp,
     ClimbingDown,
     ClimbCheckStop,
@@ -76,6 +78,9 @@ class Character : public Entity {
         AnimationSequence *anim_walk_right;
         Animation *anim_fall_left;
         Animation *anim_fall_right;
+
+        int turn2climb_x;
+        int turn2climb_y;
 };
 
 #endif

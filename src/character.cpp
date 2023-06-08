@@ -171,6 +171,23 @@ void Character::update(float delta_time) {
         return;
     }
 
+    if (state == Turn2ClimbUp || state == Turn2ClimbDown) {
+        if (facing == FacingLeft && facing_tween >= 0.5) {
+            state = (state == Turn2ClimbUp) ? ClimbingUp : ClimbingDown;
+            Entity::move(turn2climb_x, turn2climb_y);
+            update_anim(0);
+        } else if (facing == FacingRight && facing_tween <= 0.5f) {
+            state = (state == Turn2ClimbUp) ? ClimbingUp : ClimbingDown;
+            Entity::move(turn2climb_x, turn2climb_y);
+            update_anim(0);
+        } else {
+            facing_tween = clamp(facing_tween
+                                 + delta_time * (1.f / turn_time)
+                                 * (facing == FacingLeft ? 1.f : -1.f),
+                                 0.f, 1.f);
+        }
+    }
+
     if (state == Walking) {
         if (real_x == (float) block_x) {
             state = Idling;
@@ -281,6 +298,8 @@ void Character::update_anim(float delta_time) {
     if (anim) {
         /* Only if this is a 'playing' rather than a 'sampled' animation... */
         if (state != Turning
+            && state != Turn2ClimbUp
+            && state != Turn2ClimbDown
             && state != Walking) {
             if (anim->complete) {
                 delete anim;
@@ -354,9 +373,25 @@ void Character::move(int _x, int _y) {
     if (_x != block_x) {
         state = Walking;
     } else if (_y > block_y) {
-        state = ClimbingDown;
+        if (state == ClimbCheckStop) {
+            // We're in the middle of climbing - not just starting
+            state = ClimbingDown;
+        } else {
+            state = Turn2ClimbDown;
+            turn2climb_x = _x;
+            turn2climb_y = _y;
+            return;
+        }
     } else if (_y < block_y) {
-        state = ClimbingUp;
+        if (state == ClimbCheckStop) {
+            // We're in the middle of climbing - not just starting
+            state = ClimbingUp;
+        } else {
+            state = Turn2ClimbUp;
+            turn2climb_x = _x;
+            turn2climb_y = _y;
+            return;
+        }
     }
     Entity::move(_x, _y);
 }
@@ -366,7 +401,7 @@ string Character::sprite() {
         return anim->sprite();
     }
 
-    if (state == Turning) {
+    if (state == Turning || state == Turn2ClimbUp || state == Turn2ClimbDown) {
         return anim_turn->sprite(1.f - facing_tween);
     } else if (state == Walking) {
         Animation *anim_walk = facing == FacingLeft ? anim_walk_left : anim_walk_right;
