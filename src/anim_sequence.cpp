@@ -15,7 +15,7 @@ AnimSequence::AnimSequence() {
     this->time = 0.f;
     this->complete = false;
     this->next_event_countdown = 0.f;
-    this->current_scene = NULL;
+    this->current_scene = nullptr;
 }
 
 AnimSequence::~AnimSequence() {
@@ -54,7 +54,7 @@ void AnimSequence::clear_anims() {
 
     if (this->current_scene) {
         delete this->current_scene;
-        this->current_scene = NULL;
+        this->current_scene = nullptr;
     }
 }
 

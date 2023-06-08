@@ -71,7 +71,7 @@ Character::Character(int _x, int _y, CharacterType ctype) : Entity(_x, _y) {
 Character::~Character() {
     if (anim) {
         delete anim;
-        anim = NULL;
+        anim = nullptr;
     }
 }
 
@@ -82,14 +82,14 @@ void Character::reset() {
 
     force_move_pending = false;
     force_move_left = false;
-    force_move_breakable = NULL;
+    force_move_breakable = nullptr;
 
     facing = FacingRight;
 
     facing_tween = 1.f;
     turn_time = 0.15;
 
-    anim = NULL;
+    anim = nullptr;
 }
 
 bool Character::receptive_to_input() {
@@ -205,7 +205,7 @@ void Character::update(float delta_time) {
             force_move_breakable->ignore = true;
             move(force_move_breakable->block_x, force_move_breakable->block_y);
             force_move_pending = false;
-            force_move_breakable = NULL;
+            force_move_breakable = nullptr;
         }
         /* Don't try to make another move now */
         return;
@@ -310,7 +310,7 @@ void Character::update_anim(float delta_time) {
             && state != Walking) {
             if (anim->complete) {
                 delete anim;
-                anim = NULL;
+                anim = nullptr;
 
                 if (state == ClimbingUp || state == ClimbingDown) {
                     state = ClimbCheckStop;

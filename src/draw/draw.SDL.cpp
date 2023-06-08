@@ -21,7 +21,7 @@ using std::string;
 void SDLDrawManager::init() {
     logger.info("DrawManager Init...");
     current_scene = None;
-    clicked_animation = NULL;
+    clicked_animation = nullptr;
     win = SDL_CreateWindow(PROG_NAME,
                                  SDL_WINDOWPOS_UNDEFINED,
                                  SDL_WINDOWPOS_UNDEFINED,
@@ -29,7 +29,7 @@ void SDLDrawManager::init() {
                                  SCREEN_HEIGHT,
                                  SDL_WINDOW_SHOWN);
     surf = SDL_GetWindowSurface(win);
-    background_spr = NULL;
+    background_spr = nullptr;
     background_path = string("");
 
     scene_font = TTF_OpenFont("font/Tangerine-Regular.ttf", 36);
@@ -47,7 +47,7 @@ void SDLDrawManager::init() {
         logger.fatal(TTF_GetError());
     }
 
-    SDL_FillRect(surf, NULL, SDL_MapRGB(surf->format, 0x0, 0x0, 0x0));
+    SDL_FillRect(surf, nullptr, SDL_MapRGB(surf->format, 0x0, 0x0, 0x0));
 }
 
 void SDLDrawManager::draw_text(void* font_gen, string text, int x, int y, int w, int h,
@@ -67,7 +67,7 @@ void SDLDrawManager::draw_text(void* font_gen, string text, int x, int y, int w,
     msg_rect.w = w;
     msg_rect.h = h;
 
-    SDL_BlitSurface(msg_surf, NULL, surf, &msg_rect);
+    SDL_BlitSurface(msg_surf, nullptr, surf, &msg_rect);
 }
 
 void SDLDrawManager::draw_text(void* font_gen, string text, float x, float y, int w, int h,
@@ -96,7 +96,7 @@ void SDLDrawManager::update(Level *level) {
         background_spr = (void*) IMG_Load(background_path.c_str());
     }
 
-    SDL_BlitSurface((SDL_Surface*) background_spr, NULL, surf, NULL);
+    SDL_BlitSurface((SDL_Surface*) background_spr, nullptr, surf, nullptr);
     for (unsigned int i = 0; i < level->entities.size(); ++i) {
         ent = level->entities[i];
         if (ent->ignore)
@@ -113,7 +113,7 @@ void SDLDrawManager::update(Level *level) {
 
         SDL_Surface *spr_surf = (SDL_Surface*) get_sprite_data(img_path);
         if (spr_surf) {
-            SDL_BlitSurface(spr_surf, NULL, surf, &surf_rect);
+            SDL_BlitSurface(spr_surf, nullptr, surf, &surf_rect);
         } else {
             SDL_FillRect(surf, &surf_rect, SDL_MapRGB(surf->format,
                                                             ent->r, ent->g, ent->b));
@@ -130,7 +130,7 @@ void SDLDrawManager::update(Level *level) {
                          int((ent->real_y + ent->y_draw_offset) * (float) blocksz_h),
                          blocksz_w,
                          blocksz_h};
-            SDL_BlitSurface(spr_surf, NULL, surf, &surf_rect);
+            SDL_BlitSurface(spr_surf, nullptr, surf, &surf_rect);
         }
 
     }
@@ -140,11 +140,11 @@ void SDLDrawManager::update(Level *level) {
 void SDLDrawManager::update(Scene *scene) {
     if (scene->scene_ref != current_scene) {
         /* Clear screen first */
-        SDL_FillRect(surf, NULL, SDL_MapRGB(surf->format, 0x0, 0x0, 0x0));
+        SDL_FillRect(surf, nullptr, SDL_MapRGB(surf->format, 0x0, 0x0, 0x0));
         current_scene = scene->scene_ref;
         SDL_Surface *spr_surf = (SDL_Surface*) get_sprite_data(scene->image_path());
         if (spr_surf) {
-            SDL_BlitSurface(spr_surf, NULL, surf, NULL);
+            SDL_BlitSurface(spr_surf, nullptr, surf, nullptr);
         }
     }
 
@@ -164,7 +164,7 @@ void SDLDrawManager::update(Scene *scene) {
 void SDLDrawManager::update(vector<Animation*> anims) {
     Animation *anim;
     ClickPos click_pos = input_manager.read_click();
-    SDL_FillRect(surf, NULL, SDL_MapRGB(surf->format, 0x0, 0x0, 0x0));
+    SDL_FillRect(surf, nullptr, SDL_MapRGB(surf->format, 0x0, 0x0, 0x0));
     for (unsigned int x = 0; x < anims.size(); ++x) {
         anim = anims.at(x);
 
@@ -185,7 +185,7 @@ void SDLDrawManager::update(vector<Animation*> anims) {
                                       draw_y,
                                       spr_surf->w,
                                       spr_surf->h};
-                SDL_BlitSurface(spr_surf, NULL, surf, &surf_rect);
+                SDL_BlitSurface(spr_surf, nullptr, surf, &surf_rect);
                 /* Check if this draw element has been clicked */
                 if (anim->clickable
                     && click_pos.x >= draw_x && click_pos.x <= draw_x + spr_surf->w
@@ -208,7 +208,7 @@ void* SDLDrawManager::get_sprite_data(string img_path) {
         }
         return sprite_data[img_path];
     }
-    return NULL;
+    return nullptr;
 }
 
 AnimClick SDLDrawManager::read_clicked_animation() {
@@ -216,7 +216,7 @@ AnimClick SDLDrawManager::read_clicked_animation() {
     result.anim = clicked_animation;
     result.rel_x = clicked_animation_rel_x;
     result.rel_y = clicked_animation_rel_y;
-    clicked_animation = NULL;
+    clicked_animation = nullptr;
     clicked_animation_rel_x = 0.f;
     clicked_animation_rel_y = 0.f;
     return result;

@@ -15,9 +15,9 @@ using std::string;
 using std::vector;
 
 MainMenu::MainMenu() {
-    round_select = NULL;
-    rs_bg = NULL;
-    rs_back = NULL;
+    round_select = nullptr;
+    rs_bg = nullptr;
+    rs_back = nullptr;
     reset();
 }
 

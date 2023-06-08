@@ -12,7 +12,7 @@ Animation::Animation() {
     frames = 1;
     duration = 1.f;
     frame_duration = 1.f;
-    motion = NULL;
+    motion = nullptr;
     reset();
     x = 0.f;
     y = 0.f;
@@ -26,7 +26,7 @@ Animation::Animation(string _base, int _frames, float _duration) {
     frames = _frames;
     duration = _duration;
     frame_duration = duration / (float) frames;
-    motion = NULL;
+    motion = nullptr;
     reset();
     x = 0.f;
     y = 0.f;
@@ -40,7 +40,7 @@ Animation::Animation(string _base, int _frames, float _duration, bool _reverse) 
     frames = _frames;
     duration = _duration;
     frame_duration = duration / (float) frames;
-    motion = NULL;
+    motion = nullptr;
     reset();
     x = 0.f;
     y = 0.f;
@@ -58,7 +58,7 @@ Animation::Animation(float _x, float _y, string _base, int _frames, float _durat
     frames = _frames;
     duration = _duration;
     frame_duration = duration / (float) frames;
-    motion = NULL;
+    motion = nullptr;
     reset();
     x = _x;
     y = _y;
@@ -72,7 +72,7 @@ Animation::Animation(float _x, float _y, string _base, int _frames, float _durat
     frames = _frames;
     duration = _duration;
     frame_duration = duration / (float) frames;
-    motion = NULL;
+    motion = nullptr;
     reset();
     x = _x;
     y = _y;

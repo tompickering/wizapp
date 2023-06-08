@@ -9,7 +9,7 @@ using std::string;
 using std::vector;
 
 AnimationSequence::AnimationSequence() : Animation() {
-    current_anim = NULL;
+    current_anim = nullptr;
     duration = 0.f;
 }
 

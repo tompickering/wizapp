@@ -114,8 +114,8 @@ void Level::load() {
                 bool breakloop = false;
                 int col = 0;
                 for (char *c = output; !breakloop && *c != '\n' && *c != '\0'; ++c) {
-                    new_entity = NULL;
-                    new_entity2 = NULL;
+                    new_entity = nullptr;
+                    new_entity2 = nullptr;
                     switch (*c) {
                         case '.':   // Nothing!
                             break;
@@ -310,7 +310,7 @@ Collectable* Level::attempt_collect(int x, int y) {
 /* WARNING: In the case of a character on a ladder, this will return only one! */
 /* Will not return entity with 'ignore' flag true */
 Entity* Level::at(int x, int y) {
-    Entity *ent = NULL;
+    Entity *ent = nullptr;
     if (x < 0) return ent;
     if (y < 0) return ent;
     if (x >= block_w) return ent;
@@ -326,7 +326,7 @@ Entity* Level::at(int x, int y) {
             return ent;
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 /* The level is 'stable' if nothing is falling and everything is at its target location */

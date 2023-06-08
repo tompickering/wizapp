@@ -38,14 +38,14 @@ Level *level_ref = nullptr;
 #endif
 
 WizApp::WizApp() {
-    scene = NULL;
-    level = NULL;
+    scene = nullptr;
+    level = nullptr;
     scene_just_played = None;
     level_no = 1;
     speed = 1.f;
     next_level_pause = 0.f;
     fade_time = 0.f;
-    single_level_to_run = NULL;
+    single_level_to_run = nullptr;
 }
 
 void WizApp::init() {
@@ -109,7 +109,7 @@ void WizApp::update(float delta_time) {
                     fade_time = 0.f;
                     scene_just_played = scene->scene_ref;
                     delete scene;
-                    scene = NULL;
+                    scene = nullptr;
 
                     if (state == GS_EndLevScene) {
                         if (level_no == 20) {
@@ -238,7 +238,7 @@ void WizApp::update(float delta_time) {
             if (next_level_pause > 1.5f) {
                 level_ref->clear();
                 delete level;
-                level = NULL;
+                level = nullptr;
                 set_state(GS_EndLevel);
             } else {
                 next_level_pause += delta_time;
@@ -294,7 +294,7 @@ int WizApp::run(int argc, char **argv) {
     if (level_ref) {
         level_ref->clear();
         delete level;
-        level_ref = NULL;
+        level_ref = nullptr;
     }
 
     return 0;
