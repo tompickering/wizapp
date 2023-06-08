@@ -132,14 +132,16 @@ void Character::update(float delta_time) {
     bool left = input_manager.read(Left, false);
     bool right = input_manager.read(Right, false);
 
-    if (state == ClimbingUp || state == ClimbingDown) {
-        if (left) {
-            facing = FacingLeft;
-            facing_tween = 0.5f;
-        }
-        if (right) {
-            facing = FacingRight;
-            facing_tween = 0.5f;
+    if (type == Wizard) {
+        if (state == ClimbingUp || state == ClimbingDown) {
+            if (left) {
+                facing = FacingLeft;
+                facing_tween = 0.5f;
+            }
+            if (right) {
+                facing = FacingRight;
+                facing_tween = 0.5f;
+            }
         }
     }
 
