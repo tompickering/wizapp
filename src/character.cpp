@@ -283,10 +283,15 @@ void Character::update(float delta_time) {
     }
 
     if (state == ClimbCheckStop) {
-        // We want to end up turning towards our target facing direction
-        facing = (facing == FacingLeft) ? FacingRight : FacingLeft;
-        state = Turning;
-        facing_tween = 0.5f;
+        if (type == Wizard) {
+            // We want to end up turning towards our target facing direction
+            facing = (facing == FacingLeft) ? FacingRight : FacingLeft;
+            state = Turning;
+            facing_tween = 0.5f;
+        } else {
+            // Blob doesn't turn out out climbing
+            state = Idling;
+        }
     }
 
     update_anim(0);
@@ -373,8 +378,9 @@ void Character::move(int _x, int _y) {
     if (_x != block_x) {
         state = Walking;
     } else if (_y > block_y) {
-        if (state == ClimbCheckStop) {
+        if (state == ClimbCheckStop || type == Blob) {
             // We're in the middle of climbing - not just starting
+            // Or we're blob, who doesn't turn in and out of climbing
             state = ClimbingDown;
         } else {
             state = Turn2ClimbDown;
@@ -383,8 +389,9 @@ void Character::move(int _x, int _y) {
             return;
         }
     } else if (_y < block_y) {
-        if (state == ClimbCheckStop) {
+        if (state == ClimbCheckStop || type == Blob) {
             // We're in the middle of climbing - not just starting
+            // Or we're blob, who doesn't turn in and out of climbing
             state = ClimbingUp;
         } else {
             state = Turn2ClimbUp;
