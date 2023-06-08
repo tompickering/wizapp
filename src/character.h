@@ -31,6 +31,7 @@ enum CharacterState {
     Walking,
     ClimbingUp,
     ClimbingDown,
+    ClimbCheckStop,
     Pushing,
     Breaking,
     Falling,

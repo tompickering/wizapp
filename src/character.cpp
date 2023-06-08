@@ -135,11 +135,11 @@ void Character::update(float delta_time) {
     if (state == ClimbingUp || state == ClimbingDown) {
         if (left) {
             facing = FacingLeft;
-            facing_tween = 0.f;
+            facing_tween = 0.5f;
         }
         if (right) {
             facing = FacingRight;
-            facing_tween = 1.f;
+            facing_tween = 0.5f;
         }
     }
 
@@ -177,7 +177,7 @@ void Character::update(float delta_time) {
         }
     }
 
-    if (state != Idling)
+    if (state != Idling && state != ClimbCheckStop)
         return;
 
     if (force_move_pending) {
@@ -196,7 +196,7 @@ void Character::update(float delta_time) {
     bool attempting_climb = false;
     int input_target_x = block_x;
     int input_target_y = block_y;
-    if (left ^ right) {
+    if (state != ClimbCheckStop && (left ^ right)) {
         move_attempted = true;
         if (left) {
             input_target_x--;
@@ -265,6 +265,13 @@ void Character::update(float delta_time) {
         }
     }
 
+    if (state == ClimbCheckStop) {
+        // We want to end up turning towards our target facing direction
+        facing = (facing == FacingLeft) ? FacingRight : FacingLeft;
+        state = Turning;
+        facing_tween = 0.5f;
+    }
+
     update_anim(0);
 }
 
@@ -279,7 +286,11 @@ void Character::update_anim(float delta_time) {
                 delete anim;
                 anim = NULL;
 
-                state = Idling;
+                if (state == ClimbingUp || state == ClimbingDown) {
+                    state = ClimbCheckStop;
+                } else {
+                    state = Idling;
+                }
             } else {
                 anim->advance(delta_time);
             }
