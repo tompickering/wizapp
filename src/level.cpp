@@ -41,9 +41,9 @@ Level::Level(LevelSet set, unsigned int _number) {
     logger.debug(theme_base);
 }
 
-Level::Level(string path) {
-    number = 1;
-    theme = Valley;
+Level::Level(string path, Theme _theme) {
+    number = (10*(int)_theme)+1;
+    theme = _theme;
     file_path = path;
     complete = false;
 

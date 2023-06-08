@@ -46,6 +46,7 @@ WizApp::WizApp() {
     next_level_pause = 0.f;
     fade_time = 0.f;
     single_level_to_run = nullptr;
+    single_level_theme = Valley;
 }
 
 void WizApp::init() {
@@ -128,7 +129,7 @@ void WizApp::update(float delta_time) {
         }
     } else if (state == GS_StartLevel) {
         if (single_level_to_run) {
-            level = new Level(string(single_level_to_run));
+            level = new Level(string(single_level_to_run), single_level_theme);
             level_ref = level;
             level->load();
             audio_manager.play_music(level_ref->get_track(), false, true);

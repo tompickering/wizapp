@@ -49,6 +49,7 @@ class WizApp {
         float speed;
         bool run_single_level;
         char *single_level_to_run;
+        Theme single_level_theme;
 };
 
 #endif
