@@ -45,7 +45,7 @@ WizApp::WizApp() {
     speed = 1.f;
     next_level_pause = 0.f;
     fade_time = 0.f;
-    run_single_level = false;
+    single_level_to_run = NULL;
 }
 
 void WizApp::init() {
@@ -127,7 +127,7 @@ void WizApp::update(float delta_time) {
             return;
         }
     } else if (state == GS_StartLevel) {
-        if (run_single_level) {
+        if (single_level_to_run) {
             level = new Level(string(single_level_to_run));
             level_ref = level;
             level->load();
@@ -204,7 +204,7 @@ void WizApp::update(float delta_time) {
         }
 
         if (input_manager.read(Q, true) && !level_ref->complete) {
-            if (!run_single_level) {
+            if (!single_level_to_run) {
                 set_state(GS_Menu);
                 logger.debug("Quitting to menu");
             } else {
@@ -220,7 +220,7 @@ void WizApp::update(float delta_time) {
         }
 
         if (level_ref->complete) {
-            if (run_single_level) {
+            if (single_level_to_run) {
                 running = false;
                 return;
             }
@@ -261,7 +261,6 @@ int WizApp::run(int argc, char **argv) {
     float update_time = 0.f;
 
     if (argc > 1) {
-        run_single_level = true;
         single_level_to_run = argv[1];
         state = GS_StartLevel;
     }
