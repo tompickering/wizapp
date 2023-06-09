@@ -117,6 +117,7 @@ void Animation::advance(float delta) {
 void Animation::reset() {
     time = 0.f;
     complete = false;
+    reverse = false;
     if (motion)
         motion->reset();
 }
